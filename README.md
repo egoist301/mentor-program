@@ -1,2 +1,2 @@
-# mentor-programm
+# mentor-program
 
