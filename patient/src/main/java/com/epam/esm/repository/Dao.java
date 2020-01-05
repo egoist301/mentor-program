@@ -3,7 +3,7 @@ package com.epam.esm.repository;
 import com.epam.esm.repository.entity.Entity;
 
 public interface Dao<T extends Entity> {
-    T get(Long entity);
+    T get(Long id);
 
     void create(T entity);
 
