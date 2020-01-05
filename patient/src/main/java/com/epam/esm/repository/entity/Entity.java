@@ -6,31 +6,31 @@ import java.util.Objects;
 public abstract class Entity implements Serializable {
     private Long id;
 
-    public Entity() {
+    Entity() {
 
     }
 
-    public Entity(final Long idNew) {
-        id = idNew;
+    Entity(final Long id) {
+        this.id = id;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(final Long idNew) {
-        id = idNew;
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     @Override
-    public boolean equals(final Object oNew) {
-        if (this == oNew) {
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(oNew instanceof Entity)) {
+        if (!(o instanceof Entity)) {
             return false;
         }
-        Entity entity = (Entity) oNew;
+        Entity entity = (Entity) o;
         return Objects.equals(getId(), entity.getId());
     }
 
@@ -41,6 +41,6 @@ public abstract class Entity implements Serializable {
 
     @Override
     public String toString() {
-        return "id=" + id + '}';
+        return "id=" + id;
     }
 }
