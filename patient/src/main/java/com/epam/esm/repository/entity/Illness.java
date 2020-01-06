@@ -2,7 +2,8 @@ package com.epam.esm.repository.entity;
 
 import java.util.Objects;
 
-public class Illness extends Entity {
+public class Illness {
+    private Long id;
     private String name;
     private String nameInLatin;
     private int chanceToDie;
@@ -11,10 +12,18 @@ public class Illness extends Entity {
     }
 
     public Illness(final Long id, final String name, final String nameInLatin, final int chanceToDie) {
-        super(id);
+        this.id = id;
         this.name = name;
         this.nameInLatin = nameInLatin;
         this.chanceToDie = chanceToDie;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -49,23 +58,21 @@ public class Illness extends Entity {
         if (!(o instanceof Illness)) {
             return false;
         }
-        if (!super.equals(o)) {
-            return false;
-        }
         Illness illness = (Illness) o;
         return getChanceToDie() == illness.getChanceToDie() &&
+                Objects.equals(getId(), illness.getId()) &&
                 Objects.equals(getName(), illness.getName()) &&
                 Objects.equals(getNameInLatin(), illness.getNameInLatin());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getName(), getNameInLatin(), getChanceToDie());
+        return Objects.hash(getId(), getName(), getNameInLatin(), getChanceToDie());
     }
 
     @Override
     public String toString() {
-        return "Illness{" + super.toString() +
+        return "Illness{" + "id=" + id +
                 ", name='" + name + '\'' +
                 ", nameInLatin='" + nameInLatin + '\'' +
                 ", chanceToDie=" + chanceToDie +

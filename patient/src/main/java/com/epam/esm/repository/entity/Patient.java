@@ -3,7 +3,8 @@ package com.epam.esm.repository.entity;
 import java.util.Date;
 import java.util.Objects;
 
-public class Patient extends Entity {
+public class Patient {
+    private Long id;
     private String firstName;
     private String lastName;
     private String middleName;
@@ -13,14 +14,22 @@ public class Patient extends Entity {
     public Patient() {
     }
 
-    public Patient(final Long idNew, final String firstName, final String lastName, final String middleName,
+    public Patient(final Long id, final String firstName, final String lastName, final String middleName,
                    final int phoneNumber, final Date dateOfBirth) {
-        super(idNew);
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -71,11 +80,9 @@ public class Patient extends Entity {
         if (!(o instanceof Patient)) {
             return false;
         }
-        if (!super.equals(o)) {
-            return false;
-        }
         Patient patient = (Patient) o;
         return getPhoneNumber() == patient.getPhoneNumber() &&
+                Objects.equals(getId(), patient.getId()) &&
                 Objects.equals(getFirstName(), patient.getFirstName()) &&
                 Objects.equals(getLastName(), patient.getLastName()) &&
                 Objects.equals(getMiddleName(), patient.getMiddleName()) &&
@@ -85,13 +92,12 @@ public class Patient extends Entity {
     @Override
     public int hashCode() {
         return Objects
-                .hash(super.hashCode(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(),
-                        getDateOfBirth());
+                .hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth());
     }
 
     @Override
     public String toString() {
-        return "Patient{" + super.toString() +
+        return "Patient{" + "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +
