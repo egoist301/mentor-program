@@ -9,30 +9,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/sick/patient/")
+@RequestMapping(value = "/sick/patient", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PatientController {
     @Autowired
     private PatientDao patientDao;
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Patient> patient(@PathVariable("id") Long id) {
         Patient patient = patientDao.get(id);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/")
     public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
         patientDao.create(patient);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
-    @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/")
     public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) {
         patientDao.update(patient);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Patient> deletePatient(@PathVariable("id") Long id) {
         patientDao.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
