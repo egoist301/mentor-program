@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-@ComponentScan(basePackages = "com.epam.esm")
 public class ConnectionConfiguration {
     @Autowired
     private Environment environment;
