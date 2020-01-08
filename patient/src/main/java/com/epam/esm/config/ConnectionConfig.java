@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-public class ConnectionConfiguration {
+public class ConnectionConfig {
     @Autowired
     private Environment environment;
     private static final String DRIVER = "db.driver";

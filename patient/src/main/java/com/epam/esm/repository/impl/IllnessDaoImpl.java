@@ -9,8 +9,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class IllnessDaoImpl implements IllnessDao {
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public IllnessDaoImpl(final JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Illness get(final Long id) {

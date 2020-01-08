@@ -1,8 +1,11 @@
 package com.epam.esm.repository.entity;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Component
 public class Patient {
     private Long id;
     private String firstName;

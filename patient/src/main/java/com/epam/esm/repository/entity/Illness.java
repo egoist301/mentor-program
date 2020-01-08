@@ -1,7 +1,10 @@
 package com.epam.esm.repository.entity;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
+@Component
 public class Illness {
     private Long id;
     private String name;
