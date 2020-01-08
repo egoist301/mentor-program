@@ -26,7 +26,7 @@ public class PatientController {
         return convertToDto(patientService.get(id));
     }
 
-    @PostMapping("/")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDto createPatient(@RequestBody PatientDto patientDto) throws ParseException {
         Patient patient = convertToEntity(patientDto);
@@ -34,7 +34,7 @@ public class PatientController {
         return convertToDto(patient);
     }
 
-    @PutMapping("/")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updatePatient(@RequestBody PatientDto patientDto) throws ParseException {
         Patient patient = convertToEntity(patientDto);
