@@ -1,10 +1,10 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.controller.dto.IllnessDto;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,20 +18,40 @@ public class IllnessController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Illness> patient(@PathVariable("id") Long id) {
-        Illness illness = illnessService.get(id);
-        return new ResponseEntity<>(illness, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public IllnessDto patient(@PathVariable("id") Long id) {
+        return convertToDto(illnessService.get(id));
     }
 
     @PostMapping("/")
-    public ResponseEntity<Illness> createPatient(@RequestBody Illness illness) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public IllnessDto createPatient(@RequestBody IllnessDto illnessDto) {
+        Illness illness = convertToEntity(illnessDto);
         illnessService.create(illness);
-        return new ResponseEntity<>(illness, HttpStatus.OK);
+        return convertToDto(illness);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Illness> deletePatient(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePatient(@PathVariable("id") Long id) {
         illnessService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private IllnessDto convertToDto(Illness illness) {
+        IllnessDto illnessDto = new IllnessDto();
+        illnessDto.setId(illness.getId());
+        illnessDto.setChanceToDie(illness.getChanceToDie());
+        illnessDto.setName(illness.getName());
+        illnessDto.setNameInLatin(illness.getNameInLatin());
+        return illnessDto;
+    }
+
+    private Illness convertToEntity(IllnessDto illnessDto) {
+        Illness illness = new Illness();
+        illness.setName(illnessDto.getName());
+        illness.setNameInLatin(illnessDto.getNameInLatin());
+        illness.setChanceToDie(illnessDto.getChanceToDie());
+        illness.setId(illnessDto.getId());
+        return illness;
     }
 }

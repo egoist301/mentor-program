@@ -3,7 +3,6 @@ package com.epam.esm.controller.dto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class PatientDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -54,13 +53,19 @@ public class PatientDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getDateOfBirthConverted(String timezone) throws ParseException {
-        SIMPLE_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone(timezone));
+    public Date getDateOfBirthConverted() throws ParseException {
         return SIMPLE_DATE_FORMAT.parse(this.date);
     }
 
-    public void setDateOfBirth(Date date, String timezone) {
-        SIMPLE_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone(timezone));
+    public void setDateOfBirth(Date date) {
         this.date = SIMPLE_DATE_FORMAT.format(date);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
