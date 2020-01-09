@@ -1,5 +1,7 @@
 package com.epam.esm.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,9 +9,13 @@ import java.util.Date;
 public class PatientDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private Long id;
+    @JsonProperty("first_name")
     private String firstName;
+    @JsonProperty("last_name")
     private String lastName;
+    @JsonProperty("middle_name")
     private String middleName;
+    @JsonProperty("phone_number")
     private int phoneNumber;
     private String date;
 

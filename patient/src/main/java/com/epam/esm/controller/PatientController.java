@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
+import static com.epam.esm.controller.converter.PatientDtoConverter.convertToDto;
+import static com.epam.esm.controller.converter.PatientDtoConverter.convertToEntity;
+
 @RestController
 @RequestMapping(value = "/sick/patient", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PatientController {
@@ -45,27 +48,5 @@ public class PatientController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatient(@PathVariable("id") Long id) {
         patientService.delete(id);
-    }
-
-    private PatientDto convertToDto(Patient patient) {
-        PatientDto patientDto = new PatientDto();
-        patientDto.setId(patient.getId());
-        patientDto.setFirstName(patient.getFirstName());
-        patientDto.setLastName(patient.getLastName());
-        patientDto.setMiddleName(patient.getMiddleName());
-        patientDto.setPhoneNumber(patient.getPhoneNumber());
-        patientDto.setDateOfBirth(patient.getDateOfBirth());
-        return patientDto;
-    }
-
-    private Patient convertToEntity(PatientDto patientDto) throws ParseException {
-        Patient patient = new Patient();
-        patient.setId(patientDto.getId());
-        patient.setFirstName(patientDto.getFirstName());
-        patient.setMiddleName(patientDto.getMiddleName());
-        patient.setLastName(patientDto.getLastName());
-        patient.setPhoneNumber(patientDto.getPhoneNumber());
-        patient.setDateOfBirth(patientDto.getDateOfBirthConverted());
-        return patient;
     }
 }

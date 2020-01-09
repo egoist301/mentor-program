@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToDto;
+import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToEntity;
+
 @RestController
 @RequestMapping("/sick/illness")
 public class IllnessController {
@@ -35,23 +38,5 @@ public class IllnessController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatient(@PathVariable("id") Long id) {
         illnessService.delete(id);
-    }
-
-    private IllnessDto convertToDto(Illness illness) {
-        IllnessDto illnessDto = new IllnessDto();
-        illnessDto.setId(illness.getId());
-        illnessDto.setChanceToDie(illness.getChanceToDie());
-        illnessDto.setName(illness.getName());
-        illnessDto.setNameInLatin(illness.getNameInLatin());
-        return illnessDto;
-    }
-
-    private Illness convertToEntity(IllnessDto illnessDto) {
-        Illness illness = new Illness();
-        illness.setName(illnessDto.getName());
-        illness.setNameInLatin(illnessDto.getNameInLatin());
-        illness.setChanceToDie(illnessDto.getChanceToDie());
-        illness.setId(illnessDto.getId());
-        return illness;
     }
 }
