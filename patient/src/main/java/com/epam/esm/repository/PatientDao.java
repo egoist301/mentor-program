@@ -6,22 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 @Repository
 public class PatientDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public PatientDao(final JdbcTemplate jdbcTemplate) {
+    public PatientDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Patient get(final Long id) {
+    public Patient get(Long id) {
         final String SELECT_PATIENT_BY_ID =
                 "SELECT id, first_name, last_name, middle_name, phone_number, date_of_birth FROM patients WHERE id = ?";
         return jdbcTemplate.queryForObject(SELECT_PATIENT_BY_ID, new PatientMapper(), id);
     }
 
-    public void create(final Patient entity) {
+    public void create(Patient entity) {
         final String INSERT_PATIENT =
                 "INSERT INTO patients(first_name, last_name, middle_name, phone_number, date_of_birth)"
                         + " VALUES(?,?,?,?,?)";
@@ -29,7 +32,7 @@ public class PatientDao {
                 entity.getPhoneNumber(), entity.getDateOfBirth());
     }
 
-    public void update(final Patient entity) {
+    public void update(Patient entity) {
         final String UPDATE_PATIENT =
                 "UPDATE patients SET first_name = ?, last_name = ?, middle_name = ?, phone_number = ?, "
                         + "date_of_birth = ? WHERE id = ?";
@@ -37,8 +40,13 @@ public class PatientDao {
                 entity.getPhoneNumber(), entity.getDateOfBirth(), entity.getId());
     }
 
-    public void delete(final Long id) {
+    public void delete(Long id) {
         final String DELETE_PATIENT = "DELETE FROM patients WHERE id = ?";
         jdbcTemplate.update(DELETE_PATIENT, id);
+    }
+
+    public List<Patient> search(String firstName, String lastName, String middleName, int phone, Date dateOfBirth) {
+        final String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
+        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName, lastName, middleName, phone, dateOfBirth);
     }
 }

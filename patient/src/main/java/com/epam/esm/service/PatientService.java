@@ -5,6 +5,8 @@ import com.epam.esm.repository.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PatientService {
     private PatientDao patientDao;
@@ -28,5 +30,9 @@ public class PatientService {
 
     public void delete(Long id) {
         patientDao.delete(id);
+    }
+
+    public List<Patient> search() {
+        return null;
     }
 }

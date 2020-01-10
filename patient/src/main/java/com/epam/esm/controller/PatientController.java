@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 import static com.epam.esm.controller.converter.PatientDtoConverter.convertToDto;
 import static com.epam.esm.controller.converter.PatientDtoConverter.convertToEntity;
@@ -48,5 +49,11 @@ public class PatientController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatient(@PathVariable("id") Long id) {
         patientService.delete(id);
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PatientDto> search() {
+        return null;
     }
 }
