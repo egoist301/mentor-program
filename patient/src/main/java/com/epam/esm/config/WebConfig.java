@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
             DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter(new Jackson2ObjectMapperBuilder().build()));

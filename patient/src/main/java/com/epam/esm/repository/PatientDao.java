@@ -47,6 +47,6 @@ public class PatientDao {
 
     public List<Patient> search(String firstName, String lastName, String middleName, int phone, Date dateOfBirth) {
         final String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
-        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName, lastName, middleName, phone, dateOfBirth);
+        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%', phone, dateOfBirth);
     }
 }
