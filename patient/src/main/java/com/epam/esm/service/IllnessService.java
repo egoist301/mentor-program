@@ -5,6 +5,8 @@ import com.epam.esm.repository.entity.Illness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IllnessService {
     private IllnessDao illnessDao;
@@ -24,5 +26,9 @@ public class IllnessService {
 
     public void delete(Long id) {
         illnessDao.delete(id);
+    }
+
+    public List<Illness> search(String name, String nameInLatin) {
+        return illnessDao.search(name, nameInLatin);
     }
 }

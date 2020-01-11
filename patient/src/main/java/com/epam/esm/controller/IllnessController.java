@@ -1,11 +1,15 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.controller.converter.IllnessDtoConverter;
 import com.epam.esm.controller.dto.IllnessDto;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToDto;
 import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToEntity;
@@ -38,5 +42,15 @@ public class IllnessController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatient(@PathVariable("id") Long id) {
         illnessService.delete(id);
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IllnessDto> search(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+                                   @RequestParam(value = "latin", required = false, defaultValue = "") String nameInLatin) {
+        return illnessService
+                .search(name, nameInLatin).stream()
+                .map(IllnessDtoConverter::convertToDto)
+                .collect(Collectors.toList());
     }
 }

@@ -60,18 +60,9 @@ public class PatientController {
     public List<PatientDto> search(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
                                    @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
                                    @RequestParam(value = "middle", required = false, defaultValue = "")
-                                           String middleName,
-                                   @RequestParam(value = "phone", required = false) int phoneNumber,
-                                   @RequestParam(value = "birth", required = false) String dateOfBirth)
-            throws ParseException {
-        final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(firstName);
-        System.out.println(lastName);
-        System.out.println(middleName);
-        System.out.println(phoneNumber);
-        System.out.println(dateOfBirth);
+                                           String middleName) {
         return patientService
-                .search(firstName, lastName, middleName, phoneNumber, SIMPLE_DATE_FORMAT.parse(dateOfBirth)).stream()
+                .search(firstName, lastName, middleName).stream()
                 .map(PatientDtoConverter::convertToDto)
                 .collect(Collectors.toList());
     }

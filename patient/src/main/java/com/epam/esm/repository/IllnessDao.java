@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class IllnessDao {
     private final JdbcTemplate jdbcTemplate;
@@ -28,5 +30,10 @@ public class IllnessDao {
     public void delete(final Long id) {
         final String DELETE_ILLNESS = "DELETE FROM illness WHERE id = ?";
         jdbcTemplate.update(DELETE_ILLNESS, id);
+    }
+
+    public List<Illness> search(String name, String nameInLatin) {
+        final String SEARCH = "SELECT * FROM searchIllness(?,?)";
+        return jdbcTemplate.query(SEARCH, new IllnessMapper(), name + '%', nameInLatin + '%');
     }
 }

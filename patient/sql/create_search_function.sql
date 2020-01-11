@@ -1,15 +1,18 @@
-CREATE FUNCTION searchPatient(text, text, text, int, date)
+CREATE OR REPLACE  FUNCTION searchPatient(text, text, text)
     RETURNS patients AS
 $$
 SELECT id, first_name, last_name, middle_name, phone_number, date_of_birth
 FROM patients
 WHERE first_name LIKE $1
   AND last_name LIKE $2
-  AND middle_name LIKE $3
-  AND phone_number = $4
-  AND date_of_birth = $5;
+  AND middle_name LIKE $3;
 $$ LANGUAGE SQL;
 
-SELECT first_name, last_name, middle_name, phone_number, date_of_birth
-FROM searchPatient('%', '%', '%', 3221114,
-    '2000-08-27');
+CREATE OR REPLACE  FUNCTION searchIllness(text, text)
+RETURNS illness AS
+$$
+SELECT id, name, name_in_latin, chance_to_die
+FROM illness
+WHERE name LIKE $1
+AND name_in_latin LIKE $2;
+$$ LANGUAGE SQL;

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -45,8 +44,8 @@ public class PatientDao {
         jdbcTemplate.update(DELETE_PATIENT, id);
     }
 
-    public List<Patient> search(String firstName, String lastName, String middleName, int phone, Date dateOfBirth) {
-        final String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
-        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%', phone, dateOfBirth);
+    public List<Patient> search(String firstName, String lastName, String middleName) {
+        final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
+        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%');
     }
 }

@@ -33,7 +33,7 @@ public class PatientService {
         patientDao.delete(id);
     }
 
-    public List<Patient> search(String firstName, String lastName, String middleName, int phone, Date dateOfBirth) {
-        return patientDao.search(firstName, lastName, middleName, phone, dateOfBirth);
+    public List<Patient> search(String firstName, String lastName, String middleName) {
+        return patientDao.search(firstName, lastName, middleName);
     }
 }
