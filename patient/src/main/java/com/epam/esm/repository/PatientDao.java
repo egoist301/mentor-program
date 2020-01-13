@@ -61,4 +61,9 @@ public class PatientDao {
         final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
         return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%');
     }
+
+    public void saveIllness(Long patient, Long illness) {
+        final String SAVE = "INSERT INTO patients_illness(patient_id, illness_id) VALUES (?,?)";
+        jdbcTemplate.update(SAVE, patient, illness);
+    }
 }

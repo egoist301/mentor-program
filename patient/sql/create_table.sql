@@ -9,7 +9,7 @@ create table patients (
 );
 create table illness (
 	id serial,
-	name varchar(30),
+	name varchar(30) UNIQUE,
 	name_in_latin varchar(30),
     chance_to_die int CHECK ( chance_to_die BETWEEN 0 AND 100),
 	constraint pk_illness primary key (id)

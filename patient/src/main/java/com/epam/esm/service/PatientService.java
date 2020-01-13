@@ -27,11 +27,14 @@ public class PatientService {
     }
 
     public void create(Patient entity) {
-        List<Illness> illnesses = entity.getIllnesses();
-        for (Illness illness : illnesses) {
-            illnessDao.create(illness);
-        }
         patientDao.create(entity);
+        List<Illness> illnesses = entity.getIllnesses();
+        if (!illnesses.isEmpty()) {
+            illnesses.forEach(illness -> {
+                illnessDao.create(illness);
+                patientDao.saveIllness(entity.getId(), illness.getId());
+            });
+        }
     }
 
     public void update(Patient entity) {
@@ -43,6 +46,8 @@ public class PatientService {
     }
 
     public List<Patient> get(String firstName, String lastName, String middleName) {
-        return patientDao.get(firstName, lastName, middleName);
+        List<Patient> patients = patientDao.get(firstName, lastName, middleName);
+        patients.forEach(patient -> {patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));});
+        return patients;
     }
 }

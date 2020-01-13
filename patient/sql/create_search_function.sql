@@ -1,5 +1,5 @@
 CREATE OR REPLACE  FUNCTION searchPatient(text, text, text)
-    RETURNS patients AS
+    RETURNS SETOF patients AS
 $$
 SELECT id, first_name, last_name, middle_name, phone_number, date_of_birth
 FROM patients
@@ -9,7 +9,7 @@ WHERE first_name LIKE $1
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE  FUNCTION searchIllness(text, text)
-RETURNS illness AS
+RETURNS SETOF illness AS
 $$
 SELECT id, name, name_in_latin, chance_to_die
 FROM illness
