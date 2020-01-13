@@ -1,10 +1,12 @@
 package com.epam.esm.controller.dto;
 
+import com.epam.esm.repository.entity.Illness;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 public class PatientDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -18,6 +20,7 @@ public class PatientDto {
     @JsonProperty("phone_number")
     private int phoneNumber;
     private String date;
+    private Set<Illness> illnesses;
 
     public Long getId() {
         return id;
@@ -73,5 +76,13 @@ public class PatientDto {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public Set<Illness> getIllnesses() {
+        return illnesses;
+    }
+
+    public void setIllnesses(Set<Illness> illnessesNew) {
+        illnesses = illnessesNew;
     }
 }

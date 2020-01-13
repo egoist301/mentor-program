@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,14 +53,13 @@ public class PatientController {
         patientService.delete(id);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
-    public List<PatientDto> search(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
-                                   @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
-                                   @RequestParam(value = "middle", required = false, defaultValue = "")
-                                           String middleName) {
-        return patientService
-                .search(firstName, lastName, middleName).stream()
+    public List<PatientDto> get(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
+                                @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
+                                @RequestParam(value = "middle", required = false, defaultValue = "")
+                                        String middleName) {
+        return patientService.get(firstName, lastName, middleName).stream()
                 .map(PatientDtoConverter::convertToDto)
                 .collect(Collectors.toList());
     }

@@ -44,7 +44,7 @@ public class PatientDao {
         jdbcTemplate.update(DELETE_PATIENT, id);
     }
 
-    public List<Patient> search(String firstName, String lastName, String middleName) {
+    public List<Patient> get(String firstName, String lastName, String middleName) {
         final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
         return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%');
     }

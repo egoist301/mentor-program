@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class Patient {
@@ -13,18 +14,9 @@ public class Patient {
     private String middleName;
     private int phoneNumber;
     private Date dateOfBirth;
+    private Set<Illness> illnesses;
 
     public Patient() {
-    }
-
-    public Patient(final Long id, final String firstName, final String lastName, final String middleName,
-                   final int phoneNumber, final Date dateOfBirth) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.phoneNumber = phoneNumber;
-        this.dateOfBirth = dateOfBirth;
     }
 
     public Long getId() {
@@ -71,31 +63,35 @@ public class Patient {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(final Date dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public Set<Illness> getIllnesses() {
+        return illnesses;
+    }
+
+    public void setIllnesses(Set<Illness> illnessesNew) {
+        illnesses = illnessesNew;
+    }
+
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Patient)) {
-            return false;
-        }
-        Patient patient = (Patient) o;
+    public boolean equals(Object oNew) {
+        if (this == oNew) return true;
+        if (!(oNew instanceof Patient)) return false;
+        Patient patient = (Patient) oNew;
         return getPhoneNumber() == patient.getPhoneNumber() &&
                 Objects.equals(getId(), patient.getId()) &&
                 Objects.equals(getFirstName(), patient.getFirstName()) &&
                 Objects.equals(getLastName(), patient.getLastName()) &&
                 Objects.equals(getMiddleName(), patient.getMiddleName()) &&
-                Objects.equals(getDateOfBirth(), patient.getDateOfBirth());
+                Objects.equals(getDateOfBirth(), patient.getDateOfBirth()) &&
+                Objects.equals(getIllnesses(), patient.getIllnesses());
     }
 
     @Override
     public int hashCode() {
-        return Objects
-                .hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth(), getIllnesses());
     }
 
     @Override
@@ -106,6 +102,6 @@ public class Patient {
                 ", middleName='" + middleName + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", dateOfBirth=" + dateOfBirth +
-                '}';
+                ", illnesses=" + illnesses + '}';
     }
 }

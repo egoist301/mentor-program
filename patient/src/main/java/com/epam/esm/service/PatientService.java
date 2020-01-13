@@ -5,7 +5,6 @@ import com.epam.esm.repository.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,7 +32,7 @@ public class PatientService {
         patientDao.delete(id);
     }
 
-    public List<Patient> search(String firstName, String lastName, String middleName) {
-        return patientDao.search(firstName, lastName, middleName);
+    public List<Patient> get(String firstName, String lastName, String middleName) {
+        return patientDao.get(firstName, lastName, middleName);
     }
 }

@@ -44,12 +44,11 @@ public class IllnessController {
         illnessService.delete(id);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
-    public List<IllnessDto> search(@RequestParam(value = "name", required = false, defaultValue = "") String name,
-                                   @RequestParam(value = "latin", required = false, defaultValue = "") String nameInLatin) {
-        return illnessService
-                .search(name, nameInLatin).stream()
+    public List<IllnessDto> get(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+                                @RequestParam(value = "latin", required = false, defaultValue = "") String nameInLatin) {
+        return illnessService.get(name, nameInLatin).stream()
                 .map(IllnessDtoConverter::convertToDto)
                 .collect(Collectors.toList());
     }

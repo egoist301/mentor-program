@@ -28,7 +28,7 @@ public class IllnessService {
         illnessDao.delete(id);
     }
 
-    public List<Illness> search(String name, String nameInLatin) {
-        return illnessDao.search(name, nameInLatin);
+    public List<Illness> get(String name, String nameInLatin) {
+        return illnessDao.get(name, nameInLatin);
     }
 }
