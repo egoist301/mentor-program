@@ -49,7 +49,7 @@ public class IllnessDao {
             preparedStatement.setInt(3, entity.getChanceToDie());
             return preparedStatement;
         }, keyHolder);
-        entity.setId((long)((int) keyHolder.getKeys().get("id")));
+        entity.setId(((Integer) keyHolder.getKeys().get("id")).longValue());
     }
 
     public void delete(Long id) {

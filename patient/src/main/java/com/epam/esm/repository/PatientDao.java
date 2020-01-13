@@ -42,7 +42,7 @@ public class PatientDao {
             preparedStatement.setDate(5, new Date(entity.getDateOfBirth().getTime()));
             return preparedStatement;
         }, keyHolder);
-        entity.setId((long)((int) keyHolder.getKeys().get("id")));
+        entity.setId(((Integer) keyHolder.getKeys().get("id")).longValue());
     }
 
     public void update(Patient entity) {
