@@ -3,6 +3,7 @@ package com.epam.esm.repository;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.mapper.IllnessMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -26,6 +27,17 @@ public class IllnessDao {
         return jdbcTemplate.queryForObject(SELECT_ILLNESS_BY_ID, new IllnessMapper(), id);
     }
 
+    public Long getID(String name) {
+        final String SELECT_ILLNESS_BY_NAME = "SELECT id FROM illness WHERE name = ?";
+        return jdbcTemplate.queryForObject(SELECT_ILLNESS_BY_NAME, Long.class, name);
+    }
+
+
+    public boolean isIllnessExistByName(String name) {
+        final String SELECT_COUNT_BY_NAME = "SELECT COUNT(*) FROM illness WHERE name = ?";
+        return jdbcTemplate.queryForObject(SELECT_COUNT_BY_NAME, Integer.class, name) > 0;
+    }
+
     public void create(Illness entity) {
         final String INSERT_ILLNESS = "INSERT INTO illness(name, name_in_latin, chance_to_die) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -44,7 +56,7 @@ public class IllnessDao {
         jdbcTemplate.update(DELETE_ILLNESS, id);
     }
 
-    public List<Illness> get(String name, String nameInLatin) {
+    public List<Illness> getAll(String name, String nameInLatin) {
         final String SEARCH = "SELECT * FROM searchIllness(?,?)";
         return jdbcTemplate.query(SEARCH, new IllnessMapper(), name + '%', nameInLatin + '%');
     }

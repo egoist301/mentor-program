@@ -21,14 +21,16 @@ public class IllnessService {
     }
 
     public void create(Illness entity) {
-        illnessDao.create(entity);
+        if (!illnessDao.isIllnessExistByName(entity.getName())) {
+            illnessDao.create(entity);
+        }
     }
 
     public void delete(Long id) {
         illnessDao.delete(id);
     }
 
-    public List<Illness> get(String name, String nameInLatin) {
-        return illnessDao.get(name, nameInLatin);
+    public List<Illness> getAll(String name, String nameInLatin) {
+        return illnessDao.getAll(name, nameInLatin);
     }
 }

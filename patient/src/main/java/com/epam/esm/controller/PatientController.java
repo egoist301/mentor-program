@@ -28,7 +28,7 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PatientDto patient(@PathVariable("id") Long id) {
+    public PatientDto get(@PathVariable("id") Long id) {
         return convertToDto(patientService.get(id));
     }
 
@@ -55,11 +55,11 @@ public class PatientController {
 
     @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
-    public List<PatientDto> get(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
+    public List<PatientDto> getAll(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
                                 @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
                                 @RequestParam(value = "middle", required = false, defaultValue = "")
                                         String middleName) {
-        return patientService.get(firstName, lastName, middleName).stream()
+        return patientService.getAll(firstName, lastName, middleName).stream()
                 .map(PatientDtoConverter::convertToDto)
                 .collect(Collectors.toList());
     }
