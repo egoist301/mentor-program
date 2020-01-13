@@ -66,4 +66,9 @@ public class PatientDao {
         final String SAVE = "INSERT INTO patients_illness(patient_id, illness_id) VALUES (?,?)";
         jdbcTemplate.update(SAVE, patient, illness);
     }
+
+    public void removeIllness(Long patient, Long illness) {
+        final String DELETE = "DELETE FROM patients_illness WHERE patient_id = ?, illness_id = ?";
+        jdbcTemplate.update(DELETE, patient, illness);
+    }
 }
