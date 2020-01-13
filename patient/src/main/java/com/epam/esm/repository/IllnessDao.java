@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 
@@ -42,13 +43,13 @@ public class IllnessDao {
         final String INSERT_ILLNESS = "INSERT INTO illness(name, name_in_latin, chance_to_die) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ILLNESS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getNameInLatin());
             preparedStatement.setInt(3, entity.getChanceToDie());
             return preparedStatement;
         }, keyHolder);
-        entity.setId((long) keyHolder.getKey());
+        entity.setId((long)((int) keyHolder.getKeys().get("id")));
     }
 
     public void delete(Long id) {

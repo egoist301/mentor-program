@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -33,15 +34,15 @@ public class PatientDao {
                 "INSERT INTO patients(first_name, last_name, middle_name, phone_number, date_of_birth)"
                         + " VALUES(?,?,?,?,?)";
         jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PATIENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
             preparedStatement.setInt(4, entity.getPhoneNumber());
-            preparedStatement.setDate(5, (Date) entity.getDateOfBirth());
+            preparedStatement.setDate(5, new Date(entity.getDateOfBirth().getTime()));
             return preparedStatement;
         }, keyHolder);
-        entity.setId((long) keyHolder.getKey());
+        entity.setId((long)((int) keyHolder.getKeys().get("id")));
     }
 
     public void update(Patient entity) {
