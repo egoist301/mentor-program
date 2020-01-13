@@ -4,8 +4,12 @@ import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.repository.mapper.PatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -24,11 +28,20 @@ public class PatientDao {
     }
 
     public void create(Patient entity) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         final String INSERT_PATIENT =
                 "INSERT INTO patients(first_name, last_name, middle_name, phone_number, date_of_birth)"
                         + " VALUES(?,?,?,?,?)";
-        jdbcTemplate.update(INSERT_PATIENT, entity.getFirstName(), entity.getLastName(), entity.getMiddleName(),
-                entity.getPhoneNumber(), entity.getDateOfBirth());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PATIENT);
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setString(3, entity.getMiddleName());
+            preparedStatement.setInt(4, entity.getPhoneNumber());
+            preparedStatement.setDate(5, (Date) entity.getDateOfBirth());
+            return preparedStatement;
+        }, keyHolder);
+        entity.setId((long) keyHolder.getKey());
     }
 
     public void update(Patient entity) {
