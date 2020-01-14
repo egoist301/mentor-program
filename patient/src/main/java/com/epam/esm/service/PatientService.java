@@ -67,8 +67,8 @@ public class PatientService {
         patientDao.delete(id);
     }
 
-    public List<Patient> getAll(String firstName, String lastName, String middleName) {
-        List<Patient> patients = patientDao.getAll(firstName, lastName, middleName);
+    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName) {
+        List<Patient> patients = patientDao.getAll(searchByFirstName, searchByLastName, searchByMiddleName);
         patients.forEach(patient -> {patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));});
         return patients;
     }

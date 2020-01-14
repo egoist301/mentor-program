@@ -60,11 +60,11 @@ public class PatientController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PatientDto> getAll(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
-                                   @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
-                                   @RequestParam(value = "middle", required = false, defaultValue = "")
-                                           String middleName) {
-        return patientService.getAll(firstName, lastName, middleName).stream()
+    public List<PatientDto> getAll(
+            @RequestParam(value = "first", required = false, defaultValue = "") String searchByFirstName,
+            @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
+            @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName) {
+        return patientService.getAll(searchByFirstName, searchByLastName, searchByMiddleName).stream()
                 .map(PatientDtoConverter::convertToDto)
                 .collect(Collectors.toList());
     }

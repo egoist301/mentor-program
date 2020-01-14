@@ -30,7 +30,7 @@ public class IllnessService {
         illnessDao.delete(id);
     }
 
-    public List<Illness> getAll(String name, String nameInLatin) {
-        return illnessDao.getAll(name, nameInLatin);
+    public List<Illness> getAll() {
+        return illnessDao.getAll();
     }
 }

@@ -57,9 +57,9 @@ public class IllnessDao {
         jdbcTemplate.update(DELETE_ILLNESS, id);
     }
 
-    public List<Illness> getAll(String name, String nameInLatin) {
-        final String SEARCH = "SELECT * FROM searchIllness(?,?)";
-        return jdbcTemplate.query(SEARCH, new IllnessMapper(), name, nameInLatin);
+    public List<Illness> getAll() {
+        final String SEARCH = "SELECT * FROM illness";
+        return jdbcTemplate.query(SEARCH, new IllnessMapper());
     }
 
     public List<Illness> findByPatientId(Long patient) {

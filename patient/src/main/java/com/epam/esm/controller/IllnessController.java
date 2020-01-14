@@ -47,10 +47,7 @@ public class IllnessController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<IllnessDto> getAll(@RequestParam(value = "name", required = false, defaultValue = "") String name,
-                                @RequestParam(value = "latin", required = false, defaultValue = "") String nameInLatin) {
-        return illnessService.getAll(name, nameInLatin).stream()
-                .map(IllnessDtoConverter::convertToDto)
-                .collect(Collectors.toList());
+    public List<IllnessDto> getAll() {
+        return illnessService.getAll().stream().map(IllnessDtoConverter::convertToDto).collect(Collectors.toList());
     }
 }

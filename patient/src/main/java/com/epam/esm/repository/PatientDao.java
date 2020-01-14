@@ -34,7 +34,8 @@ public class PatientDao {
                 "INSERT INTO patients(first_name, last_name, middle_name, phone_number, date_of_birth)"
                         + " VALUES(?,?,?,?,?)";
         jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
@@ -58,9 +59,9 @@ public class PatientDao {
         jdbcTemplate.update(DELETE_PATIENT, id);
     }
 
-    public List<Patient> getAll(String firstName, String lastName, String middleName) {
+    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName) {
         final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
-        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName, lastName, middleName);
+        return jdbcTemplate.query(SEARCH, new PatientMapper(), searchByFirstName, searchByLastName, searchByMiddleName);
     }
 
     public void saveIllness(Long patient, Long illness) {
