@@ -50,7 +50,7 @@ public class PatientDao {
                 "UPDATE patients SET first_name = ?, last_name = ?, middle_name = ?, phone_number = ?, "
                         + "date_of_birth = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_PATIENT, entity.getFirstName(), entity.getLastName(), entity.getMiddleName(),
-                entity.getPhoneNumber(), entity.getDateOfBirth(), entity.getId());
+                entity.getPhoneNumber(), new Date(entity.getDateOfBirth().getTime()), entity.getId());
     }
 
     public void delete(Long id) {
@@ -60,7 +60,7 @@ public class PatientDao {
 
     public List<Patient> getAll(String firstName, String lastName, String middleName) {
         final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
-        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName + '%', lastName + '%', middleName + '%');
+        return jdbcTemplate.query(SEARCH, new PatientMapper(), firstName, lastName, middleName);
     }
 
     public void saveIllness(Long patient, Long illness) {
@@ -69,7 +69,7 @@ public class PatientDao {
     }
 
     public void removeIllness(Long patient, Long illness) {
-        final String DELETE = "DELETE FROM patients_illness WHERE patient_id = ?, illness_id = ?";
+        final String DELETE = "DELETE FROM patients_illness WHERE patient_id = ? AND illness_id = ?";
         jdbcTemplate.update(DELETE, patient, illness);
     }
 }

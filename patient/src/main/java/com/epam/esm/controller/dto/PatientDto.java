@@ -2,6 +2,10 @@ package com.epam.esm.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,15 +13,25 @@ import java.util.List;
 
 public class PatientDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    @Min(1)
     private Long id;
     @JsonProperty("first_name")
+    @NotNull
+    @Size(min = 2, max = 16)
     private String firstName;
     @JsonProperty("last_name")
+    @NotNull
+    @Size(min = 2, max = 16)
     private String lastName;
     @JsonProperty("middle_name")
+    @Size(min = 4, max = 16)
+    @NotNull
     private String middleName;
     @JsonProperty("phone_number")
+    @Min(1000000)
+    @Max(9999999)
     private int phoneNumber;
+    @NotNull
     private String date;
     private List<IllnessDto> illnesses;
 

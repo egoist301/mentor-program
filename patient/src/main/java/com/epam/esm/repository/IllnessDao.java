@@ -59,7 +59,7 @@ public class IllnessDao {
 
     public List<Illness> getAll(String name, String nameInLatin) {
         final String SEARCH = "SELECT * FROM searchIllness(?,?)";
-        return jdbcTemplate.query(SEARCH, new IllnessMapper(), name + '%', nameInLatin + '%');
+        return jdbcTemplate.query(SEARCH, new IllnessMapper(), name, nameInLatin);
     }
 
     public List<Illness> findByPatientId(Long patient) {

@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,15 +37,17 @@ public class PatientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientDto createPatient(@RequestBody PatientDto patientDto) throws ParseException {
+    public PatientDto createPatient(@RequestBody @Valid PatientDto patientDto) throws ParseException {
         Patient patient = convertToEntity(patientDto);
         patientService.create(patient);
         return convertToDto(patient);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updatePatient(@RequestBody PatientDto patientDto) throws ParseException {
+    public void updatePatient(@PathVariable("id") Long id, @RequestBody @Valid PatientDto patientDto)
+            throws ParseException {
+        patientDto.setId(id);
         Patient patient = convertToEntity(patientDto);
         patientService.update(patient);
     }
@@ -56,9 +61,9 @@ public class PatientController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PatientDto> getAll(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
-                                @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
-                                @RequestParam(value = "middle", required = false, defaultValue = "")
-                                        String middleName) {
+                                   @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
+                                   @RequestParam(value = "middle", required = false, defaultValue = "")
+                                           String middleName) {
         return patientService.getAll(firstName, lastName, middleName).stream()
                 .map(PatientDtoConverter::convertToDto)
                 .collect(Collectors.toList());

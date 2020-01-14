@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class IllnessController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IllnessDto createPatient(@RequestBody IllnessDto illnessDto) {
+    public IllnessDto createPatient(@RequestBody @Valid IllnessDto illnessDto) {
         Illness illness = convertToEntity(illnessDto);
         illnessService.create(illness);
         return convertToDto(illness);
