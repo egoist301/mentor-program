@@ -3,7 +3,6 @@ package com.epam.esm.repository;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.mapper.IllnessMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.HashSet;
 import java.util.List;
 
 @Repository

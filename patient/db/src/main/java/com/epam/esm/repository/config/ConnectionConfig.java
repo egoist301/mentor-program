@@ -1,4 +1,4 @@
-package com.epam.esm.config;
+package com.epam.esm.repository.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
