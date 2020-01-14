@@ -27,10 +27,10 @@ public class PatientService {
         return patient;
     }
 
-    public void create(Patient entity) {
-        patientDao.create(entity);
-        List<Illness> illnesses = entity.getIllnesses();
-        infect(entity, illnesses);
+    public void create(Patient patient) {
+        patientDao.create(patient);
+        List<Illness> illnesses = patient.getIllnesses();
+        infect(patient, illnesses);
     }
 
     public void update(Patient entity) {
@@ -52,14 +52,14 @@ public class PatientService {
                 } else {
                     illnessDao.create(illness);
                 }
-                patientDao.saveIllness(entity.getId(), illness.getId());
+                patientDao.saveRefPatientIllness(entity.getId(), illness.getId());
             });
         }
     }
 
     private void treat(Patient entity, List<Illness> oldIllnesses) {
         if (!oldIllnesses.isEmpty()) {
-            oldIllnesses.forEach(illness -> {patientDao.removeIllness(entity.getId(), illness.getId());});
+            oldIllnesses.forEach(illness -> {patientDao.removeRefPatientIllness(entity.getId(), illness.getId());});
         }
     }
 

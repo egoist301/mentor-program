@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.controller.converter.IllnessDtoConverter;
 import com.epam.esm.controller.dto.IllnessDto;
-import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,15 +32,13 @@ public class IllnessController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IllnessDto createPatient(@RequestBody @Valid IllnessDto illnessDto) {
-        Illness illness = convertToEntity(illnessDto);
-        illnessService.create(illness);
-        return convertToDto(illness);
+    public void create(@RequestBody @Valid IllnessDto illnessDto) {
+        illnessService.create(convertToEntity(illnessDto));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePatient(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         illnessService.delete(id);
     }
 

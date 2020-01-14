@@ -37,17 +37,17 @@ public class IllnessDao {
         return jdbcTemplate.queryForObject(SELECT_COUNT_BY_NAME, Integer.class, name) > 0;
     }
 
-    public void create(Illness entity) {
+    public void create(Illness illness) {
         final String INSERT_ILLNESS = "INSERT INTO illness(name, name_in_latin, chance_to_die) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, entity.getName());
-            preparedStatement.setString(2, entity.getNameInLatin());
-            preparedStatement.setInt(3, entity.getChanceToDie());
+            preparedStatement.setString(1, illness.getName());
+            preparedStatement.setString(2, illness.getNameInLatin());
+            preparedStatement.setInt(3, illness.getChanceToDie());
             return preparedStatement;
         }, keyHolder);
-        entity.setId(((Integer) keyHolder.getKeys().get("id")).longValue());
+        illness.setId(((Integer) keyHolder.getKeys().get("id")).longValue());
     }
 
     public void delete(Long id) {

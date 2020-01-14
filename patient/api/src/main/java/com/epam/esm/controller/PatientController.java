@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.controller.converter.PatientDtoConverter;
 import com.epam.esm.controller.dto.PatientDto;
-import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,30 +29,27 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PatientDto get(@Valid @PathVariable("id") @Min(1) Long id) {
-        return convertToDto(patientService.get(id));
+    public PatientDto get(@PathVariable("id") Long id) {
+            return convertToDto(patientService.get(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientDto createPatient(@RequestBody @Valid PatientDto patientDto) throws ParseException {
-        Patient patient = convertToEntity(patientDto);
-        patientService.create(patient);
-        return convertToDto(patient);
+    public void create(@RequestBody @Valid PatientDto patientDto) throws ParseException {
+        patientService.create(convertToEntity(patientDto));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updatePatient(@PathVariable("id") Long id, @RequestBody @Valid PatientDto patientDto)
+    public void update(@PathVariable("id") Long patientId, @RequestBody @Valid PatientDto patientDto)
             throws ParseException {
-        patientDto.setId(id);
-        Patient patient = convertToEntity(patientDto);
-        patientService.update(patient);
+        patientDto.setId(patientId);
+        patientService.update(convertToEntity(patientDto));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePatient(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         patientService.delete(id);
     }
 

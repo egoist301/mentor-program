@@ -66,28 +66,25 @@ public class PatientDao {
     }
 
     private String getQuery(String sortBy, String order) {
-        String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
-        System.out.println(sortBy);
-        System.out.println(order);
+        String search = "SELECT * FROM searchPatient(?,?,?,?,?)";
         if (sortBy != null &&
                 (sortBy.equals("first_name") || sortBy.equals("last_name") || sortBy.equals("middle_name") ||
                         sortBy.equals("date_of_birth"))) {
-            SEARCH = SEARCH.concat(" ORDER BY ".concat(sortBy));
-            System.out.println(SEARCH);
+            search = search.concat(" ORDER BY ".concat(sortBy));
+
             if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
-                SEARCH = SEARCH.concat(" ".concat(order));
-                System.out.println(SEARCH);
+                search = search.concat(" ".concat(order));
             }
         }
-        return SEARCH;
+        return search;
     }
 
-    public void saveIllness(Long patient, Long illness) {
+    public void saveRefPatientIllness(Long patient, Long illness) {
         final String SAVE = "INSERT INTO patients_illness(patient_id, illness_id) VALUES (?,?)";
         jdbcTemplate.update(SAVE, patient, illness);
     }
 
-    public void removeIllness(Long patient, Long illness) {
+    public void removeRefPatientIllness(Long patient, Long illness) {
         final String DELETE = "DELETE FROM patients_illness WHERE patient_id = ? AND illness_id = ?";
         jdbcTemplate.update(DELETE, patient, illness);
     }
