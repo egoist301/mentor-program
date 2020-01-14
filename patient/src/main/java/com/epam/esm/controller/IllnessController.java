@@ -30,7 +30,7 @@ public class IllnessController {
         return convertToDto(illnessService.get(id));
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public IllnessDto createPatient(@RequestBody IllnessDto illnessDto) {
         Illness illness = convertToEntity(illnessDto);
@@ -44,7 +44,7 @@ public class IllnessController {
         illnessService.delete(id);
     }
 
-    @GetMapping("/get")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<IllnessDto> getAll(@RequestParam(value = "name", required = false, defaultValue = "") String name,
                                 @RequestParam(value = "latin", required = false, defaultValue = "") String nameInLatin) {

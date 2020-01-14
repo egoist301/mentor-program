@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION searchPatient(text, text, text)
 $$
 SELECT id, first_name, last_name, middle_name, phone_number, date_of_birth
 FROM patients
-WHERE first_name LIKE $1
+WHERE first_name LIKE '%' + $1
   AND last_name LIKE $2
   AND middle_name LIKE $3;
 $$ LANGUAGE SQL;

@@ -32,7 +32,7 @@ public class PatientController {
         return convertToDto(patientService.get(id));
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDto createPatient(@RequestBody PatientDto patientDto) throws ParseException {
         Patient patient = convertToEntity(patientDto);
@@ -40,7 +40,7 @@ public class PatientController {
         return convertToDto(patient);
     }
 
-    @PutMapping()
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public void updatePatient(@RequestBody PatientDto patientDto) throws ParseException {
         Patient patient = convertToEntity(patientDto);
@@ -53,7 +53,7 @@ public class PatientController {
         patientService.delete(id);
     }
 
-    @GetMapping("/get")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PatientDto> getAll(@RequestParam(value = "first", required = false, defaultValue = "") String firstName,
                                 @RequestParam(value = "last", required = false, defaultValue = "") String lastName,
