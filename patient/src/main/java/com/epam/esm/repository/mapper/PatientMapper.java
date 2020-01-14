@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class PatientMapper implements RowMapper<Patient> {
     @Override
-    public Patient mapRow(final ResultSet resultSet, final int i) throws SQLException {
+    public Patient mapRow(ResultSet resultSet, int i) throws SQLException {
         Patient patient = new Patient();
         patient.setId(resultSet.getLong(1));
         patient.setFirstName(resultSet.getString(2));

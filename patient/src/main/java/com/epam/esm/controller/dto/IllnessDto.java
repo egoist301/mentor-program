@@ -20,7 +20,8 @@ public class IllnessDto {
     @JsonProperty("chance_to_die")
     @Min(0)
     @Max(100)
-    private int chanceToDie;
+    @NotNull
+    private Integer chanceToDie;
 
     public Long getId() {
         return id;
@@ -46,11 +47,11 @@ public class IllnessDto {
         this.nameInLatin = nameInLatin;
     }
 
-    public int getChanceToDie() {
+    public Integer getChanceToDie() {
         return chanceToDie;
     }
 
-    public void setChanceToDie(int chanceToDie) {
+    public void setChanceToDie(Integer chanceToDie) {
         this.chanceToDie = chanceToDie;
     }
 }

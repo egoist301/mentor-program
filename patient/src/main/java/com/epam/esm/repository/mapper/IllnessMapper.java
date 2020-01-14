@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class IllnessMapper implements RowMapper<Illness> {
     @Override
-    public Illness mapRow(final ResultSet resultSet, final int i) throws SQLException {
+    public Illness mapRow(ResultSet resultSet, int i) throws SQLException {
         Illness illness = new Illness();
         illness.setId(resultSet.getLong(1));
         illness.setName(resultSet.getString(2));

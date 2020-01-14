@@ -9,23 +9,16 @@ public class Illness {
     private Long id;
     private String name;
     private String nameInLatin;
-    private int chanceToDie;
+    private Integer chanceToDie;
 
     public Illness() {
-    }
-
-    public Illness(final Long id, final String name, final String nameInLatin, final int chanceToDie) {
-        this.id = id;
-        this.name = name;
-        this.nameInLatin = nameInLatin;
-        this.chanceToDie = chanceToDie;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -33,7 +26,7 @@ public class Illness {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -41,20 +34,20 @@ public class Illness {
         return nameInLatin;
     }
 
-    public void setNameInLatin(final String nameInLatin) {
+    public void setNameInLatin(String nameInLatin) {
         this.nameInLatin = nameInLatin;
     }
 
-    public int getChanceToDie() {
+    public Integer getChanceToDie() {
         return chanceToDie;
     }
 
-    public void setChanceToDie(final int chanceToDie) {
+    public void setChanceToDie(Integer chanceToDie) {
         this.chanceToDie = chanceToDie;
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -62,7 +55,7 @@ public class Illness {
             return false;
         }
         Illness illness = (Illness) o;
-        return getChanceToDie() == illness.getChanceToDie() &&
+        return Objects.equals(getChanceToDie(), illness.getChanceToDie()) &&
                 Objects.equals(getId(), illness.getId()) &&
                 Objects.equals(getName(), illness.getName()) &&
                 Objects.equals(getNameInLatin(), illness.getNameInLatin());

@@ -12,7 +12,7 @@ public class Patient {
     private String firstName;
     private String lastName;
     private String middleName;
-    private int phoneNumber;
+    private Integer phoneNumber;
     private Date dateOfBirth;
     private List<Illness> illnesses;
 
@@ -23,7 +23,7 @@ public class Patient {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -31,7 +31,7 @@ public class Patient {
         return firstName;
     }
 
-    public void setFirstName(final String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -39,7 +39,7 @@ public class Patient {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -47,15 +47,15 @@ public class Patient {
         return middleName;
     }
 
-    public void setMiddleName(final String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
-    public int getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(final int phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -77,10 +77,14 @@ public class Patient {
 
     @Override
     public boolean equals(Object oNew) {
-        if (this == oNew) return true;
-        if (!(oNew instanceof Patient)) return false;
+        if (this == oNew) {
+            return true;
+        }
+        if (!(oNew instanceof Patient)) {
+            return false;
+        }
         Patient patient = (Patient) oNew;
-        return getPhoneNumber() == patient.getPhoneNumber() &&
+        return Objects.equals(getPhoneNumber(), patient.getPhoneNumber()) &&
                 Objects.equals(getId(), patient.getId()) &&
                 Objects.equals(getFirstName(), patient.getFirstName()) &&
                 Objects.equals(getLastName(), patient.getLastName()) &&
@@ -91,7 +95,8 @@ public class Patient {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth(), getIllnesses());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth(),
+                getIllnesses());
     }
 
     @Override

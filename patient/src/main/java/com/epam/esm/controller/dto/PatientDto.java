@@ -30,7 +30,8 @@ public class PatientDto {
     @JsonProperty("phone_number")
     @Min(1000000)
     @Max(9999999)
-    private int phoneNumber;
+    @NotNull
+    private Integer phoneNumber;
     @NotNull
     private String date;
     private List<IllnessDto> illnesses;
@@ -67,11 +68,11 @@ public class PatientDto {
         this.middleName = middleName;
     }
 
-    public int getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
