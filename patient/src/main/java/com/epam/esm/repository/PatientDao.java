@@ -11,7 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class PatientDao {
@@ -59,9 +62,12 @@ public class PatientDao {
         jdbcTemplate.update(DELETE_PATIENT, id);
     }
 
-    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName) {
-        final String SEARCH = "SELECT * FROM searchPatient(?,?,?)";
-        return jdbcTemplate.query(SEARCH, new PatientMapper(), searchByFirstName, searchByLastName, searchByMiddleName);
+    public Set<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                               String searchByIllnessName, String searchByIllnessLatin) {
+        final String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
+        return new HashSet<>(
+                jdbcTemplate.query(SEARCH, new PatientMapper(), searchByFirstName, searchByLastName, searchByMiddleName,
+                        searchByIllnessName, searchByIllnessLatin));
     }
 
     public void saveIllness(Long patient, Long illness) {

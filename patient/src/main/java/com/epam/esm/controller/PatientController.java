@@ -63,9 +63,10 @@ public class PatientController {
     public List<PatientDto> getAll(
             @RequestParam(value = "first", required = false, defaultValue = "") String searchByFirstName,
             @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
-            @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName) {
-        return patientService.getAll(searchByFirstName, searchByLastName, searchByMiddleName).stream()
-                .map(PatientDtoConverter::convertToDto)
-                .collect(Collectors.toList());
+            @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName,
+            @RequestParam(value = "name", required = false, defaultValue = "") String searchByIllnessName,
+            @RequestParam(value = "latin", required = false, defaultValue = "") String searchByIllnessLatin) {
+        return patientService.getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName,
+                searchByIllnessLatin).stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
     }
 }
