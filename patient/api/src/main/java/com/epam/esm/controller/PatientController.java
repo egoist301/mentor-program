@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +31,7 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PatientDto get(@PathVariable("id") Long id) {
+    public PatientDto get(@Valid @PathVariable("id") @Min(1) Long id) {
         return convertToDto(patientService.get(id));
     }
 
@@ -63,8 +65,10 @@ public class PatientController {
             @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
             @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName,
             @RequestParam(value = "name", required = false, defaultValue = "") String searchByIllnessName,
-            @RequestParam(value = "latin", required = false, defaultValue = "") String searchByIllnessLatin) {
+            @RequestParam(value = "latin", required = false, defaultValue = "") String searchByIllnessLatin,
+            @RequestParam(value = "sort", required = false) String sortBy,
+            @RequestParam(value = "order", required = false) String order) {
         return patientService.getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName,
-                searchByIllnessLatin).stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
+                searchByIllnessLatin, sortBy, order).stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
     }
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Repository
 public class PatientDao {
@@ -60,12 +59,27 @@ public class PatientDao {
         jdbcTemplate.update(DELETE_PATIENT, id);
     }
 
-    public Set<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                               String searchByIllnessName, String searchByIllnessLatin) {
-        final String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
-        return new HashSet<>(
-                jdbcTemplate.query(SEARCH, new PatientMapper(), searchByFirstName, searchByLastName, searchByMiddleName,
-                        searchByIllnessName, searchByIllnessLatin));
+    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                                String searchByIllnessName, String searchByIllnessLatin, String sortBy, String order) {
+        return jdbcTemplate.query(getQuery(sortBy, order), new PatientMapper(), searchByFirstName, searchByLastName,
+                searchByMiddleName, searchByIllnessName, searchByIllnessLatin);
+    }
+
+    private String getQuery(String sortBy, String order) {
+        String SEARCH = "SELECT * FROM searchPatient(?,?,?,?,?)";
+        System.out.println(sortBy);
+        System.out.println(order);
+        if (sortBy != null &&
+                (sortBy.equals("first_name") || sortBy.equals("last_name") || sortBy.equals("middle_name") ||
+                        sortBy.equals("date_of_birth"))) {
+            SEARCH = SEARCH.concat(" ORDER BY ".concat(sortBy));
+            System.out.println(SEARCH);
+            if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
+                SEARCH = SEARCH.concat(" ".concat(order));
+                System.out.println(SEARCH);
+            }
+        }
+        return SEARCH;
     }
 
     public void saveIllness(Long patient, Long illness) {

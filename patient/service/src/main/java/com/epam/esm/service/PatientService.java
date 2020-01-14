@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PatientService {
@@ -68,11 +67,11 @@ public class PatientService {
         patientDao.delete(id);
     }
 
-    public Set<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                               String searchByIllnessName, String searchByIllnessLatin) {
-        Set<Patient> patients = patientDao
+    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                               String searchByIllnessName, String searchByIllnessLatin, String sortBy, String order) {
+        List<Patient> patients = patientDao
                 .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName,
-                        searchByIllnessLatin);
+                        searchByIllnessLatin, sortBy, order);
         patients.forEach(patient -> {patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));});
         return patients;
     }
