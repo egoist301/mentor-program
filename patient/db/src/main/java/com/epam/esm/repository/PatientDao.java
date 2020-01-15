@@ -46,8 +46,8 @@ public class PatientDao {
 
     public void update(Patient entity) {
         final String UPDATE_PATIENT =
-                "UPDATE patients SET first_name = ?, last_name = ?, middle_name = ?, phone_number = ?, "
-                        + "date_of_birth = ? WHERE id = ?";
+                "UPDATE patients SET first_name = ?, last_name = ?, middle_name = ?, phone_number = ?, " +
+                        "date_of_birth = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_PATIENT, entity.getFirstName(), entity.getLastName(), entity.getMiddleName(),
                 entity.getPhoneNumber(), new Date(entity.getDateOfBirth().getTime()), entity.getId());
     }
@@ -85,5 +85,52 @@ public class PatientDao {
     public void removeRefPatientIllness(Long patient, Long illness) {
         final String DELETE = "DELETE FROM patients_illness WHERE patient_id = ? AND illness_id = ?";
         jdbcTemplate.update(DELETE, patient, illness);
+    }
+
+    public void partialUpdate(Patient patient) {
+        String PARTIAL_UPDATE = "UPDATE patients SET ";
+        if (patient.getFirstName() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("first_name = '" + patient.getFirstName() + "'");
+            if (patient.getLastName() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", last_name = '" + patient.getLastName() + "'");
+            }
+            if (patient.getMiddleName() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", middle_name = '" + patient.getMiddleName() + "'");
+            }
+            if (patient.getPhoneNumber() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", phone_number = " + patient.getPhoneNumber());
+            }
+            if (patient.getDateOfBirth() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", date_of_birth = '" + patient.getDateOfBirth() + "'");
+            }
+        } else if (patient.getLastName() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("last_name = '" + patient.getLastName() + "'");
+            if (patient.getMiddleName() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", middle_name = '" + patient.getMiddleName() + "'");
+            }
+            if (patient.getPhoneNumber() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", phone_number = " + patient.getPhoneNumber());
+            }
+            if (patient.getDateOfBirth() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", date_of_birth = '" + patient.getDateOfBirth() + "'");
+            }
+        } else if (patient.getMiddleName() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("middle_name = '" + patient.getMiddleName() + "'");
+            if (patient.getPhoneNumber() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", phone_number = " + patient.getPhoneNumber());
+            }
+            if (patient.getDateOfBirth() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", date_of_birth = '" + patient.getDateOfBirth() + "'");
+            }
+        } else if (patient.getPhoneNumber() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("phone_number = " + patient.getPhoneNumber());
+            if (patient.getDateOfBirth() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", date_of_birth = '" + patient.getDateOfBirth() + "'");
+            }
+        } else if (patient.getDateOfBirth() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("date_of_birth = '" + patient.getDateOfBirth() + "'");
+        }
+        PARTIAL_UPDATE = PARTIAL_UPDATE.concat(" where id = " + patient.getId());
+        jdbcTemplate.update(PARTIAL_UPDATE);
     }
 }

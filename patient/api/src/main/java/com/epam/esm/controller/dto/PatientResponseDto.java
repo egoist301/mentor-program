@@ -8,9 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class PatientDto {
+public class PatientResponseDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Min(1)
+    @JsonProperty("id")
     private Long id;
     @Size(min = 2, max = 16)
     @JsonProperty("first_name")
@@ -28,7 +29,8 @@ public class PatientDto {
     @PastOrPresent
     @JsonProperty("date_of_birth")
     private String date;
-    private List<IllnessDto> illnesses;
+    @JsonProperty("illnesses")
+    private List<IllnessResponseDto> illnesses;
 
     public Long getId() {
         return id;
@@ -86,11 +88,11 @@ public class PatientDto {
         this.date = date;
     }
 
-    public List<IllnessDto> getIllnesses() {
+    public List<IllnessResponseDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(List<IllnessDto> illnesses) {
+    public void setIllnesses(List<IllnessResponseDto> illnesses) {
         this.illnesses = illnesses;
     }
 }

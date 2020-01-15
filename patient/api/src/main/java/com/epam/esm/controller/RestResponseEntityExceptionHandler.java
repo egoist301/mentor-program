@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.controller.dto.ErrorDto;
-import com.epam.esm.service.IllnessExistException;
+import com.epam.esm.service.IllnessNameExistException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         error.setMessage("Server error. Try later please.");
         return new ResponseEntity<>(error, new HttpHeaders(), status);
     }
-    @ExceptionHandler(IllnessExistException.class)
+    @ExceptionHandler(IllnessNameExistException.class)
     public ResponseEntity<Object> handleIllnessExistException(RuntimeException e, WebRequest request) {
         ErrorDto error = new ErrorDto();
         HttpStatus status = HttpStatus.CONFLICT;

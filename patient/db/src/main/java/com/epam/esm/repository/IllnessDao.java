@@ -42,7 +42,8 @@ public class IllnessDao {
         final String INSERT_ILLNESS = "INSERT INTO illness(" + COLUMNS_OF_ILLNESS + ") VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, illness.getName());
             preparedStatement.setString(2, illness.getNameInLatin());
             preparedStatement.setInt(3, illness.getChanceToDie());
@@ -61,9 +62,39 @@ public class IllnessDao {
         return jdbcTemplate.query(SEARCH, new IllnessMapper());
     }
 
-    public List<Illness> findByPatientId(Long patient) {
+    public List<Illness> findByPatientId(Long patientId) {
         final String FIND_BY_PATIENT_ID =
                 "SELECT i.* FROM illness i JOIN patients_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
-        return jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patient);
+        return jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId);
+    }
+
+    public void update(Illness illness) {
+        final String UPDATE = "UPDATE illness SET name = ?, name_in_latin = ?, chance_to_die = ?";
+        jdbcTemplate.update(UPDATE, illness.getName(), illness.getNameInLatin(), illness.getChanceToDie());
+    }
+
+    public void partialUpdate(Illness illness) {
+        String PARTIAL_UPDATE = "UPDATE illness SET ";
+        if (illness.getName() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("name = '" + illness.getName() + "'");
+            if (illness.getNameInLatin() != null) {
+                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", name_in_latin = '" + illness.getNameInLatin() + "'");
+            }
+            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, ", chance_to_die = ");
+        } else if (illness.getNameInLatin() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("name_in_latin = '" + illness.getNameInLatin() + "'");
+            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, ", chance_to_die = ");
+        } else {
+            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, "chance_to_die = ");
+        }
+        PARTIAL_UPDATE = PARTIAL_UPDATE.concat(" WHERE id = " + illness.getId());
+        jdbcTemplate.update(PARTIAL_UPDATE);
+    }
+
+    private String getChanceToDie(Illness illness, String PARTIAL_UPDATE, String s) {
+        if (illness.getChanceToDie() != null) {
+            PARTIAL_UPDATE = PARTIAL_UPDATE.concat(s + illness.getChanceToDie());
+        }
+        return PARTIAL_UPDATE;
     }
 }

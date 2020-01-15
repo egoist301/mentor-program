@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.controller.converter.PatientDtoConverter;
-import com.epam.esm.controller.dto.PatientDto;
+import com.epam.esm.controller.dto.PatientResponseDto;
 import com.epam.esm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,22 +28,30 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PatientDto get(@PathVariable("id") Long id) {
+    public PatientResponseDto get(@PathVariable("id") Long id) {
             return convertToDto(patientService.get(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody @Valid PatientDto patientDto) throws ParseException {
-        patientService.create(convertToEntity(patientDto));
+    public void create(@RequestBody @Valid PatientResponseDto patientResponseDto) throws ParseException {
+        patientService.create(convertToEntity(patientResponseDto));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long patientId, @RequestBody @Valid PatientDto patientDto)
+    public void update(@PathVariable("id") Long patientId, @RequestBody @Valid PatientResponseDto patientResponseDto)
             throws ParseException {
-        patientDto.setId(patientId);
-        patientService.update(convertToEntity(patientDto));
+        patientResponseDto.setId(patientId);
+        patientService.update(convertToEntity(patientResponseDto));
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void partialUpdate(@PathVariable("id") Long id, @RequestBody @Valid PatientResponseDto patientResponseDto)
+            throws ParseException {
+        patientResponseDto.setId(id);
+        patientService.partialUpdate(convertToEntity(patientResponseDto));
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +62,7 @@ public class PatientController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PatientDto> getAll(
+    public List<PatientResponseDto> getAll(
             @RequestParam(value = "first", required = false, defaultValue = "") String searchByFirstName,
             @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
             @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName,

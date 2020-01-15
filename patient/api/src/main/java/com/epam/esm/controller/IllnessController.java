@@ -1,7 +1,8 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.controller.converter.IllnessDtoConverter;
-import com.epam.esm.controller.dto.IllnessDto;
+import com.epam.esm.controller.dto.IllnessResponseDto;
+import com.epam.esm.controller.dto.IllnessDtoPatch;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToDto;
-import static com.epam.esm.controller.converter.IllnessDtoConverter.convertToEntity;
+import static com.epam.esm.controller.converter.IllnessDtoConverter.*;
 
 @RestController
 @RequestMapping("/sick/illness")
@@ -27,15 +27,23 @@ public class IllnessController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public IllnessDto get(@PathVariable("id") Long id) {
+    public IllnessResponseDto get(@PathVariable("id") Long id) {
         return convertToDto(illnessService.get(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IllnessDto create(@RequestBody @Valid IllnessDto illnessDto) {
-        Illness illness = convertToEntity(illnessDto);
+    public IllnessResponseDto create(@RequestBody @Valid IllnessResponseDto illnessResponseDto) {
+        Illness illness = convertToEntity(illnessResponseDto);
         illnessService.create(illness);
+        return convertToDto(illness);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public IllnessResponseDto update(@PathVariable("id") Long id, @RequestBody @Valid IllnessResponseDto illnessResponseDto) {
+        Illness illness = convertToEntity(illnessResponseDto);
+        illnessService.update(illness);
         return convertToDto(illness);
     }
 
@@ -47,7 +55,16 @@ public class IllnessController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<IllnessDto> getAll() {
+    public List<IllnessResponseDto> getAll() {
         return illnessService.getAll().stream().map(IllnessDtoConverter::convertToDto).collect(Collectors.toList());
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public IllnessDtoPatch partialUpdate(@RequestBody IllnessDtoPatch illnessDto, @PathVariable("id") Long id) {
+        illnessDto.setId(id);
+        Illness illness = convertToEntityPatch(illnessDto);
+        illnessService.partialUpdate(illness);
+        return convertToDtoPatch(illness);
     }
 }

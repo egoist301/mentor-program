@@ -75,4 +75,8 @@ public class PatientService {
         patients.forEach(patient -> {patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));});
         return patients;
     }
+
+    public void partialUpdate(Patient patient) {
+        patientDao.partialUpdate(patient);
+    }
 }

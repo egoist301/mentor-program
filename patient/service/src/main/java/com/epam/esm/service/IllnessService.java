@@ -3,6 +3,7 @@ package com.epam.esm.service;
 import com.epam.esm.repository.IllnessDao;
 import com.epam.esm.repository.entity.Illness;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +21,11 @@ public class IllnessService {
         return illnessDao.get(id);
     }
 
-    public void create(Illness entity) {
-        if (!illnessDao.isIllnessExistByName(entity.getName())) {
-            illnessDao.create(entity);
-        }
-        else {
-            throw new IllnessExistException("Illness already exist.");
+    public void create(Illness illness) {
+        try {
+            illnessDao.create(illness);
+        } catch (DuplicateKeyException ex) {
+            throw new IllnessNameExistException("name already exist");
         }
     }
 
@@ -35,5 +35,21 @@ public class IllnessService {
 
     public List<Illness> getAll() {
         return illnessDao.getAll();
+    }
+
+    public void update(Illness illness) {
+        try {
+            illnessDao.update(illness);
+        } catch (DuplicateKeyException ex) {
+            throw new IllnessNameExistException("name already exist");
+        }
+    }
+
+    public void partialUpdate(Illness illness) {
+        try {
+            illnessDao.partialUpdate(illness);
+        } catch (DuplicateKeyException ex) {
+            throw new IllnessNameExistException("name already exist");
+        }
     }
 }
