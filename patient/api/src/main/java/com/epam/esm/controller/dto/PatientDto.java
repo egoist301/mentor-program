@@ -12,25 +12,21 @@ public class PatientDto {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Min(1)
     private Long id;
+    @Size(min = 2, max = 16)
     @JsonProperty("first_name")
-    @NotNull
-    @Size(min = 2, max = 16)
     private String firstName;
-    @JsonProperty("last_name")
-    @NotNull
     @Size(min = 2, max = 16)
+    @JsonProperty("last_name")
     private String lastName;
-    @JsonProperty("middle_name")
     @Size(min = 4, max = 16)
-    @NotNull
+    @JsonProperty("middle_name")
     private String middleName;
-    @JsonProperty("phone_number")
     @Min(1000000)
     @Max(9999999)
-    @NotNull
+    @JsonProperty("phone_number")
     private Integer phoneNumber;
-    @NotNull
     @PastOrPresent
+    @JsonProperty("date_of_birth")
     private String date;
     private List<IllnessDto> illnesses;
 

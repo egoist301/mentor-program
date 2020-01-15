@@ -24,6 +24,9 @@ public class IllnessService {
         if (!illnessDao.isIllnessExistByName(entity.getName())) {
             illnessDao.create(entity);
         }
+        else {
+            throw new IllnessExistException("Illness already exist.");
+        }
     }
 
     public void delete(Long id) {
