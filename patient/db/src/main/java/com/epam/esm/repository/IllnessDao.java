@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 public class IllnessDao {
+    private static final String COLUMNS_OF_ILLNESS = "name, name_in_latin, chance_to_die";
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -22,7 +23,7 @@ public class IllnessDao {
     }
 
     public Illness get(Long id) {
-        final String SELECT_ILLNESS_BY_ID = "SELECT id, name, name_in_latin, chance_to_die FROM illness WHERE id = ?";
+        final String SELECT_ILLNESS_BY_ID = "SELECT id, " + COLUMNS_OF_ILLNESS + " FROM illness WHERE id = ?";
         return jdbcTemplate.queryForObject(SELECT_ILLNESS_BY_ID, new IllnessMapper(), id);
     }
 
@@ -38,7 +39,7 @@ public class IllnessDao {
     }
 
     public void create(Illness illness) {
-        final String INSERT_ILLNESS = "INSERT INTO illness(name, name_in_latin, chance_to_die) VALUES (?,?,?)";
+        final String INSERT_ILLNESS = "INSERT INTO illness(" + COLUMNS_OF_ILLNESS + ") VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);

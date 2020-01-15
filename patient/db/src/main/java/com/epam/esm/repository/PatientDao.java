@@ -15,6 +15,7 @@ import java.util.List;
 
 @Repository
 public class PatientDao {
+    private static final String COLUMNS_OF_PATIENT = "first_name, last_name, middle_name, phone_number, date_of_birth";
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -23,16 +24,13 @@ public class PatientDao {
     }
 
     public Patient get(Long id) {
-        final String SELECT_PATIENT_BY_ID =
-                "SELECT id, first_name, last_name, middle_name, phone_number, date_of_birth FROM patients WHERE id = ?";
+        final String SELECT_PATIENT_BY_ID = "SELECT id, " + COLUMNS_OF_PATIENT + " FROM patients WHERE id = ?";
         return jdbcTemplate.queryForObject(SELECT_PATIENT_BY_ID, new PatientMapper(), id);
     }
 
     public void create(Patient entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        final String INSERT_PATIENT =
-                "INSERT INTO patients(first_name, last_name, middle_name, phone_number, date_of_birth)"
-                        + " VALUES(?,?,?,?,?)";
+        final String INSERT_PATIENT = "INSERT INTO patients(" + COLUMNS_OF_PATIENT + ") VALUES(?,?,?,?,?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
