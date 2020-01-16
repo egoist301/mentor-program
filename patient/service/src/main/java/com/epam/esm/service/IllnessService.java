@@ -3,7 +3,6 @@ package com.epam.esm.service;
 import com.epam.esm.repository.IllnessDao;
 import com.epam.esm.repository.entity.Illness;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,38 +17,42 @@ public class IllnessService {
     }
 
     public Illness get(Long id) {
-        return illnessDao.get(id);
-    }
-
-    public void create(Illness illness) {
-        try {
-            illnessDao.create(illness);
-        } catch (DuplicateKeyException ex) {
-            throw new IllnessNameExistException("name already exist");
-        }
-    }
-
-    public void delete(Long id) {
-        illnessDao.delete(id);
+        return illnessDao.findById(id).get(0);
     }
 
     public List<Illness> getAll() {
         return illnessDao.getAll();
     }
 
+    public void create(Illness illness) {
+        illnessDao.create(illness);
+    }
+
+    public void delete(Long id) {
+        illnessDao.delete(id);
+    }
+
     public void update(Illness illness) {
-        try {
-            illnessDao.update(illness);
-        } catch (DuplicateKeyException ex) {
-            throw new IllnessNameExistException("name already exist");
-        }
+        illnessDao.update(illness);
     }
 
     public void partialUpdate(Illness illness) {
-        try {
-            illnessDao.partialUpdate(illness);
-        } catch (DuplicateKeyException ex) {
-            throw new IllnessNameExistException("name already exist");
-        }
+        illnessDao.partialUpdate(illness);
+    }
+
+    public List<Illness> findByName(String name) {
+        return illnessDao.findByName(name);
+    }
+
+    public boolean isIllnessExist(String name) {
+        return !illnessDao.findByName(name).isEmpty();
+    }
+
+    public boolean isIllnessExist(Long id) {
+        return !illnessDao.findById(id).isEmpty();
+    }
+
+    public boolean isAnyIllnessExistWithName(Long id, String name) {
+        return !illnessDao.findByNameWithDifferentId(name, id).isEmpty();
     }
 }

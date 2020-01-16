@@ -4,17 +4,22 @@ import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.mapper.IllnessMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 
 @Repository
 public class IllnessDao {
-    private static final String COLUMNS_OF_ILLNESS = "name, name_in_latin, chance_to_die";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String CHANCE_TO_DIE = "chance_to_die";
+    private static final String CREATE_DATE = "create_date";
+    private static final String UPDATE_DATE = "update_date";
+    private static final String ALL_FIELDS =
+            ID + ", " + NAME + ", " + DESCRIPTION + ", " + CHANCE_TO_DIE + ", " + CREATE_DATE + ", " + UPDATE_DATE;
+    private static final String TABLE_NAME = "illness";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -22,79 +27,116 @@ public class IllnessDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Illness get(Long id) {
-        final String SELECT_ILLNESS_BY_ID = "SELECT id, " + COLUMNS_OF_ILLNESS + " FROM illness WHERE id = ?";
-        return jdbcTemplate.queryForObject(SELECT_ILLNESS_BY_ID, new IllnessMapper(), id);
+    public List<Illness> findById(Long id) {
+        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+        return jdbcTemplate.query(QUERY, new IllnessMapper(), id);
     }
 
-    public Long getID(String name) {
-        final String SELECT_ILLNESS_BY_NAME = "SELECT id FROM illness WHERE name = ?";
-        return jdbcTemplate.queryForObject(SELECT_ILLNESS_BY_NAME, Long.class, name);
+    public List<Illness> findByName(String name) {
+        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ?";
+        return jdbcTemplate.query(QUERY, new IllnessMapper(), name);
+    }
+
+    public List<Illness> findByNameWithDifferentId(String name, Long id) {
+        final String QUERY =
+                "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ? AND " + ID + " <> ?";
+        return jdbcTemplate.query(QUERY, new IllnessMapper(), name, id);
+    }
+
+    public List<Illness> getAll() {
+        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME;
+        return jdbcTemplate.query(QUERY, new IllnessMapper());
+    }
+
+    public void create(Illness illness) {
+        final String QUERY =
+                "INSERT INTO " + TABLE_NAME + "(" + NAME + ", " + DESCRIPTION + ", " + CHANCE_TO_DIE + ", " +
+                        CREATE_DATE + ", " + UPDATE_DATE + ") VALUES (?,?,?,current_date,current_date)";
+        jdbcTemplate.update(QUERY, illness.getName(), illness.getDescription(), illness.getChanceToDie());
+    }
+
+    public void delete(Long id) {
+        final String QUERY = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+        jdbcTemplate.update(QUERY, id);
+    }
+
+    public void update(Illness illness) {
+        final String QUERY =
+                "UPDATE " + TABLE_NAME + " SET " + NAME + " = ?, " + DESCRIPTION + " = ?, " + CHANCE_TO_DIE + " = ?, " +
+                        UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
+        jdbcTemplate
+                .update(QUERY, illness.getName(), illness.getDescription(), illness.getChanceToDie(), illness.getId());
+    }
+
+    public void partialUpdate(Illness illness) {
+        String updatePart = "UPDATE " + TABLE_NAME;
+        String setPart = " SET ";
+        String wherePart = " WHERE " + ID + " = " + illness.getId();
+        int fieldCount = 0;
+
+        if (illness.getName() != null) {
+            setPart = setPart.concat(NAME + " = '" + illness.getName() + "'");
+            fieldCount++;
+        }
+        if (illness.getDescription() != null) {
+            setPart = addCommaAndSpace(setPart, fieldCount);
+            setPart = setPart.concat(DESCRIPTION + " = '" + illness.getDescription() + "'");
+            fieldCount++;
+        }
+        if (illness.getChanceToDie() != null) {
+            setPart = addCommaAndSpace(setPart, fieldCount);
+            setPart = setPart.concat(CHANCE_TO_DIE + " = " + illness.getChanceToDie());
+            fieldCount++;
+        }
+        setPart = addCommaAndSpace(setPart, fieldCount);
+        setPart = setPart.concat(UPDATE_DATE + " = current_date");
+
+        jdbcTemplate.update(updatePart + setPart + wherePart);
+    }
+
+    private String addCommaAndSpace(String query, int fieldCount) {
+        if (fieldCount != 0) {
+            query = query.concat(", ");
+        }
+        return query;
     }
 
 
     public boolean isIllnessExistByName(String name) {
-        final String SELECT_COUNT_BY_NAME = "SELECT COUNT(*) FROM illness WHERE name = ?";
+        final String SELECT_COUNT_BY_NAME = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + NAME + " = ?";
         return jdbcTemplate.queryForObject(SELECT_COUNT_BY_NAME, Integer.class, name) > 0;
-    }
-
-    public void create(Illness illness) {
-        final String INSERT_ILLNESS = "INSERT INTO illness(" + COLUMNS_OF_ILLNESS + ") VALUES (?,?,?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(INSERT_ILLNESS, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, illness.getName());
-            preparedStatement.setString(2, illness.getNameInLatin());
-            preparedStatement.setInt(3, illness.getChanceToDie());
-            return preparedStatement;
-        }, keyHolder);
-        illness.setId(((Integer) keyHolder.getKeys().get("id")).longValue());
-    }
-
-    public void delete(Long id) {
-        final String DELETE_ILLNESS = "DELETE FROM illness WHERE id = ?";
-        jdbcTemplate.update(DELETE_ILLNESS, id);
-    }
-
-    public List<Illness> getAll() {
-        final String SEARCH = "SELECT * FROM illness";
-        return jdbcTemplate.query(SEARCH, new IllnessMapper());
     }
 
     public List<Illness> findByPatientId(Long patientId) {
         final String FIND_BY_PATIENT_ID =
-                "SELECT i.* FROM illness i JOIN patients_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
+                "SELECT i.* FROM illness i JOIN patient_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
         return jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId);
     }
 
-    public void update(Illness illness) {
-        final String UPDATE = "UPDATE illness SET name = ?, name_in_latin = ?, chance_to_die = ?";
-        jdbcTemplate.update(UPDATE, illness.getName(), illness.getNameInLatin(), illness.getChanceToDie());
-    }
 
-    public void partialUpdate(Illness illness) {
-        String PARTIAL_UPDATE = "UPDATE illness SET ";
+    public void partialUpdateOld(Illness illness) {
+        String partialUpdate = "UPDATE illness SET ";
         if (illness.getName() != null) {
-            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("name = '" + illness.getName() + "'");
-            if (illness.getNameInLatin() != null) {
-                PARTIAL_UPDATE = PARTIAL_UPDATE.concat(", name_in_latin = '" + illness.getNameInLatin() + "'");
+            partialUpdate = partialUpdate.concat("name = '" + illness.getName() + "'");
+            if (illness.getDescription() != null) {
+                partialUpdate = partialUpdate.concat(", description = '" + illness.getDescription() + "'");
             }
-            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, ", chance_to_die = ");
-        } else if (illness.getNameInLatin() != null) {
-            PARTIAL_UPDATE = PARTIAL_UPDATE.concat("name_in_latin = '" + illness.getNameInLatin() + "'");
-            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, ", chance_to_die = ");
+            partialUpdate = getChanceToDie(illness, partialUpdate, ", chance_to_die = ");
+        } else if (illness.getDescription() != null) {
+            partialUpdate = partialUpdate.concat("description = '" + illness.getDescription() + "'");
+            partialUpdate = getChanceToDie(illness, partialUpdate, ", chance_to_die = ");
         } else {
-            PARTIAL_UPDATE = getChanceToDie(illness, PARTIAL_UPDATE, "chance_to_die = ");
+            partialUpdate = getChanceToDie(illness, partialUpdate, "chance_to_die = ");
         }
-        PARTIAL_UPDATE = PARTIAL_UPDATE.concat(" WHERE id = " + illness.getId());
-        jdbcTemplate.update(PARTIAL_UPDATE);
+        partialUpdate = partialUpdate.concat(" WHERE id = " + illness.getId());
+        jdbcTemplate.update(partialUpdate);
     }
 
-    private String getChanceToDie(Illness illness, String PARTIAL_UPDATE, String s) {
+
+    private String getChanceToDie(Illness illness, String partialUpdate, String s) {
         if (illness.getChanceToDie() != null) {
-            PARTIAL_UPDATE = PARTIAL_UPDATE.concat(s + illness.getChanceToDie());
+            partialUpdate = partialUpdate.concat(s + illness.getChanceToDie());
         }
-        return PARTIAL_UPDATE;
+        return partialUpdate;
     }
 }

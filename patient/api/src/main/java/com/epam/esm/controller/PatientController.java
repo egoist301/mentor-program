@@ -1,63 +1,42 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.controller.converter.PatientDtoConverter;
+import com.epam.esm.controller.dto.PatientPartialRequestDto;
+import com.epam.esm.controller.dto.PatientRequestDto;
 import com.epam.esm.controller.dto.PatientResponseDto;
-import com.epam.esm.service.PatientService;
+import com.epam.esm.facade.PatientFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.epam.esm.controller.converter.PatientDtoConverter.convertToDto;
-import static com.epam.esm.controller.converter.PatientDtoConverter.convertToEntity;
 
 @RestController
-@RequestMapping(value = "/sick/patient", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/patient",
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PatientController {
-    private final PatientService patientService;
+    private final PatientFacade patientFacade;
 
     @Autowired
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
+    public PatientController(PatientFacade patientFacade) {
+        this.patientFacade = patientFacade;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PatientResponseDto get(@PathVariable("id") Long id) {
-            return convertToDto(patientService.get(id));
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody @Valid PatientResponseDto patientResponseDto) throws ParseException {
-        patientService.create(convertToEntity(patientResponseDto));
-    }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long patientId, @RequestBody @Valid PatientResponseDto patientResponseDto)
-            throws ParseException {
-        patientResponseDto.setId(patientId);
-        patientService.update(convertToEntity(patientResponseDto));
-    }
-
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void partialUpdate(@PathVariable("id") Long id, @RequestBody @Valid PatientResponseDto patientResponseDto)
-            throws ParseException {
-        patientResponseDto.setId(id);
-        patientService.partialUpdate(convertToEntity(patientResponseDto));
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        patientService.delete(id);
+        return patientFacade.get(id);
     }
 
     @GetMapping
@@ -67,10 +46,37 @@ public class PatientController {
             @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
             @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName,
             @RequestParam(value = "name", required = false, defaultValue = "") String searchByIllnessName,
-            @RequestParam(value = "latin", required = false, defaultValue = "") String searchByIllnessLatin,
             @RequestParam(value = "sort", required = false) String sortBy,
             @RequestParam(value = "order", required = false) String order) {
-        return patientService.getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName,
-                searchByIllnessLatin, sortBy, order).stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
+        return patientFacade
+                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PatientResponseDto create(@RequestBody @Valid PatientRequestDto patientRequestDto) {
+        return patientFacade.create(patientRequestDto);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PatientResponseDto update(@PathVariable("id") Long id,
+                                     @RequestBody @Valid PatientRequestDto patientRequestDto) {
+        return patientFacade.update(id, patientRequestDto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PatientResponseDto partialUpdate(@PathVariable("id") Long id,
+                                            @RequestBody @Valid PatientPartialRequestDto patientPartialRequestDto) {
+        return patientFacade.partialUpdate(id, patientPartialRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Long id) {
+        patientFacade.delete(id);
+    }
+
+
 }

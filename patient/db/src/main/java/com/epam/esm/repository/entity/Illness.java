@@ -2,14 +2,17 @@ package com.epam.esm.repository.entity;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Component
 public class Illness {
     private Long id;
     private String name;
-    private String nameInLatin;
+    private String description;
     private Integer chanceToDie;
+    private Date createDate;
+    private Date updateDate;
 
     public Illness() {
     }
@@ -30,12 +33,12 @@ public class Illness {
         this.name = name;
     }
 
-    public String getNameInLatin() {
-        return nameInLatin;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNameInLatin(String nameInLatin) {
-        this.nameInLatin = nameInLatin;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getChanceToDie() {
@@ -44,6 +47,22 @@ public class Illness {
 
     public void setChanceToDie(Integer chanceToDie) {
         this.chanceToDie = chanceToDie;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override
@@ -55,23 +74,16 @@ public class Illness {
             return false;
         }
         Illness illness = (Illness) o;
-        return Objects.equals(getChanceToDie(), illness.getChanceToDie()) &&
-                Objects.equals(getId(), illness.getId()) &&
+        return Objects.equals(getId(), illness.getId()) &&
                 Objects.equals(getName(), illness.getName()) &&
-                Objects.equals(getNameInLatin(), illness.getNameInLatin());
+                Objects.equals(getDescription(), illness.getDescription()) &&
+                Objects.equals(getChanceToDie(), illness.getChanceToDie()) &&
+                Objects.equals(getCreateDate(), illness.getCreateDate()) &&
+                Objects.equals(getUpdateDate(), illness.getUpdateDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getNameInLatin(), getChanceToDie());
-    }
-
-    @Override
-    public String toString() {
-        return "Illness{" + "id=" + id +
-                ", name='" + name + '\'' +
-                ", nameInLatin='" + nameInLatin + '\'' +
-                ", chanceToDie=" + chanceToDie +
-                '}';
+        return Objects.hash(getId(), getName(), getDescription(), getChanceToDie(), getCreateDate(), getUpdateDate());
     }
 }

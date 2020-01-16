@@ -18,12 +18,14 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    public void configureDefaultServletHandling(
+            DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(
+            List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter(
                 new Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
                         .visibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)

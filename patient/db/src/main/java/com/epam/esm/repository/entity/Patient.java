@@ -14,6 +14,9 @@ public class Patient {
     private String middleName;
     private Integer phoneNumber;
     private Date dateOfBirth;
+    private String identificationNumber;
+    private Date createDate;
+    private Date updateDate;
     private List<Illness> illnesses;
 
     public Patient() {
@@ -67,46 +70,63 @@ public class Patient {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
     public List<Illness> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(List<Illness> illnessesNew) {
-        illnesses = illnessesNew;
+    public void setIllnesses(
+            List<Illness> illnesses) {
+        this.illnesses = illnesses;
     }
 
     @Override
-    public boolean equals(Object oNew) {
-        if (this == oNew) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(oNew instanceof Patient)) {
+        if (!(o instanceof Patient)) {
             return false;
         }
-        Patient patient = (Patient) oNew;
-        return Objects.equals(getPhoneNumber(), patient.getPhoneNumber()) &&
-                Objects.equals(getId(), patient.getId()) &&
+        Patient patient = (Patient) o;
+        return Objects.equals(getId(), patient.getId()) &&
                 Objects.equals(getFirstName(), patient.getFirstName()) &&
                 Objects.equals(getLastName(), patient.getLastName()) &&
                 Objects.equals(getMiddleName(), patient.getMiddleName()) &&
+                Objects.equals(getPhoneNumber(), patient.getPhoneNumber()) &&
                 Objects.equals(getDateOfBirth(), patient.getDateOfBirth()) &&
+                Objects.equals(getIdentificationNumber(), patient.getIdentificationNumber()) &&
+                Objects.equals(getCreateDate(), patient.getCreateDate()) &&
+                Objects.equals(getUpdateDate(), patient.getUpdateDate()) &&
                 Objects.equals(getIllnesses(), patient.getIllnesses());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getFirstName(), getLastName(), getMiddleName(), getPhoneNumber(), getDateOfBirth(),
-                getIllnesses());
-    }
-
-    @Override
-    public String toString() {
-        return "Patient{" + "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", phoneNumber=" + phoneNumber +
-                ", dateOfBirth=" + dateOfBirth +
-                ", illnesses=" + illnesses + '}';
+                getIdentificationNumber(), getCreateDate(), getUpdateDate(), getIllnesses());
     }
 }

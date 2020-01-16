@@ -11,6 +11,8 @@
         <module>api</module>
         <module>db</module>
         <module>service</module>
+        <module>util</module>
+        <module>error</module>
     </modules>
     <packaging>pom</packaging>
     <build>

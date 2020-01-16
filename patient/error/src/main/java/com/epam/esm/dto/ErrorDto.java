@@ -1,4 +1,4 @@
-package com.epam.esm.controller.dto;
+package com.epam.esm.dto;
 
 import org.springframework.http.HttpStatus;
 
@@ -7,7 +7,8 @@ public class ErrorDto {
     private HttpStatus status;
     private String message;
 
-    public ErrorDto() {}
+    public ErrorDto() {
+    }
 
     public ErrorDto(int code, HttpStatus status, String message) {
         this.code = code;

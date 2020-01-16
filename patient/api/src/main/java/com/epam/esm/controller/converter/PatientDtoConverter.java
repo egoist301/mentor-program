@@ -1,7 +1,10 @@
 package com.epam.esm.controller.converter;
 
+import com.epam.esm.controller.dto.PatientPartialRequestDto;
+import com.epam.esm.controller.dto.PatientRequestDto;
 import com.epam.esm.controller.dto.PatientResponseDto;
 import com.epam.esm.repository.entity.Patient;
+import com.epam.esm.util.DateFormatter;
 
 import java.text.ParseException;
 import java.util.stream.Collectors;
@@ -17,22 +20,41 @@ public final class PatientDtoConverter {
         patientResponseDto.setLastName(patient.getLastName());
         patientResponseDto.setMiddleName(patient.getMiddleName());
         patientResponseDto.setPhoneNumber(patient.getPhoneNumber());
-        patientResponseDto.setDateOfBirth(patient.getDateOfBirth());
+        patientResponseDto.setDateOfBirth(DateFormatter.convertDateToString(patient.getDateOfBirth()));
+        patientResponseDto.setIdentificationNumber(patient.getIdentificationNumber());
+        patientResponseDto.setCreateDate(DateFormatter.convertDateToString(patient.getCreateDate()));
+        patientResponseDto.setUpdateDate(DateFormatter.convertDateToString(patient.getUpdateDate()));
         patientResponseDto.setIllnesses(patient.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
                 Collectors.toList()));
         return patientResponseDto;
     }
 
-    public static Patient convertToEntity(PatientResponseDto patientResponseDto) throws ParseException {
+    public static Patient convertToEntity(PatientRequestDto patientRequestDto) throws ParseException {
         Patient patient = new Patient();
-        patient.setId(patientResponseDto.getId());
-        patient.setFirstName(patientResponseDto.getFirstName());
-        patient.setMiddleName(patientResponseDto.getMiddleName());
-        patient.setLastName(patientResponseDto.getLastName());
-        patient.setPhoneNumber(patientResponseDto.getPhoneNumber());
-        patient.setDateOfBirth(patientResponseDto.getDateOfBirthConverted());
-        patient.setIllnesses(patientResponseDto.getIllnesses().stream().map(IllnessDtoConverter::convertToEntity).collect(
-                Collectors.toList()));
+        patient.setFirstName(patientRequestDto.getFirstName());
+        patient.setMiddleName(patientRequestDto.getMiddleName());
+        patient.setLastName(patientRequestDto.getLastName());
+        patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
+        patient.setDateOfBirth(DateFormatter.convertStringToDate(patientRequestDto.getDateOfBirth()));
+        patient.setIdentificationNumber(patientRequestDto.getIdentificationNumber());
+        patient.setIllnesses(
+                patientRequestDto.getIllnesses().stream().map(IllnessDtoConverter::convertToEntity).collect(
+                        Collectors.toList()));
+        return patient;
+    }
+
+    public static Patient partialConvertToEntity(
+            PatientPartialRequestDto patientPartialRequestDto)
+            throws ParseException {
+        Patient patient = new Patient();
+        patient.setFirstName(patientPartialRequestDto.getFirstName());
+        patient.setMiddleName(patientPartialRequestDto.getMiddleName());
+        patient.setLastName(patientPartialRequestDto.getLastName());
+        patient.setPhoneNumber(patientPartialRequestDto.getPhoneNumber());
+        patient.setDateOfBirth(DateFormatter.convertStringToDate(patientPartialRequestDto.getDateOfBirth()));
+        patient.setIllnesses(
+                patientPartialRequestDto.getIllnesses().stream().map(IllnessDtoConverter::partialConvertToEntity)
+                        .collect(Collectors.toList()));
         return patient;
     }
 }

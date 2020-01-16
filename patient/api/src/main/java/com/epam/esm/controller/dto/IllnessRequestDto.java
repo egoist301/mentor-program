@@ -4,15 +4,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class IllnessRequestDto {
+    @NotNull
     @Size(min = 4, max = 30)
     @JsonProperty("name")
     private String name;
-    @Size(min = 4, max = 60)
-    @JsonProperty("name_in_latin")
-    private String nameInLatin;
+
+    @NotNull
+    @Size(min = 4, max = 250)
+    @JsonProperty("description")
+    private String description;
+
+    @NotNull
     @Min(0)
     @Max(100)
     @JsonProperty("chance_to_die")
@@ -26,12 +32,12 @@ public class IllnessRequestDto {
         this.name = name;
     }
 
-    public String getNameInLatin() {
-        return nameInLatin;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNameInLatin(String nameInLatin) {
-        this.nameInLatin = nameInLatin;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getChanceToDie() {

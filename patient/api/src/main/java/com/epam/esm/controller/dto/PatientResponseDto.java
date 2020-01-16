@@ -2,35 +2,41 @@ package com.epam.esm.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class PatientResponseDto {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    @Min(1)
     @JsonProperty("id")
     private Long id;
-    @Size(min = 2, max = 16)
+
     @JsonProperty("first_name")
     private String firstName;
-    @Size(min = 2, max = 16)
+
     @JsonProperty("last_name")
     private String lastName;
-    @Size(min = 4, max = 16)
+
     @JsonProperty("middle_name")
     private String middleName;
-    @Min(1000000)
-    @Max(9999999)
+
     @JsonProperty("phone_number")
     private Integer phoneNumber;
-    @PastOrPresent
+
     @JsonProperty("date_of_birth")
-    private String date;
+    private String dateOfBirth;
+
+    @JsonProperty("identification_number")
+    private String identificationNumber;
+
+    @JsonProperty("create_date")
+    private String createDate;
+
+    @JsonProperty("update_date")
+    private String updateDate;
+
     @JsonProperty("illnesses")
     private List<IllnessResponseDto> illnesses;
+
+    public PatientResponseDto() {
+    }
 
     public Long getId() {
         return id;
@@ -72,20 +78,36 @@ public class PatientResponseDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getDateOfBirthConverted() throws ParseException {
-        return SIMPLE_DATE_FORMAT.parse(this.date);
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date date) {
-        this.date = SIMPLE_DATE_FORMAT.format(date);
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public String getDate() {
-        return date;
+    public String getIdentificationNumber() {
+        return identificationNumber;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
 
     public List<IllnessResponseDto> getIllnesses() {

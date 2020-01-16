@@ -12,8 +12,10 @@ public class IllnessMapper implements RowMapper<Illness> {
         Illness illness = new Illness();
         illness.setId(resultSet.getLong(1));
         illness.setName(resultSet.getString(2));
-        illness.setNameInLatin(resultSet.getString(3));
+        illness.setDescription(resultSet.getString(3));
         illness.setChanceToDie(resultSet.getInt(4));
+        illness.setCreateDate(resultSet.getDate(5));
+        illness.setUpdateDate(resultSet.getDate(6));
         return illness;
     }
 }

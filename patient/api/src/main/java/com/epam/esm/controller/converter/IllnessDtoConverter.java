@@ -1,8 +1,10 @@
 package com.epam.esm.controller.converter;
 
+import com.epam.esm.controller.dto.IllnessPartialRequestDto;
+import com.epam.esm.controller.dto.IllnessRequestDto;
 import com.epam.esm.controller.dto.IllnessResponseDto;
-import com.epam.esm.controller.dto.IllnessDtoPatch;
 import com.epam.esm.repository.entity.Illness;
+import com.epam.esm.util.DateFormatter;
 
 public final class IllnessDtoConverter {
     private IllnessDtoConverter() {
@@ -11,35 +13,27 @@ public final class IllnessDtoConverter {
     public static IllnessResponseDto convertToDto(Illness illness) {
         IllnessResponseDto illnessResponseDto = new IllnessResponseDto();
         illnessResponseDto.setId(illness.getId());
-        illnessResponseDto.setChanceToDie(illness.getChanceToDie());
         illnessResponseDto.setName(illness.getName());
-        illnessResponseDto.setNameInLatin(illness.getNameInLatin());
+        illnessResponseDto.setDescription(illness.getDescription());
+        illnessResponseDto.setChanceToDie(illness.getChanceToDie());
+        illnessResponseDto.setCreateDate(DateFormatter.convertDateToString(illness.getCreateDate()));
+        illnessResponseDto.setUpdateDate(DateFormatter.convertDateToString(illness.getUpdateDate()));
         return illnessResponseDto;
     }
 
-    public static Illness convertToEntity(IllnessResponseDto illnessResponseDto) {
+    public static Illness convertToEntity(IllnessRequestDto illnessRequestDto) {
         Illness illness = new Illness();
-        illness.setName(illnessResponseDto.getName());
-        illness.setNameInLatin(illnessResponseDto.getNameInLatin());
-        illness.setChanceToDie(illnessResponseDto.getChanceToDie());
-        illness.setId(illnessResponseDto.getId());
+        illness.setName(illnessRequestDto.getName());
+        illness.setDescription(illnessRequestDto.getDescription());
+        illness.setChanceToDie(illnessRequestDto.getChanceToDie());
         return illness;
     }
-    public static IllnessDtoPatch convertToDtoPatch(Illness illness) {
-        IllnessDtoPatch illnessDtoPatch = new IllnessDtoPatch();
-        illnessDtoPatch.setId(illness.getId());
-        illnessDtoPatch.setChanceToDie(illness.getChanceToDie());
-        illnessDtoPatch.setName(illness.getName());
-        illnessDtoPatch.setNameInLatin(illness.getNameInLatin());
-        return illnessDtoPatch;
-    }
 
-    public static Illness convertToEntityPatch(IllnessDtoPatch illnessDtoPatch) {
+    public static Illness partialConvertToEntity(IllnessPartialRequestDto illnessPartialRequestDto) {
         Illness illness = new Illness();
-        illness.setName(illnessDtoPatch.getName());
-        illness.setNameInLatin(illnessDtoPatch.getNameInLatin());
-        illness.setChanceToDie(illnessDtoPatch.getChanceToDie());
-        illness.setId(illnessDtoPatch.getId());
+        illness.setName(illnessPartialRequestDto.getName());
+        illness.setDescription(illnessPartialRequestDto.getDescription());
+        illness.setChanceToDie(illnessPartialRequestDto.getChanceToDie());
         return illness;
     }
 }

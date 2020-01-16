@@ -1,70 +1,70 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.controller.converter.IllnessDtoConverter;
+import com.epam.esm.controller.dto.IllnessPartialRequestDto;
+import com.epam.esm.controller.dto.IllnessRequestDto;
 import com.epam.esm.controller.dto.IllnessResponseDto;
-import com.epam.esm.controller.dto.IllnessDtoPatch;
-import com.epam.esm.repository.entity.Illness;
-import com.epam.esm.service.IllnessService;
+import com.epam.esm.facade.IllnessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.epam.esm.controller.converter.IllnessDtoConverter.*;
 
 @RestController
-@RequestMapping("/sick/illness")
+@RequestMapping("/illness")
 public class IllnessController {
-    private final IllnessService illnessService;
+    private final IllnessFacade illnessFacade;
 
     @Autowired
-    public IllnessController(IllnessService illnessService) {
-        this.illnessService = illnessService;
+    public IllnessController(IllnessFacade illnessFacade) {
+        this.illnessFacade = illnessFacade;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public IllnessResponseDto get(@PathVariable("id") Long id) {
-        return convertToDto(illnessService.get(id));
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public IllnessResponseDto create(@RequestBody @Valid IllnessResponseDto illnessResponseDto) {
-        Illness illness = convertToEntity(illnessResponseDto);
-        illnessService.create(illness);
-        return convertToDto(illness);
-    }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public IllnessResponseDto update(@PathVariable("id") Long id, @RequestBody @Valid IllnessResponseDto illnessResponseDto) {
-        Illness illness = convertToEntity(illnessResponseDto);
-        illnessService.update(illness);
-        return convertToDto(illness);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        illnessService.delete(id);
+        return illnessFacade.get(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<IllnessResponseDto> getAll() {
-        return illnessService.getAll().stream().map(IllnessDtoConverter::convertToDto).collect(Collectors.toList());
+        return illnessFacade.getAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public IllnessResponseDto create(@RequestBody @Valid IllnessRequestDto illnessRequestDto) {
+        return illnessFacade.create(illnessRequestDto);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public IllnessResponseDto update(@PathVariable("id") Long id,
+                                     @RequestBody @Valid IllnessRequestDto illnessRequestDto) {
+        return illnessFacade.update(id, illnessRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Long id) {
+        illnessFacade.delete(id);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public IllnessDtoPatch partialUpdate(@RequestBody IllnessDtoPatch illnessDto, @PathVariable("id") Long id) {
-        illnessDto.setId(id);
-        Illness illness = convertToEntityPatch(illnessDto);
-        illnessService.partialUpdate(illness);
-        return convertToDtoPatch(illness);
+    public IllnessResponseDto partialUpdate(@PathVariable("id") Long id, @RequestBody
+            IllnessPartialRequestDto illnessPartialRequestDto) {
+        return illnessFacade.partialUpdate(id, illnessPartialRequestDto);
     }
 }

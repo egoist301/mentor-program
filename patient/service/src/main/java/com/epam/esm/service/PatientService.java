@@ -22,15 +22,23 @@ public class PatientService {
     }
 
     public Patient get(Long id) {
-        Patient patient = patientDao.get(id);
+        Patient patient = patientDao.findById(id).get(0);
         patient.setIllnesses(illnessDao.findByPatientId(id));
         return patient;
     }
 
+    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                                String searchByIllnessName, String sortBy, String order) {
+        List<Patient> patients = patientDao
+                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
+        patients.forEach(patient -> {
+            patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));
+        });
+        return patients;
+    }
+
     public void create(Patient patient) {
         patientDao.create(patient);
-        List<Illness> illnesses = patient.getIllnesses();
-        infect(patient, illnesses);
     }
 
     public void update(Patient entity) {
@@ -44,11 +52,15 @@ public class PatientService {
         treat(entity, oldIllnesses);
     }
 
+    public void saveRefPatientIlness(Long patientId, Long illnessId) {
+        patientDao.saveRefPatientIllness(patientId, illnessId);
+    }
+
     private void infect(Patient entity, List<Illness> newIllnesses) {
         if (!newIllnesses.isEmpty()) {
             newIllnesses.forEach(illness -> {
                 if (illnessDao.isIllnessExistByName(illness.getName())) {
-                    illness.setId(illnessDao.getID(illness.getName()));
+                    illness.setId(illnessDao.findByName(illness.getName()).get(0).getId());
                 } else {
                     illnessDao.create(illness);
                 }
@@ -59,7 +71,9 @@ public class PatientService {
 
     private void treat(Patient entity, List<Illness> oldIllnesses) {
         if (!oldIllnesses.isEmpty()) {
-            oldIllnesses.forEach(illness -> {patientDao.removeRefPatientIllness(entity.getId(), illness.getId());});
+            oldIllnesses.forEach(illness -> {
+                patientDao.removeRefPatientIllness(entity.getId(), illness.getId());
+            });
         }
     }
 
@@ -67,16 +81,26 @@ public class PatientService {
         patientDao.delete(id);
     }
 
-    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                               String searchByIllnessName, String searchByIllnessLatin, String sortBy, String order) {
-        List<Patient> patients = patientDao
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName,
-                        searchByIllnessLatin, sortBy, order);
-        patients.forEach(patient -> {patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));});
-        return patients;
-    }
 
     public void partialUpdate(Patient patient) {
         patientDao.partialUpdate(patient);
+    }
+
+    public Patient findByIdentificationNumber(String identificationNumber) {
+        Patient patient = patientDao.findByIdentificationNumber(identificationNumber).get(0);
+        patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));
+        return patient;
+    }
+
+    public boolean isPatientExist(String identificationNumber) {
+        return !patientDao.findByIdentificationNumber(identificationNumber).isEmpty();
+    }
+
+    public boolean isPatientExist(Long id) {
+        return !patientDao.findById(id).isEmpty();
+    }
+
+    public boolean isAnyPatientExistWithIdentificationNumber(Long id, String identificationNumber) {
+        return !patientDao.findByIdentificationNumberWithDifferentId(id, identificationNumber).isEmpty();
     }
 }
