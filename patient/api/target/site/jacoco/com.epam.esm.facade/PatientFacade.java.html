@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PatientFacade.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">api</a> &gt; <a href="index.source.html" class="el_package">com.epam.esm.facade</a> &gt; <span class="el_source">PatientFacade.java</span></div><h1>PatientFacade.java</h1><pre class="source lang-java linenums">package com.epam.esm.facade;
+
+import com.epam.esm.converter.PatientDtoConverter;
+import com.epam.esm.dto.PatientPartialRequestDto;
+import com.epam.esm.dto.PatientRequestDto;
+import com.epam.esm.dto.PatientResponseDto;
+import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
+import com.epam.esm.exception.ParseDateException;
+import com.epam.esm.exception.PatientAlreadyExistException;
+import com.epam.esm.exception.PatientNotExistException;
+import com.epam.esm.repository.entity.Illness;
+import com.epam.esm.repository.entity.Patient;
+import com.epam.esm.service.IllnessService;
+import com.epam.esm.service.PatientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+public class PatientFacade {
+    private PatientService patientService;
+    private IllnessService illnessService;
+
+    @Autowired
+<span class="fc" id="L29">    public PatientFacade(PatientService patientService, IllnessService illnessService) {</span>
+<span class="fc" id="L30">        this.patientService = patientService;</span>
+<span class="fc" id="L31">        this.illnessService = illnessService;</span>
+<span class="fc" id="L32">    }</span>
+
+    public PatientResponseDto get(Long id) {
+<span class="fc" id="L35">        Patient patient = patientService.get(id);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (patient == null) {</span>
+<span class="fc" id="L37">            return null;</span>
+        }
+<span class="fc" id="L39">        patient.setIllnesses(illnessService.findByPatientId(id));</span>
+<span class="fc" id="L40">        return PatientDtoConverter.convertToDto(patient);</span>
+    }
+
+    public List&lt;PatientResponseDto&gt; getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                                           String searchByIllnessName, String sortBy, String order) {
+<span class="fc" id="L45">        List&lt;Patient&gt; patients = patientService</span>
+<span class="fc" id="L46">                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);</span>
+<span class="fc" id="L47">        patients.forEach(patient -&gt; {</span>
+<span class="fc" id="L48">            patient.setIllnesses(illnessService.findByPatientId(patient.getId()));</span>
+<span class="fc" id="L49">        });</span>
+<span class="fc" id="L50">        return patients.stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());</span>
+    }
+
+    public PatientResponseDto create(PatientRequestDto patientRequestDto) {
+        try {
+<span class="fc" id="L55">            Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (patientService.isPatientExist(patient.getIdentificationNumber())) {</span>
+<span class="fc" id="L57">                throw new PatientAlreadyExistException();</span>
+            } else {
+<span class="fc" id="L59">                patientService.create(patient);</span>
+<span class="fc" id="L60">                Patient patientToResponse =</span>
+<span class="fc" id="L61">                        patientService.findByIdentificationNumber(patient.getIdentificationNumber());</span>
+<span class="fc" id="L62">                patient.setId(patientToResponse.getId());</span>
+<span class="fc" id="L63">                patient.getIllnesses().forEach(illness -&gt; {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">                    if (!illnessService.isIllnessExist(illness.getName())) {</span>
+<span class="fc" id="L65">                        illnessService.create(illness);</span>
+                    }
+<span class="fc" id="L67">                    illness.setId(illnessService.findByName(illness.getName()).getId());</span>
+<span class="fc" id="L68">                    patientService.saveRefPatientIlness(patient.getId(), illness.getId());</span>
+<span class="fc" id="L69">                });</span>
+<span class="fc" id="L70">                patientToResponse.setIllnesses(illnessService.findByPatientId(patientToResponse.getId()));</span>
+<span class="fc" id="L71">                return PatientDtoConverter.convertToDto(patientToResponse);</span>
+            }
+<span class="nc" id="L73">        } catch (ParseException e) {</span>
+<span class="nc" id="L74">            throw new ParseDateException();</span>
+        }
+    }
+
+    public PatientResponseDto update(Long id, PatientRequestDto patientRequestDto) {
+        try {
+<span class="nc" id="L80">            Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);</span>
+<span class="nc" id="L81">            patient.setId(id);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (!patientService.isPatientExist(patient.getId())) {</span>
+<span class="nc" id="L83">                throw new PatientNotExistException();</span>
+<span class="nc" id="L84">            } else if (patientService</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {</span>
+<span class="nc" id="L86">                throw new AnyPatientExistWithSameIdentificationNumberException();</span>
+            } else {
+<span class="nc" id="L88">                patientService.update(patient);</span>
+
+<span class="nc" id="L90">                Patient patientToResponse = patientService.get(id);</span>
+<span class="nc" id="L91">                test(patient, id);</span>
+<span class="nc" id="L92">                patientToResponse.setIllnesses(illnessService.findByPatientId(id));</span>
+<span class="nc" id="L93">                return PatientDtoConverter.convertToDto(patientToResponse);</span>
+            }
+<span class="nc" id="L95">        } catch (ParseException e) {</span>
+<span class="nc" id="L96">            throw new ParseDateException();</span>
+        }
+    }
+
+    private void test(Patient patient, Long id) {
+<span class="nc" id="L101">        Set&lt;Illness&gt; oldIllnesses = illnessService.findByPatientId(id);</span>
+<span class="nc" id="L102">        oldIllnesses.removeAll(patient.getIllnesses());</span>
+<span class="nc" id="L103">        oldIllnesses.forEach(illness -&gt; patientService.removeRefPatientIllness(id, illness.getId()));</span>
+<span class="nc" id="L104">        patient.getIllnesses().forEach(illness -&gt; {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (!illnessService.isIllnessExist(illness.getName())) {</span>
+<span class="nc" id="L106">                illnessService.create(illness);</span>
+<span class="nc" id="L107">                illness.setId(illnessService.findByName(illness.getName()).getId());</span>
+<span class="nc" id="L108">                patientService.saveRefPatientIlness(id, illness.getId());</span>
+            } else {
+<span class="nc" id="L110">                illness.setId(illnessService.findByName(illness.getName()).getId());</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {</span>
+<span class="nc" id="L112">                    patientService.saveRefPatientIlness(id, illness.getId());</span>
+                }
+            }
+<span class="nc" id="L115">        });</span>
+<span class="nc" id="L116">    }</span>
+
+    public void delete(Long id) {
+<span class="nc" id="L119">        patientService.delete(id);</span>
+<span class="nc" id="L120">    }</span>
+
+
+    public PatientResponseDto partialUpdate(Long id, PatientPartialRequestDto patientPartialRequestDto) {
+        try {
+<span class="nc" id="L125">            Patient patient = PatientDtoConverter.partialConvertToEntity(patientPartialRequestDto);</span>
+<span class="nc" id="L126">            patient.setId(id);</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            if (!patientService.isPatientExist(patient.getId())) {</span>
+<span class="nc" id="L129">                throw new PatientNotExistException();</span>
+<span class="nc" id="L130">            } else if (patientService</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {</span>
+<span class="nc" id="L132">                throw new AnyPatientExistWithSameIdentificationNumberException();</span>
+            } else {
+<span class="nc" id="L134">                patientService.partialUpdate(patient);</span>
+<span class="nc" id="L135">                Patient patientToResponse = patientService.get(id);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                if (patient.getIllnesses() != null) {</span>
+<span class="nc" id="L137">                    test(patient, id);</span>
+<span class="nc" id="L138">                    patientToResponse.setIllnesses(illnessService.findByPatientId(id));</span>
+                }
+<span class="nc" id="L140">                return PatientDtoConverter.convertToDto(patientToResponse);</span>
+            }
+<span class="nc" id="L142">        } catch (ParseException e) {</span>
+<span class="nc" id="L143">            throw new ParseDateException();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

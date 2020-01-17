@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IllnessResponseDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">api</a> &gt; <a href="index.source.html" class="el_package">com.epam.esm.dto</a> &gt; <span class="el_source">IllnessResponseDto.java</span></div><h1>IllnessResponseDto.java</h1><pre class="source lang-java linenums">package com.epam.esm.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class IllnessResponseDto {
+    @JsonProperty(&quot;id&quot;)
+    private Long id;
+
+    @JsonProperty(&quot;name&quot;)
+    private String name;
+
+    @JsonProperty(&quot;description&quot;)
+    private String description;
+
+    @JsonProperty(&quot;chance_to_die&quot;)
+    private Integer chanceToDie;
+
+    @JsonProperty(&quot;create_date&quot;)
+    private String createDate;
+
+    @JsonProperty(&quot;update_date&quot;)
+    private String updateDate;
+
+<span class="fc" id="L24">    public IllnessResponseDto() {</span>
+<span class="fc" id="L25">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L28">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L32">        this.id = id;</span>
+<span class="fc" id="L33">    }</span>
+
+    public String getName() {
+<span class="nc" id="L36">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L40">        this.name = name;</span>
+<span class="fc" id="L41">    }</span>
+
+    public String getDescription() {
+<span class="nc" id="L44">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L48">        this.description = description;</span>
+<span class="fc" id="L49">    }</span>
+
+    public Integer getChanceToDie() {
+<span class="nc" id="L52">        return chanceToDie;</span>
+    }
+
+    public void setChanceToDie(Integer chanceToDie) {
+<span class="fc" id="L56">        this.chanceToDie = chanceToDie;</span>
+<span class="fc" id="L57">    }</span>
+
+    public String getCreateDate() {
+<span class="nc" id="L60">        return createDate;</span>
+    }
+
+    public void setCreateDate(String createDate) {
+<span class="fc" id="L64">        this.createDate = createDate;</span>
+<span class="fc" id="L65">    }</span>
+
+    public String getUpdateDate() {
+<span class="nc" id="L68">        return updateDate;</span>
+    }
+
+    public void setUpdateDate(String updateDate) {
+<span class="fc" id="L72">        this.updateDate = updateDate;</span>
+<span class="fc" id="L73">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

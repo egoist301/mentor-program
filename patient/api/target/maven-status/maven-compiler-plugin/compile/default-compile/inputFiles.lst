@@ -1,0 +1,15 @@
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\facade\IllnessFacade.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\config\RootConfig.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\controller\PatientController.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\controller\IllnessController.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\IllnessPartialRequestDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\PatientPartialRequestDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\IllnessRequestDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\converter\PatientDtoConverter.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\config\WebConfig.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\PatientRequestDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\IllnessResponseDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\dto\PatientResponseDto.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\converter\IllnessDtoConverter.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\facade\PatientFacade.java
+D:\mentor-program\patient\api\src\main\java\com\epam\esm\config\WebInitializer.java

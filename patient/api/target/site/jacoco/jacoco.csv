@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+api,com.epam.esm.dto,IllnessPartialRequestDto,24,0,0,0,10,0,7,0,7,0
+api,com.epam.esm.dto,PatientResponseDto,30,43,0,0,10,22,10,11,10,11
+api,com.epam.esm.dto,PatientRequestDto,16,36,0,0,8,14,4,11,4,11
+api,com.epam.esm.dto,IllnessRequestDto,0,24,0,0,0,10,0,7,0,7
+api,com.epam.esm.dto,PatientPartialRequestDto,52,0,0,0,22,0,15,0,15,0
+api,com.epam.esm.dto,IllnessResponseDto,18,27,0,0,6,14,6,7,6,7
+api,com.epam.esm.converter,PatientDtoConverter,43,96,4,0,12,24,3,2,1,2
+api,com.epam.esm.converter,IllnessDtoConverter,18,50,0,0,5,13,1,2,1,2
+api,com.epam.esm.config,WebInitializer,46,0,0,0,9,0,2,0,2,0
+api,com.epam.esm.config,RootConfig,3,0,0,0,1,0,1,0,1,0
+api,com.epam.esm.config,WebConfig,25,0,0,0,8,0,3,0,3,0
+api,com.epam.esm.facade,PatientFacade,197,126,15,5,46,30,14,8,6,6
+api,com.epam.esm.facade,IllnessFacade,86,50,11,3,20,12,9,5,3,4
+api,com.epam.esm.controller,PatientController,102,0,18,0,25,0,18,0,9,0
+api,com.epam.esm.controller,IllnessController,56,0,2,0,16,0,9,0,8,0

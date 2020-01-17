@@ -1,0 +1,7 @@
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\entity\Patient.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\PatientDao.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\mapper\IllnessMapper.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\config\ConnectionConfig.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\entity\Illness.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\mapper\PatientMapper.java
+D:\mentor-program\patient\db\src\main\java\com\epam\esm\repository\IllnessDao.java

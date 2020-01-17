@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PatientDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">db</a> &gt; <a href="index.source.html" class="el_package">com.epam.esm.repository</a> &gt; <span class="el_source">PatientDao.java</span></div><h1>PatientDao.java</h1><pre class="source lang-java linenums">package com.epam.esm.repository;
+
+import com.epam.esm.repository.entity.Patient;
+import com.epam.esm.repository.mapper.PatientMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
+
+@Repository
+public class PatientDao {
+    private static final String ID = &quot;id&quot;;
+    private static final String FIRST_NAME = &quot;first_name&quot;;
+    private static final String LAST_NAME = &quot;last_name&quot;;
+    private static final String MIDDLE_NAME = &quot;middle_name&quot;;
+    private static final String PHONE_NUMBER = &quot;phone_number&quot;;
+    private static final String DATE_OF_BIRTH = &quot;date_of_birth&quot;;
+    private static final String IDENTIFICATION_NUMBER = &quot;identification_number&quot;;
+    private static final String CREATE_DATE = &quot;create_date&quot;;
+    private static final String UPDATE_DATE = &quot;update_date&quot;;
+    private static final String ALL_FIELDS =
+            ID + &quot;, &quot; + FIRST_NAME + &quot;, &quot; + LAST_NAME + &quot;, &quot; + MIDDLE_NAME + &quot;, &quot; + PHONE_NUMBER + &quot;, &quot; +
+                    DATE_OF_BIRTH + &quot;, &quot; + IDENTIFICATION_NUMBER + &quot;, &quot; + CREATE_DATE + &quot;, &quot; + UPDATE_DATE;
+    private static final String TABLE_NAME = &quot;patient&quot;;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+<span class="nc" id="L31">    public PatientDao(JdbcTemplate jdbcTemplate) {</span>
+<span class="nc" id="L32">        this.jdbcTemplate = jdbcTemplate;</span>
+<span class="nc" id="L33">    }</span>
+
+    public Patient findById(Long id) {
+<span class="nc" id="L36">        final String QUERY = &quot;SELECT &quot; + ALL_FIELDS + &quot; FROM &quot; + TABLE_NAME + &quot; WHERE &quot; + ID + &quot; = ?&quot;;</span>
+<span class="nc" id="L37">        List&lt;Patient&gt; patients = jdbcTemplate.query(QUERY, new PatientMapper(), id);</span>
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (patients.isEmpty()) {</span>
+<span class="nc" id="L40">            return null;</span>
+        } else {
+<span class="nc" id="L42">            return patients.get(0);</span>
+        }
+    }
+
+    public Patient findByIdentificationNumber(String identificationNumber) {
+<span class="nc" id="L47">        final String QUERY =</span>
+                &quot;SELECT &quot; + ALL_FIELDS + &quot; FROM &quot; + TABLE_NAME + &quot; WHERE &quot; + IDENTIFICATION_NUMBER + &quot; = ?&quot;;
+<span class="nc" id="L49">        List&lt;Patient&gt; patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber);</span>
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (patients.isEmpty()) {</span>
+<span class="nc" id="L52">            return null;</span>
+        } else {
+<span class="nc" id="L54">            return patients.get(0);</span>
+        }
+    }
+
+    public void create(Patient patient) {
+<span class="nc" id="L59">        final String QUERY =</span>
+                &quot;INSERT INTO &quot; + TABLE_NAME + &quot;(&quot; + FIRST_NAME + &quot;, &quot; + LAST_NAME + &quot;, &quot; + MIDDLE_NAME + &quot;, &quot; +
+                        PHONE_NUMBER + &quot;, &quot; + DATE_OF_BIRTH + &quot;, &quot; + IDENTIFICATION_NUMBER + &quot;, &quot; + CREATE_DATE + &quot;, &quot; +
+                        UPDATE_DATE + &quot;) VALUES (?,?,?,?,?,?,current_date,current_date)&quot;;
+<span class="nc" id="L63">        jdbcTemplate.update(QUERY, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),</span>
+<span class="nc" id="L64">                patient.getPhoneNumber(), patient.getDateOfBirth(), patient.getIdentificationNumber());</span>
+<span class="nc" id="L65">    }</span>
+
+    public void delete(Long id) {
+<span class="nc" id="L68">        final String QUERY = &quot;DELETE FROM &quot; + TABLE_NAME + &quot; WHERE &quot; + ID + &quot; = ?&quot;;</span>
+<span class="nc" id="L69">        jdbcTemplate.update(QUERY, id);</span>
+<span class="nc" id="L70">    }</span>
+
+    public void update(Patient patient) {
+<span class="nc" id="L73">        final String QUERY =</span>
+                &quot;UPDATE &quot; + TABLE_NAME + &quot; SET &quot; + FIRST_NAME + &quot; = ?, &quot; + LAST_NAME + &quot; = ?, &quot; + MIDDLE_NAME +
+                        &quot; = ?, &quot; + PHONE_NUMBER + &quot; = ?, &quot; + DATE_OF_BIRTH + &quot; = ?, &quot; + IDENTIFICATION_NUMBER +
+                        &quot; = ?, &quot; + UPDATE_DATE + &quot; = current_date WHERE &quot; + ID + &quot; = ?&quot;;
+<span class="nc" id="L77">        jdbcTemplate.update(QUERY, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),</span>
+<span class="nc" id="L78">                patient.getPhoneNumber(), patient.getDateOfBirth(), patient.getIdentificationNumber(), patient.getId());</span>
+<span class="nc" id="L79">    }</span>
+
+    public void partialUpdate(Patient patient) {
+<span class="nc" id="L82">        String updatePart = &quot;UPDATE &quot; + TABLE_NAME;</span>
+<span class="nc" id="L83">        String setPart = &quot; SET &quot;;</span>
+<span class="nc" id="L84">        String wherePart = &quot; WHERE &quot; + ID + &quot; = &quot; + patient.getId();</span>
+<span class="nc" id="L85">        int fieldCount = 0;</span>
+
+<span class="nc" id="L87">        String firstName = patient.getFirstName();</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (firstName != null) {</span>
+<span class="nc" id="L89">            setPart = setPart.concat(FIRST_NAME + &quot; = '&quot; + firstName + &quot;'&quot;);</span>
+<span class="nc" id="L90">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L93">        String lastName = patient.getLastName();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (lastName != null) {</span>
+<span class="nc" id="L95">            setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L96">            setPart = setPart.concat(LAST_NAME + &quot; = '&quot; + lastName + &quot;'&quot;);</span>
+<span class="nc" id="L97">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L100">        String middleName = patient.getMiddleName();</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (middleName != null) {</span>
+<span class="nc" id="L102">            setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L103">            setPart = setPart.concat(MIDDLE_NAME + &quot; = '&quot; + middleName + &quot;'&quot;);</span>
+<span class="nc" id="L104">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L107">        Integer phoneNumber = patient.getPhoneNumber();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (phoneNumber != null) {</span>
+<span class="nc" id="L109">            setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L110">            setPart = setPart.concat(PHONE_NUMBER + &quot; = &quot; + phoneNumber);</span>
+<span class="nc" id="L111">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L114">        Date dateOfBirth = patient.getDateOfBirth();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (dateOfBirth != null) {</span>
+<span class="nc" id="L116">            setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L117">            setPart = setPart.concat(DATE_OF_BIRTH + &quot; = '&quot; + dateOfBirth + &quot;'&quot;);</span>
+<span class="nc" id="L118">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L121">        String identificationNumber = patient.getIdentificationNumber();</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (identificationNumber != null) {</span>
+<span class="nc" id="L123">            setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L124">            setPart = setPart.concat(IDENTIFICATION_NUMBER + &quot; = '&quot; + identificationNumber + &quot;'&quot;);</span>
+<span class="nc" id="L125">            fieldCount++;</span>
+        }
+
+<span class="nc" id="L128">        setPart = addCommaAndSpace(setPart, fieldCount);</span>
+<span class="nc" id="L129">        setPart = setPart.concat(UPDATE_DATE + &quot; = current_date&quot;);</span>
+
+<span class="nc" id="L131">        jdbcTemplate.update(updatePart + setPart + wherePart);</span>
+<span class="nc" id="L132">    }</span>
+
+    private String addCommaAndSpace(String query, int fieldCount) {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (fieldCount != 0) {</span>
+<span class="nc" id="L136">            query = query.concat(&quot;, &quot;);</span>
+        }
+<span class="nc" id="L138">        return query;</span>
+    }
+
+
+    public List&lt;Patient&gt; getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
+                                String searchByIllnessName, String sortBy, String order) {
+<span class="nc" id="L144">        return jdbcTemplate.query(getQuery(sortBy, order), new PatientMapper(), searchByFirstName, searchByLastName,</span>
+                searchByMiddleName, searchByIllnessName);
+    }
+
+    private String getQuery(String sortBy, String order) {
+<span class="nc" id="L149">        String search = &quot;SELECT &quot; + ALL_FIELDS + &quot; FROM searchPatient(?,?,?,?)&quot;;</span>
+<span class="nc bnc" id="L150" title="All 8 branches missed.">        if (sortBy != null &amp;&amp; (sortBy.equals(FIRST_NAME) || sortBy.equals(LAST_NAME) || sortBy.equals(MIDDLE_NAME) ||</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                sortBy.equals(DATE_OF_BIRTH))) {</span>
+<span class="nc" id="L152">            search = search.concat(&quot; ORDER BY &quot;.concat(sortBy));</span>
+
+<span class="nc bnc" id="L154" title="All 6 branches missed.">            if (order != null &amp;&amp; (order.equalsIgnoreCase(&quot;asc&quot;) || order.equalsIgnoreCase(&quot;desc&quot;))) {</span>
+<span class="nc" id="L155">                search = search.concat(&quot; &quot;.concat(order));</span>
+            }
+        }
+<span class="nc" id="L158">        return search;</span>
+    }
+
+    public void saveRefPatientIllness(Long patientId, Long illnessId) {
+<span class="nc" id="L162">        final String QUERY = &quot;INSERT INTO patient_illness(patient_id, illness_id) VALUES (?,?)&quot;;</span>
+<span class="nc" id="L163">        jdbcTemplate.update(QUERY, patientId, illnessId);</span>
+<span class="nc" id="L164">    }</span>
+
+    public void removeRefPatientIllness(Long patientId, Long illnessId) {
+<span class="nc" id="L167">        final String QUERY = &quot;DELETE FROM patient_illness WHERE patient_id = ? AND illness_id = ?&quot;;</span>
+<span class="nc" id="L168">        jdbcTemplate.update(QUERY, patientId, illnessId);</span>
+<span class="nc" id="L169">    }</span>
+
+    public Patient findByIdentificationNumberWithDifferentId(Long id, String identificationNumber) {
+<span class="nc" id="L172">        final String QUERY =</span>
+                &quot;SELECT &quot; + ALL_FIELDS + &quot; FROM &quot; + TABLE_NAME + &quot; WHERE &quot; + IDENTIFICATION_NUMBER + &quot; = ? AND &quot; + ID +
+                        &quot; &lt;&gt; ?&quot;;
+<span class="nc" id="L175">        List&lt;Patient&gt; patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber, id);</span>
+
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        if (patients.isEmpty()) {</span>
+<span class="nc" id="L178">            return null;</span>
+        } else {
+<span class="nc" id="L180">            return patients.get(0);</span>
+        }
+    }
+
+    public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {
+<span class="nc" id="L185">        final String QUERY = &quot;SELECT id FROM patient_illness WHERE patient_id = ? AND illness_id = ?&quot;;</span>
+<span class="nc" id="L186">        List&lt;Integer&gt; integers = jdbcTemplate.query(QUERY, (resultSet, i) -&gt; resultSet.getInt(1), patientId, illnessId);</span>
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (integers.isEmpty()) {</span>
+<span class="nc" id="L189">            return null;</span>
+        } else {
+<span class="nc" id="L191">            return integers.get(0);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
