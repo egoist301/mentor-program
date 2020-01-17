@@ -58,6 +58,6 @@ public class IllnessService {
     }
 
     public boolean isAnyIllnessExistWithName(Long id, String name) {
-        return !illnessDao.findByNameWithDifferentId(name, id).isEmpty();
+        return illnessDao.findByNameWithDifferentId(name, id) != null;
     }
 }

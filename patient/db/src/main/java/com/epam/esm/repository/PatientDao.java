@@ -168,11 +168,17 @@ public class PatientDao {
         jdbcTemplate.update(QUERY, patientId, illnessId);
     }
 
-    public List<Patient> findByIdentificationNumberWithDifferentId(Long id, String identificationNumber) {
+    public Patient findByIdentificationNumberWithDifferentId(Long id, String identificationNumber) {
         final String QUERY =
                 "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ? AND " + ID +
                         " <> ?";
-        return jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber, id);
+        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber);
+
+        if (patients.isEmpty()) {
+            return null;
+        } else {
+            return patients.get(0);
+        }
     }
 
     public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {

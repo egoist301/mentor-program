@@ -51,10 +51,15 @@ public class IllnessDao {
         }
     }
 
-    public List<Illness> findByNameWithDifferentId(String name, Long id) {
+    public Illness findByNameWithDifferentId(String name, Long id) {
         final String QUERY =
                 "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ? AND " + ID + " <> ?";
-        return jdbcTemplate.query(QUERY, new IllnessMapper(), name, id);
+        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), name, id);
+        if (illnesses.isEmpty()) {
+            return null;
+        } else {
+            return illnesses.get(0);
+        }
     }
 
     public List<Illness> getAll() {
