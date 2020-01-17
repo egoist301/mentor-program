@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class IllnessDao {
@@ -27,14 +29,26 @@ public class IllnessDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Illness> findById(Long id) {
+    public Illness findById(Long id) {
         final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        return jdbcTemplate.query(QUERY, new IllnessMapper(), id);
+        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), id);
+
+        if (illnesses.isEmpty()) {
+            return null;
+        } else {
+            return illnesses.get(0);
+        }
     }
 
-    public List<Illness> findByName(String name) {
+    public Illness findByName(String name) {
         final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ?";
-        return jdbcTemplate.query(QUERY, new IllnessMapper(), name);
+        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), name);
+
+        if (illnesses.isEmpty()) {
+            return null;
+        } else {
+            return illnesses.get(0);
+        }
     }
 
     public List<Illness> findByNameWithDifferentId(String name, Long id) {
@@ -107,10 +121,10 @@ public class IllnessDao {
         return jdbcTemplate.queryForObject(SELECT_COUNT_BY_NAME, Integer.class, name) > 0;
     }
 
-    public List<Illness> findByPatientId(Long patientId) {
+    public Set<Illness> findByPatientId(Long patientId) {
         final String FIND_BY_PATIENT_ID =
                 "SELECT i.* FROM illness i JOIN patient_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
-        return jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId);
+        return new LinkedHashSet<>(jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId));
     }
 
 

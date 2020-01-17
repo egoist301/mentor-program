@@ -7,7 +7,6 @@ import com.epam.esm.repository.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,19 +21,13 @@ public class PatientService {
     }
 
     public Patient get(Long id) {
-        Patient patient = patientDao.findById(id).get(0);
-        patient.setIllnesses(illnessDao.findByPatientId(id));
-        return patient;
+        return patientDao.findById(id);
     }
 
     public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
                                 String searchByIllnessName, String sortBy, String order) {
-        List<Patient> patients = patientDao
+        return patientDao
                 .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
-        patients.forEach(patient -> {
-            patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));
-        });
-        return patients;
     }
 
     public void create(Patient patient) {
@@ -43,13 +36,13 @@ public class PatientService {
 
     public void update(Patient entity) {
         patientDao.update(entity);
-        List<Illness> newIllnesses = entity.getIllnesses();
-        List<Illness> oldIllnesses = illnessDao.findByPatientId(entity.getId());
-        List<Illness> temp = new ArrayList<>(entity.getIllnesses());
-        newIllnesses.removeAll(oldIllnesses);
-        oldIllnesses.removeAll(temp);
-        infect(entity, newIllnesses);
-        treat(entity, oldIllnesses);
+        //List<Illness> newIllnesses = entity.getIllnesses();
+        // List<Illness> oldIllnesses = illnessDao.findByPatientId(entity.getId());
+//        List<Illness> temp = new ArrayList<>(entity.getIllnesses());
+//        newIllnesses.removeAll(oldIllnesses);
+//        oldIllnesses.removeAll(temp);
+//        infect(entity, newIllnesses);
+//        treat(entity, oldIllnesses);
     }
 
     public void saveRefPatientIlness(Long patientId, Long illnessId) {
@@ -60,7 +53,7 @@ public class PatientService {
         if (!newIllnesses.isEmpty()) {
             newIllnesses.forEach(illness -> {
                 if (illnessDao.isIllnessExistByName(illness.getName())) {
-                    illness.setId(illnessDao.findByName(illness.getName()).get(0).getId());
+                    illness.setId(illnessDao.findByName(illness.getName()).getId());
                 } else {
                     illnessDao.create(illness);
                 }
@@ -87,20 +80,26 @@ public class PatientService {
     }
 
     public Patient findByIdentificationNumber(String identificationNumber) {
-        Patient patient = patientDao.findByIdentificationNumber(identificationNumber).get(0);
-        patient.setIllnesses(illnessDao.findByPatientId(patient.getId()));
-        return patient;
+        return patientDao.findByIdentificationNumber(identificationNumber);
     }
 
     public boolean isPatientExist(String identificationNumber) {
-        return !patientDao.findByIdentificationNumber(identificationNumber).isEmpty();
+        return patientDao.findByIdentificationNumber(identificationNumber) != null;
     }
 
     public boolean isPatientExist(Long id) {
-        return !patientDao.findById(id).isEmpty();
+        return patientDao.findById(id) != null;
     }
 
     public boolean isAnyPatientExistWithIdentificationNumber(Long id, String identificationNumber) {
         return !patientDao.findByIdentificationNumberWithDifferentId(id, identificationNumber).isEmpty();
+    }
+
+    public boolean isRefPatientIllnessExist(Long patientId, Long illnessId) {
+        return patientDao.isRefPatientIllnessExist(patientId, illnessId) != null;
+    }
+
+    public void removeRefPatientIllness(Long patientId, Long illnessId) {
+        patientDao.removeRefPatientIllness(patientId, illnessId);
     }
 }

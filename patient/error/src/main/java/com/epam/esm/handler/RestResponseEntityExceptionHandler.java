@@ -5,6 +5,7 @@ import com.epam.esm.exception.AnyIllnessExistWithSameNameException;
 import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
 import com.epam.esm.exception.IllnessAlreadyExistException;
 import com.epam.esm.exception.IllnessNotExistException;
+import com.epam.esm.exception.IncorrectPathVariableException;
 import com.epam.esm.exception.ParseDateException;
 import com.epam.esm.exception.PatientAlreadyExistException;
 import com.epam.esm.exception.PatientNotExistException;
@@ -23,42 +24,38 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-        ErrorDto error = new ErrorDto();
-        error.setCode(status.value());
-        error.setStatus(status);
-        error.setMessage("Argument is not valid.");
-        return new ResponseEntity<>(error, headers, status);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleException(RuntimeException e, WebRequest request) {
-        ErrorDto error = new ErrorDto();
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        error.setCode(status.value());
-        error.setStatus(status);
-        error.setMessage("Server error. Try later please.");
-        return new ResponseEntity<>(error, new HttpHeaders(), status);
+        return createResponse(new RuntimeException(ex), status);
     }
 
     @ExceptionHandler({IllnessAlreadyExistException.class, PatientAlreadyExistException.class,
             AnyIllnessExistWithSameNameException.class, AnyPatientExistWithSameIdentificationNumberException.class,
             IllnessNotExistException.class, PatientNotExistException.class})
     public ResponseEntity<Object> handleExistException(RuntimeException e, WebRequest request) {
-        ErrorDto error = new ErrorDto();
-        HttpStatus status = HttpStatus.CONFLICT;
-        error.setCode(status.value());
-        error.setStatus(status);
-        error.setMessage(e.getMessage());
-        return new ResponseEntity<>(error, new HttpHeaders(), status);
+        return createResponse(e, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ParseDateException.class)
     public ResponseEntity<Object> handleParseException(RuntimeException e, WebRequest request) {
+        return createResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IncorrectPathVariableException.class)
+    public ResponseEntity<Object> handlePathVariableException(RuntimeException e, WebRequest request) {
+        return createResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleException(RuntimeException e, WebRequest request) {
+        return createResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseEntity<Object> createResponse(RuntimeException ex, HttpStatus status) {
         ErrorDto error = new ErrorDto();
-        HttpStatus status = HttpStatus.OK;
-        error.setCode(status.value());
         error.setStatus(status);
-        error.setMessage(e.getMessage());
+        error.setCode(status.value());
+        error.setMessage(ex.getMessage());
         return new ResponseEntity<>(error, new HttpHeaders(), status);
     }
+
+
 }

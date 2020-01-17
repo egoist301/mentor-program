@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.controller.dto.IllnessPartialRequestDto;
 import com.epam.esm.controller.dto.IllnessRequestDto;
 import com.epam.esm.controller.dto.IllnessResponseDto;
+import com.epam.esm.exception.IncorrectPathVariableException;
 import com.epam.esm.facade.IllnessFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class IllnessController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public IllnessResponseDto get(@PathVariable("id") Long id) {
+        checkId(id);
         return illnessFacade.get(id);
     }
 
@@ -52,12 +54,14 @@ public class IllnessController {
     @ResponseStatus(HttpStatus.OK)
     public IllnessResponseDto update(@PathVariable("id") Long id,
                                      @RequestBody @Valid IllnessRequestDto illnessRequestDto) {
+        checkId(id);
         return illnessFacade.update(id, illnessRequestDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
+        checkId(id);
         illnessFacade.delete(id);
     }
 
@@ -66,5 +70,11 @@ public class IllnessController {
     public IllnessResponseDto partialUpdate(@PathVariable("id") Long id, @RequestBody
             IllnessPartialRequestDto illnessPartialRequestDto) {
         return illnessFacade.partialUpdate(id, illnessPartialRequestDto);
+    }
+
+    private void checkId(Long id) {
+        if (id <= 0) {
+            throw new IncorrectPathVariableException();
+        }
     }
 }

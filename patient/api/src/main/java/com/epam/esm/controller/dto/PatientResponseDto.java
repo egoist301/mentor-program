@@ -2,7 +2,7 @@ package com.epam.esm.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import java.util.Set;
 
 public class PatientResponseDto {
     @JsonProperty("id")
@@ -33,7 +33,7 @@ public class PatientResponseDto {
     private String updateDate;
 
     @JsonProperty("illnesses")
-    private List<IllnessResponseDto> illnesses;
+    private Set<IllnessResponseDto> illnesses;
 
     public PatientResponseDto() {
     }
@@ -110,11 +110,11 @@ public class PatientResponseDto {
         this.updateDate = updateDate;
     }
 
-    public List<IllnessResponseDto> getIllnesses() {
+    public Set<IllnessResponseDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(List<IllnessResponseDto> illnesses) {
+    public void setIllnesses(Set<IllnessResponseDto> illnesses) {
         this.illnesses = illnesses;
     }
 }

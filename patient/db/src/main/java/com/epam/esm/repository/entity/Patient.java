@@ -3,8 +3,8 @@ package com.epam.esm.repository.entity;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class Patient {
@@ -17,7 +17,7 @@ public class Patient {
     private String identificationNumber;
     private Date createDate;
     private Date updateDate;
-    private List<Illness> illnesses;
+    private Set<Illness> illnesses;
 
     public Patient() {
     }
@@ -94,12 +94,12 @@ public class Patient {
         this.updateDate = updateDate;
     }
 
-    public List<Illness> getIllnesses() {
+    public Set<Illness> getIllnesses() {
         return illnesses;
     }
 
     public void setIllnesses(
-            List<Illness> illnesses) {
+            Set<Illness> illnesses) {
         this.illnesses = illnesses;
     }
 

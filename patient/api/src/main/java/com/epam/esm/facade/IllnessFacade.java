@@ -25,7 +25,11 @@ public class IllnessFacade {
     }
 
     public IllnessResponseDto get(Long id) {
-        return IllnessDtoConverter.convertToDto(illnessService.get(id));
+        Illness illness = illnessService.get(id);
+        if (illness == null) {
+            return null;
+        }
+        return IllnessDtoConverter.convertToDto(illness);
     }
 
     public List<IllnessResponseDto> getAll() {
@@ -38,7 +42,7 @@ public class IllnessFacade {
             throw new IllnessAlreadyExistException();
         } else {
             illnessService.create(illness);
-            return IllnessDtoConverter.convertToDto(illnessService.findByName(illness.getName()).get(0));
+            return IllnessDtoConverter.convertToDto(illnessService.findByName(illness.getName()));
         }
     }
 

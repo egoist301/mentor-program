@@ -32,15 +32,27 @@ public class PatientDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Patient> findById(Long id) {
+    public Patient findById(Long id) {
         final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        return jdbcTemplate.query(QUERY, new PatientMapper(), id);
+        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), id);
+
+        if (patients.isEmpty()) {
+            return null;
+        } else {
+            return patients.get(0);
+        }
     }
 
-    public List<Patient> findByIdentificationNumber(String identificationNumber) {
+    public Patient findByIdentificationNumber(String identificationNumber) {
         final String QUERY =
                 "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ?";
-        return jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber);
+        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber);
+
+        if (patients.isEmpty()) {
+            return null;
+        } else {
+            return patients.get(0);
+        }
     }
 
     public void create(Patient patient) {
@@ -161,5 +173,16 @@ public class PatientDao {
                 "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ? AND " + ID +
                         " <> ?";
         return jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber, id);
+    }
+
+    public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {
+        final String QUERY = "SELECT id FROM patient_illness WHERE patient_id = ? AND illness_id = ?";
+        List<Integer> integers = jdbcTemplate.query(QUERY, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
+
+        if (integers.isEmpty()) {
+            return null;
+        } else {
+            return integers.get(0);
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberExcepti
 import com.epam.esm.exception.ParseDateException;
 import com.epam.esm.exception.PatientAlreadyExistException;
 import com.epam.esm.exception.PatientNotExistException;
+import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.service.IllnessService;
 import com.epam.esm.service.PatientService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,14 +32,22 @@ public class PatientFacade {
     }
 
     public PatientResponseDto get(Long id) {
-        return PatientDtoConverter.convertToDto(patientService.get(id));
+        Patient patient = patientService.get(id);
+        if (patient == null) {
+            return null;
+        }
+        patient.setIllnesses(illnessService.findByPatientId(id));
+        return PatientDtoConverter.convertToDto(patient);
     }
 
     public List<PatientResponseDto> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
                                            String searchByIllnessName, String sortBy, String order) {
-        return patientService
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order)
-                .stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
+        List<Patient> patients = patientService
+                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
+        patients.forEach(patient -> {
+            patient.setIllnesses(illnessService.findByPatientId(patient.getId()));
+        });
+        return patients.stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
     }
 
     public PatientResponseDto create(PatientRequestDto patientRequestDto) {
@@ -52,11 +62,13 @@ public class PatientFacade {
                     if (!illnessService.isIllnessExist(illness.getName())) {
                         illnessService.create(illness);
                     }
-                    illness.setId(illnessService.findByName(illness.getName()).get(0).getId());
+                    illness.setId(illnessService.findByName(illness.getName()).getId());
                     patientService.saveRefPatientIlness(patient.getId(), illness.getId());
                 });
-                return PatientDtoConverter
-                        .convertToDto(patientService.findByIdentificationNumber(patient.getIdentificationNumber()));
+                Patient patientToResponse =
+                        patientService.findByIdentificationNumber(patient.getIdentificationNumber());
+                patientToResponse.setIllnesses(illnessService.findByPatientId(patientToResponse.getId()));
+                return PatientDtoConverter.convertToDto(patientToResponse);
             }
         } catch (ParseException e) {
             throw new ParseDateException();
@@ -70,19 +82,29 @@ public class PatientFacade {
             if (!patientService.isPatientExist(patient.getId())) {
                 throw new PatientNotExistException();
             } else if (patientService
-                    .isAnyPatientExistWithIdentificationNumber(patient.getId(), patient.getIdentificationNumber())) {
+                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
                 throw new AnyPatientExistWithSameIdentificationNumberException();
             } else {
                 patientService.update(patient);
+
+                Set<Illness> oldIllnesses = illnessService.findByPatientId(id);
+                oldIllnesses.removeAll(patient.getIllnesses());
+                oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
                 patient.getIllnesses().forEach(illness -> {
                     if (!illnessService.isIllnessExist(illness.getName())) {
                         illnessService.create(illness);
+                        illness.setId(illnessService.findByName(illness.getName()).getId());
+                        patientService.saveRefPatientIlness(id, illness.getId());
                     } else {
-                        illness.setId(illnessService.findByName(illness.getName()).get(0).getId());
+                        illness.setId(illnessService.findByName(illness.getName()).getId());
+                        if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
+                            patientService.saveRefPatientIlness(id, illness.getId());
+                        }
                     }
-                    patientService.saveRefPatientIlness(patient.getId(), illness.getId());
                 });
-                return PatientDtoConverter.convertToDto(patientService.get(id));
+                Patient patientToResponse = patientService.get(id);
+                patientToResponse.setIllnesses(illnessService.findByPatientId(id));
+                return PatientDtoConverter.convertToDto(patientToResponse);
             }
         } catch (ParseException e) {
             throw new ParseDateException();
@@ -99,8 +121,35 @@ public class PatientFacade {
         try {
             Patient patient = PatientDtoConverter.partialConvertToEntity(patientPartialRequestDto);
             patient.setId(id);
-            patientService.partialUpdate(patient);
-            return PatientDtoConverter.convertToDto(patientService.get(id));
+
+            if (!patientService.isPatientExist(patient.getId())) {
+                throw new PatientNotExistException();
+            } else if (patientService
+                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
+                throw new AnyPatientExistWithSameIdentificationNumberException();
+            } else {
+                patientService.partialUpdate(patient);
+                Patient patientToResponse = patientService.get(id);
+                if (patient.getIllnesses() != null) {
+                    Set<Illness> oldIllnesses = illnessService.findByPatientId(id);
+                    oldIllnesses.removeAll(patient.getIllnesses());
+                    oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
+                    patient.getIllnesses().forEach(illness -> {
+                        if (!illnessService.isIllnessExist(illness.getName())) {
+                            illnessService.create(illness);
+                            illness.setId(illnessService.findByName(illness.getName()).getId());
+                            patientService.saveRefPatientIlness(id, illness.getId());
+                        } else {
+                            illness.setId(illnessService.findByName(illness.getName()).getId());
+                            if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
+                                patientService.saveRefPatientIlness(id, illness.getId());
+                            }
+                        }
+                    });
+                    patientToResponse.setIllnesses(illnessService.findByPatientId(id));
+                }
+                return PatientDtoConverter.convertToDto(patientToResponse);
+            }
         } catch (ParseException e) {
             throw new ParseDateException();
         }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class IllnessService {
@@ -17,7 +18,7 @@ public class IllnessService {
     }
 
     public Illness get(Long id) {
-        return illnessDao.findById(id).get(0);
+        return illnessDao.findById(id);
     }
 
     public List<Illness> getAll() {
@@ -40,16 +41,20 @@ public class IllnessService {
         illnessDao.partialUpdate(illness);
     }
 
-    public List<Illness> findByName(String name) {
+    public Illness findByName(String name) {
         return illnessDao.findByName(name);
     }
 
     public boolean isIllnessExist(String name) {
-        return !illnessDao.findByName(name).isEmpty();
+        return illnessDao.findByName(name) != null;
+    }
+
+    public Set<Illness> findByPatientId(Long patientId) {
+        return illnessDao.findByPatientId(patientId);
     }
 
     public boolean isIllnessExist(Long id) {
-        return !illnessDao.findById(id).isEmpty();
+        return illnessDao.findById(id) != null;
     }
 
     public boolean isAnyIllnessExistWithName(Long id, String name) {

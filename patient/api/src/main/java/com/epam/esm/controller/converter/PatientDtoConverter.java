@@ -25,7 +25,7 @@ public final class PatientDtoConverter {
         patientResponseDto.setCreateDate(DateFormatter.convertDateToString(patient.getCreateDate()));
         patientResponseDto.setUpdateDate(DateFormatter.convertDateToString(patient.getUpdateDate()));
         patientResponseDto.setIllnesses(patient.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
-                Collectors.toList()));
+                Collectors.toSet()));
         return patientResponseDto;
     }
 
@@ -37,24 +37,29 @@ public final class PatientDtoConverter {
         patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
         patient.setDateOfBirth(DateFormatter.convertStringToDate(patientRequestDto.getDateOfBirth()));
         patient.setIdentificationNumber(patientRequestDto.getIdentificationNumber());
-        patient.setIllnesses(
-                patientRequestDto.getIllnesses().stream().map(IllnessDtoConverter::convertToEntity).collect(
-                        Collectors.toList()));
+        if (patientRequestDto.getIllnesses() != null) {
+            patient.setIllnesses(
+                    patientRequestDto.getIllnesses().stream().map(IllnessDtoConverter::convertToEntity).collect(
+                            Collectors.toSet()));
+        }
         return patient;
     }
 
-    public static Patient partialConvertToEntity(
-            PatientPartialRequestDto patientPartialRequestDto)
+    public static Patient partialConvertToEntity(PatientPartialRequestDto patientPartialRequestDto)
             throws ParseException {
         Patient patient = new Patient();
         patient.setFirstName(patientPartialRequestDto.getFirstName());
         patient.setMiddleName(patientPartialRequestDto.getMiddleName());
         patient.setLastName(patientPartialRequestDto.getLastName());
         patient.setPhoneNumber(patientPartialRequestDto.getPhoneNumber());
-        patient.setDateOfBirth(DateFormatter.convertStringToDate(patientPartialRequestDto.getDateOfBirth()));
-        patient.setIllnesses(
-                patientPartialRequestDto.getIllnesses().stream().map(IllnessDtoConverter::partialConvertToEntity)
-                        .collect(Collectors.toList()));
+        if (patientPartialRequestDto.getDateOfBirth() != null) {
+            patient.setDateOfBirth(DateFormatter.convertStringToDate(patientPartialRequestDto.getDateOfBirth()));
+        }
+        if (patientPartialRequestDto.getIllnesses() != null) {
+            patient.setIllnesses(
+                    patientPartialRequestDto.getIllnesses().stream().map(IllnessDtoConverter::partialConvertToEntity)
+                            .collect(Collectors.toSet()));
+        }
         return patient;
     }
 }

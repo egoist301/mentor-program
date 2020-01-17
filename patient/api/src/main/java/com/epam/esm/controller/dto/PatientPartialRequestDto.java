@@ -2,11 +2,11 @@ package com.epam.esm.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.Set;
 
 public class PatientPartialRequestDto {
     @Size(min = 2, max = 16)
@@ -26,7 +26,6 @@ public class PatientPartialRequestDto {
     @JsonProperty("phone_number")
     private Integer phoneNumber;
 
-    @PastOrPresent
     @JsonProperty("date_of_birth")
     private String dateOfBirth;
 
@@ -34,8 +33,9 @@ public class PatientPartialRequestDto {
     @JsonProperty("identification_number")
     private String identificationNumber;
 
+    @Valid
     @JsonProperty("illnesses")
-    private List<IllnessPartialRequestDto> illnesses;
+    private Set<IllnessPartialRequestDto> illnesses;
 
     public String getFirstName() {
         return firstName;
@@ -85,11 +85,11 @@ public class PatientPartialRequestDto {
         this.identificationNumber = identificationNumber;
     }
 
-    public List<IllnessPartialRequestDto> getIllnesses() {
+    public Set<IllnessPartialRequestDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(List<IllnessPartialRequestDto> illnesses) {
+    public void setIllnesses(Set<IllnessPartialRequestDto> illnesses) {
         this.illnesses = illnesses;
     }
 }
