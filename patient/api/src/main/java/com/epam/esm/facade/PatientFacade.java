@@ -1,9 +1,9 @@
 package com.epam.esm.facade;
 
-import com.epam.esm.controller.converter.PatientDtoConverter;
-import com.epam.esm.controller.dto.PatientPartialRequestDto;
-import com.epam.esm.controller.dto.PatientRequestDto;
-import com.epam.esm.controller.dto.PatientResponseDto;
+import com.epam.esm.converter.PatientDtoConverter;
+import com.epam.esm.dto.PatientPartialRequestDto;
+import com.epam.esm.dto.PatientRequestDto;
+import com.epam.esm.dto.PatientResponseDto;
 import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
 import com.epam.esm.exception.ParseDateException;
 import com.epam.esm.exception.PatientAlreadyExistException;

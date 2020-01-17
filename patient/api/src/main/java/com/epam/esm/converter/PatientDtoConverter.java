@@ -1,8 +1,8 @@
-package com.epam.esm.controller.converter;
+package com.epam.esm.converter;
 
-import com.epam.esm.controller.dto.PatientPartialRequestDto;
-import com.epam.esm.controller.dto.PatientRequestDto;
-import com.epam.esm.controller.dto.PatientResponseDto;
+import com.epam.esm.dto.PatientPartialRequestDto;
+import com.epam.esm.dto.PatientRequestDto;
+import com.epam.esm.dto.PatientResponseDto;
 import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.util.DateFormatter;
 
@@ -20,12 +20,21 @@ public final class PatientDtoConverter {
         patientResponseDto.setLastName(patient.getLastName());
         patientResponseDto.setMiddleName(patient.getMiddleName());
         patientResponseDto.setPhoneNumber(patient.getPhoneNumber());
-        patientResponseDto.setDateOfBirth(DateFormatter.convertDateToString(patient.getDateOfBirth()));
+        if (patient.getDateOfBirth() != null) {
+            patientResponseDto.setDateOfBirth(DateFormatter.convertDateToString(patient.getDateOfBirth()));
+        }
         patientResponseDto.setIdentificationNumber(patient.getIdentificationNumber());
-        patientResponseDto.setCreateDate(DateFormatter.convertDateToString(patient.getCreateDate()));
-        patientResponseDto.setUpdateDate(DateFormatter.convertDateToString(patient.getUpdateDate()));
-        patientResponseDto.setIllnesses(patient.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
-                Collectors.toSet()));
+        if (patient.getCreateDate() != null) {
+            patientResponseDto.setCreateDate(DateFormatter.convertDateToString(patient.getCreateDate()));
+        }
+        if (patient.getUpdateDate() != null) {
+            patientResponseDto.setUpdateDate(DateFormatter.convertDateToString(patient.getUpdateDate()));
+        }
+        if (patient.getIllnesses() != null) {
+            patientResponseDto
+                    .setIllnesses(patient.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
+                            Collectors.toSet()));
+        }
         return patientResponseDto;
     }
 
@@ -35,7 +44,9 @@ public final class PatientDtoConverter {
         patient.setMiddleName(patientRequestDto.getMiddleName());
         patient.setLastName(patientRequestDto.getLastName());
         patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
-        patient.setDateOfBirth(DateFormatter.convertStringToDate(patientRequestDto.getDateOfBirth()));
+        if (patientRequestDto.getDateOfBirth() != null) {
+            patient.setDateOfBirth(DateFormatter.convertStringToDate(patientRequestDto.getDateOfBirth()));
+        }
         patient.setIdentificationNumber(patientRequestDto.getIdentificationNumber());
         if (patientRequestDto.getIllnesses() != null) {
             patient.setIllnesses(

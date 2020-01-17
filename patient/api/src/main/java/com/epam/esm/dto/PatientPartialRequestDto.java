@@ -1,48 +1,41 @@
-package com.epam.esm.controller.dto;
+package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-public class PatientRequestDto {
-    @NotNull
+public class PatientPartialRequestDto {
     @Size(min = 2, max = 16)
     @JsonProperty("first_name")
     private String firstName;
 
-    @NotNull
     @Size(min = 2, max = 16)
     @JsonProperty("last_name")
     private String lastName;
 
-    @NotNull
     @Size(min = 4, max = 16)
     @JsonProperty("middle_name")
     private String middleName;
 
-    @NotNull
     @Min(1000000)
     @Max(9999999)
     @JsonProperty("phone_number")
     private Integer phoneNumber;
 
-    @NotNull
     @JsonProperty("date_of_birth")
     private String dateOfBirth;
 
-    @NotNull
     @Size(min = 14, max = 14)
     @JsonProperty("identification_number")
     private String identificationNumber;
 
     @Valid
     @JsonProperty("illnesses")
-    private Set<IllnessRequestDto> illnesses;
+    private Set<IllnessPartialRequestDto> illnesses;
 
     public String getFirstName() {
         return firstName;
@@ -92,11 +85,11 @@ public class PatientRequestDto {
         this.identificationNumber = identificationNumber;
     }
 
-    public Set<IllnessRequestDto> getIllnesses() {
+    public Set<IllnessPartialRequestDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(Set<IllnessRequestDto> illnesses) {
+    public void setIllnesses(Set<IllnessPartialRequestDto> illnesses) {
         this.illnesses = illnesses;
     }
 }

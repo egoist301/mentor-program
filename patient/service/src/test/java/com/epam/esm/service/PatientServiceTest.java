@@ -6,6 +6,7 @@ import com.epam.esm.repository.entity.Patient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class PatientServiceTest {
     @Mock
     private PatientDao patientDao;
+    @InjectMocks
     private PatientService patientService;
     private Set<Illness> illnesses;
     private Patient patient;

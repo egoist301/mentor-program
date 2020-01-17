@@ -1,8 +1,8 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.controller.dto.PatientPartialRequestDto;
-import com.epam.esm.controller.dto.PatientRequestDto;
-import com.epam.esm.controller.dto.PatientResponseDto;
+import com.epam.esm.dto.PatientPartialRequestDto;
+import com.epam.esm.dto.PatientRequestDto;
+import com.epam.esm.dto.PatientResponseDto;
 import com.epam.esm.exception.IncorrectPathVariableException;
 import com.epam.esm.facade.PatientFacade;
 import org.springframework.beans.factory.annotation.Autowired;

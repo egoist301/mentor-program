@@ -1,8 +1,8 @@
-package com.epam.esm.controller.converter;
+package com.epam.esm.converter;
 
-import com.epam.esm.controller.dto.IllnessPartialRequestDto;
-import com.epam.esm.controller.dto.IllnessRequestDto;
-import com.epam.esm.controller.dto.IllnessResponseDto;
+import com.epam.esm.dto.IllnessPartialRequestDto;
+import com.epam.esm.dto.IllnessRequestDto;
+import com.epam.esm.dto.IllnessResponseDto;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.util.DateFormatter;
 
@@ -16,8 +16,12 @@ public final class IllnessDtoConverter {
         illnessResponseDto.setName(illness.getName());
         illnessResponseDto.setDescription(illness.getDescription());
         illnessResponseDto.setChanceToDie(illness.getChanceToDie());
-        illnessResponseDto.setCreateDate(DateFormatter.convertDateToString(illness.getCreateDate()));
-        illnessResponseDto.setUpdateDate(DateFormatter.convertDateToString(illness.getUpdateDate()));
+        if (illness.getUpdateDate() != null) {
+            illnessResponseDto.setUpdateDate(DateFormatter.convertDateToString(illness.getUpdateDate()));
+        }
+        if (illness.getCreateDate() != null) {
+            illnessResponseDto.setCreateDate(DateFormatter.convertDateToString(illness.getCreateDate()));
+        }
         return illnessResponseDto;
     }
 

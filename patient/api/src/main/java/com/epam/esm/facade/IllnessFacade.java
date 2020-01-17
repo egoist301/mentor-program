@@ -1,9 +1,9 @@
 package com.epam.esm.facade;
 
-import com.epam.esm.controller.converter.IllnessDtoConverter;
-import com.epam.esm.controller.dto.IllnessPartialRequestDto;
-import com.epam.esm.controller.dto.IllnessRequestDto;
-import com.epam.esm.controller.dto.IllnessResponseDto;
+import com.epam.esm.converter.IllnessDtoConverter;
+import com.epam.esm.dto.IllnessPartialRequestDto;
+import com.epam.esm.dto.IllnessRequestDto;
+import com.epam.esm.dto.IllnessResponseDto;
 import com.epam.esm.exception.AnyIllnessExistWithSameNameException;
 import com.epam.esm.exception.IllnessAlreadyExistException;
 import com.epam.esm.exception.IllnessNotExistException;

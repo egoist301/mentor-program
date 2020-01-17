@@ -5,6 +5,7 @@ import com.epam.esm.repository.entity.Illness;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -19,6 +20,7 @@ import java.util.List;
 public class IllnessServiceTest {
     @Mock
     private IllnessDao illnessDao;
+    @InjectMocks
     private IllnessService illnessService;
     private List<Illness> illnesses;
     private Illness illness;
@@ -139,6 +141,5 @@ public class IllnessServiceTest {
         Mockito.when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>());
         Assert.assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>());
         Mockito.verify(illnessDao).findByPatientId(id);
-
     }
 }
