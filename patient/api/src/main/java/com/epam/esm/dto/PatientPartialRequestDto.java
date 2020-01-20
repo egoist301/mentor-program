@@ -1,11 +1,17 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.converter.LocalDateDeserializer;
+import com.epam.esm.converter.LocalDateSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class PatientPartialRequestDto {
@@ -26,8 +32,11 @@ public class PatientPartialRequestDto {
     @JsonProperty("phone_number")
     private Integer phoneNumber;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty("date_of_birth")
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Size(min = 14, max = 14)
     @JsonProperty("identification_number")
@@ -69,11 +78,11 @@ public class PatientPartialRequestDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

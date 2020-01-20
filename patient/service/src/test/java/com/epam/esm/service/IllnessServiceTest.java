@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -38,24 +38,25 @@ public class IllnessServiceTest {
         illness.setName("name");
         illness.setChanceToDie(30);
         illness.setDescription("description");
-        illness.setUpdateDate(new Date());
-        illness.setUpdateDate(new Date());
+        LocalDate date = LocalDate.now();
+        illness.setUpdateDate(date);
+        illness.setUpdateDate(date);
 
         Illness illness1 = new Illness();
         illness1.setId(1l);
         illness1.setName("name1");
         illness1.setChanceToDie(30);
         illness1.setDescription("description1");
-        illness1.setUpdateDate(new Date());
-        illness1.setUpdateDate(new Date());
+        illness1.setUpdateDate(date);
+        illness1.setUpdateDate(date);
 
         Illness illness2 = new Illness();
         illness2.setId(2l);
         illness2.setName("name2");
         illness2.setChanceToDie(50);
         illness2.setDescription("description2");
-        illness2.setUpdateDate(new Date());
-        illness2.setUpdateDate(new Date());
+        illness2.setUpdateDate(date);
+        illness2.setUpdateDate(date);
 
         illnesses.add(illness1);
         illnesses.add(illness2);

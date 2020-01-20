@@ -14,8 +14,8 @@ public class IllnessMapper implements RowMapper<Illness> {
         illness.setName(resultSet.getString(2));
         illness.setDescription(resultSet.getString(3));
         illness.setChanceToDie(resultSet.getInt(4));
-        illness.setCreateDate(resultSet.getDate(5));
-        illness.setUpdateDate(resultSet.getDate(6));
+        illness.setCreateDate(resultSet.getDate(5).toLocalDate());
+        illness.setUpdateDate(resultSet.getDate(6).toLocalDate());
         return illness;
     }
 }

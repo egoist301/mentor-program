@@ -14,8 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @ContextConfiguration(classes = RootConfig.class)
@@ -48,24 +48,25 @@ public class IllnessFacadeTest {
         illness.setName("name");
         illness.setDescription("description");
         illness.setChanceToDie(30);
-        illness.setCreateDate(new Date());
-        illness.setUpdateDate(new Date());
+        LocalDate date = LocalDate.now();
+        illness.setCreateDate(date);
+        illness.setUpdateDate(date);
 
         Illness firstIllness = new Illness();
         firstIllness.setId(1l);
         firstIllness.setName("name1");
         firstIllness.setDescription("description1");
         firstIllness.setChanceToDie(30);
-        firstIllness.setCreateDate(new Date());
-        firstIllness.setUpdateDate(new Date());
+        firstIllness.setCreateDate(date);
+        firstIllness.setUpdateDate(date);
 
         Illness secondIllness = new Illness();
         secondIllness.setId(2l);
         secondIllness.setName("name2");
         secondIllness.setChanceToDie(50);
         secondIllness.setDescription("description2");
-        secondIllness.setCreateDate(new Date());
-        secondIllness.setUpdateDate(new Date());
+        secondIllness.setCreateDate(date);
+        secondIllness.setUpdateDate(date);
 
         illnesses.add(firstIllness);
         illnesses.add(secondIllness);

@@ -4,7 +4,6 @@ import com.epam.esm.dto.IllnessPartialRequestDto;
 import com.epam.esm.dto.IllnessRequestDto;
 import com.epam.esm.dto.IllnessResponseDto;
 import com.epam.esm.repository.entity.Illness;
-import com.epam.esm.util.DateFormatter;
 
 public final class IllnessDtoConverter {
     private IllnessDtoConverter() {
@@ -16,8 +15,8 @@ public final class IllnessDtoConverter {
         illnessResponseDto.setName(illness.getName());
         illnessResponseDto.setDescription(illness.getDescription());
         illnessResponseDto.setChanceToDie(illness.getChanceToDie());
-        illnessResponseDto.setCreateDate(DateFormatter.convertDateToString(illness.getCreateDate()));
-        illnessResponseDto.setUpdateDate(DateFormatter.convertDateToString(illness.getUpdateDate()));
+        illnessResponseDto.setCreateDate(illness.getCreateDate());
+        illnessResponseDto.setUpdateDate(illness.getUpdateDate());
         return illnessResponseDto;
     }
 

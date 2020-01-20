@@ -2,7 +2,7 @@ package com.epam.esm.repository.entity;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Component
@@ -11,8 +11,8 @@ public class Illness {
     private String name;
     private String description;
     private Integer chanceToDie;
-    private Date createDate;
-    private Date updateDate;
+    private LocalDate createDate;
+    private LocalDate updateDate;
 
     public Illness() {
     }
@@ -49,19 +49,19 @@ public class Illness {
         this.chanceToDie = chanceToDie;
     }
 
-    public Date getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    public Date getUpdateDate() {
+    public LocalDate getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
     }
 

@@ -1,7 +1,11 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.converter.LocalDateDeserializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 public class PatientResponseDto {
@@ -21,16 +25,22 @@ public class PatientResponseDto {
     private Integer phoneNumber;
 
     @JsonProperty("date_of_birth")
-    private String dateOfBirth;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate dateOfBirth;
 
     @JsonProperty("identification_number")
     private String identificationNumber;
 
     @JsonProperty("create_date")
-    private String createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createDate;
 
     @JsonProperty("update_date")
-    private String updateDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updateDate;
 
     @JsonProperty("illnesses")
     private Set<IllnessResponseDto> illnesses;
@@ -78,11 +88,11 @@ public class PatientResponseDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -94,19 +104,19 @@ public class PatientResponseDto {
         this.identificationNumber = identificationNumber;
     }
 
-    public String getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    public String getUpdateDate() {
+    public LocalDate getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
     }
 

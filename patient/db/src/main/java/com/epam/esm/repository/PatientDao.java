@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -111,7 +111,7 @@ public class PatientDao {
             fieldCount++;
         }
 
-        Date dateOfBirth = patient.getDateOfBirth();
+        LocalDate dateOfBirth = patient.getDateOfBirth();
         if (dateOfBirth != null) {
             setPart = addCommaAndSpace(setPart, fieldCount);
             setPart = setPart.concat(DATE_OF_BIRTH + " = '" + dateOfBirth + "'");

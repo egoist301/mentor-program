@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -31,16 +32,17 @@ public class IllnessDaoSpecTest {
     public void init() throws ParseException {
         illness = new Illness();
         illness.setId(1l);
-        illness.setCreateDate(DateFormatter.convertStringToDate("2020-01-17"));
-        illness.setUpdateDate((DateFormatter.convertStringToDate("2020-01-17")));
+        LocalDate localDate = DateFormatter.convertStringToDate("2020-01-17");
+        illness.setCreateDate(localDate);
+        illness.setUpdateDate(localDate);
         illness.setDescription("desc1");
         illness.setName("сифилис");
         illness.setChanceToDie(80);
 
         Illness illness = new Illness();
         illness.setId(2l);
-        illness.setCreateDate(DateFormatter.convertStringToDate("2020-01-17"));
-        illness.setUpdateDate((DateFormatter.convertStringToDate("2020-01-17")));
+        illness.setCreateDate(localDate);
+        illness.setUpdateDate(localDate);
         illness.setDescription("desc2");
         illness.setName("аппендицит");
         illness.setChanceToDie(14);

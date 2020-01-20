@@ -19,8 +19,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,15 +57,16 @@ public class PatientFacadeTest {
         patientRequestDto = new PatientRequestDto();
         patientRequestDto.setIdentificationNumber(idNumber);
         patientRequestDto.setIllnesses(illnessRequestDtos);
-        patientRequestDto.setDateOfBirth("2000-01-01");
+        //patientRequestDto.setDateOfBirth("2000-01-01");
 
         illness = new Illness();
         illness.setId(1l);
         illness.setName("name1");
         illness.setDescription("description1");
         illness.setChanceToDie(30);
-        illness.setCreateDate(new Date());
-        illness.setUpdateDate(new Date());
+        LocalDate date = LocalDate.now();
+        illness.setCreateDate(date);
+        illness.setUpdateDate(date);
 
         IllnessRequestDto firstIllnessRequestDto = new IllnessRequestDto();
         firstIllnessRequestDto.setName("name1");
@@ -87,10 +88,10 @@ public class PatientFacadeTest {
         patient.setMiddleName("middle");
         patient.setIdentificationNumber("1234567890qwer");
         patient.setPhoneNumber(1234567);
-        patient.setDateOfBirth(new Date());
+        patient.setDateOfBirth(date);
         patient.setIllnesses(illnesses);
-        patient.setUpdateDate(new Date());
-        patient.setCreateDate(new Date());
+        patient.setUpdateDate(date);
+        patient.setCreateDate(date);
 
         Patient firstPatient = new Patient();
         firstPatient.setId(2l);
@@ -99,26 +100,26 @@ public class PatientFacadeTest {
         firstPatient.setMiddleName("middle1");
         firstPatient.setIdentificationNumber("0987654321rewq");
         firstPatient.setPhoneNumber(7654321);
-        firstPatient.setDateOfBirth(new Date());
+        firstPatient.setDateOfBirth(date);
         firstPatient.setIllnesses(new LinkedHashSet<>());
-        firstPatient.setUpdateDate(new Date());
-        firstPatient.setCreateDate(new Date());
+        firstPatient.setUpdateDate(date);
+        firstPatient.setCreateDate(date);
 
         firstIllness = new Illness();
         firstIllness.setId(1l);
         firstIllness.setName("name1");
         firstIllness.setChanceToDie(30);
         firstIllness.setDescription("description1");
-        firstIllness.setUpdateDate(new Date());
-        firstIllness.setCreateDate(new Date());
+        firstIllness.setUpdateDate(date);
+        firstIllness.setCreateDate(date);
 
         secondIllness = new Illness();
         secondIllness.setId(2l);
         secondIllness.setName("name2");
         secondIllness.setChanceToDie(50);
         secondIllness.setDescription("description2");
-        secondIllness.setCreateDate(new Date());
-        secondIllness.setUpdateDate(new Date());
+        secondIllness.setCreateDate(date);
+        secondIllness.setUpdateDate(date);
 
         illnesses.add(firstIllness);
         illnesses.add(secondIllness);

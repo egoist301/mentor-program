@@ -1,14 +1,7 @@
 package com.epam.esm.handler;
 
 import com.epam.esm.dto.ErrorDto;
-import com.epam.esm.exception.AnyIllnessExistWithSameNameException;
-import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
-import com.epam.esm.exception.IllnessAlreadyExistException;
-import com.epam.esm.exception.IllnessNotExistException;
-import com.epam.esm.exception.IncorrectPathVariableException;
-import com.epam.esm.exception.ParseDateException;
-import com.epam.esm.exception.PatientAlreadyExistException;
-import com.epam.esm.exception.PatientNotExistException;
+import com.epam.esm.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +21,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({IllnessAlreadyExistException.class, PatientAlreadyExistException.class,
-            AnyIllnessExistWithSameNameException.class, AnyPatientExistWithSameIdentificationNumberException.class,
-            IllnessNotExistException.class, PatientNotExistException.class})
+            AnyIllnessExistWithSameNameException.class, AnyPatientExistWithSameIdentificationNumberException.class})
     public ResponseEntity<Object> handleExistException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({IllnessNotExistException.class, PatientNotExistException.class})
+    public ResponseEntity<Object> handleNotExistException(RuntimeException e, WebRequest request) {
+        return createResponse(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ParseDateException.class)

@@ -5,7 +5,6 @@ import com.epam.esm.dto.PatientPartialRequestDto;
 import com.epam.esm.dto.PatientRequestDto;
 import com.epam.esm.dto.PatientResponseDto;
 import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
-import com.epam.esm.exception.ParseDateException;
 import com.epam.esm.exception.PatientAlreadyExistException;
 import com.epam.esm.exception.PatientNotExistException;
 import com.epam.esm.repository.entity.Illness;
@@ -15,7 +14,6 @@ import com.epam.esm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,15 +49,15 @@ public class PatientFacade {
     }
 
     public PatientResponseDto create(PatientRequestDto patientRequestDto) {
-        try {
-            Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
-            if (patientService.isPatientExist(patient.getIdentificationNumber())) {
-                throw new PatientAlreadyExistException();
-            } else {
-                patientService.create(patient);
-                Patient patientToResponse =
-                        patientService.findByIdentificationNumber(patient.getIdentificationNumber());
-                patient.setId(patientToResponse.getId());
+        Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
+        if (patientService.isPatientExist(patient.getIdentificationNumber())) {
+            throw new PatientAlreadyExistException();
+        } else {
+            patientService.create(patient);
+            Patient patientToResponse =
+                    patientService.findByIdentificationNumber(patient.getIdentificationNumber());
+            patient.setId(patientToResponse.getId());
+            if (patient.getIllnesses() != null) {
                 patient.getIllnesses().forEach(illness -> {
                     if (!illnessService.isIllnessExist(illness.getName())) {
                         illnessService.create(illness);
@@ -67,33 +65,28 @@ public class PatientFacade {
                     illness.setId(illnessService.findByName(illness.getName()).getId());
                     patientService.saveRefPatientIlness(patient.getId(), illness.getId());
                 });
-                patientToResponse.setIllnesses(illnessService.findByPatientId(patientToResponse.getId()));
-                return PatientDtoConverter.convertToDto(patientToResponse);
             }
-        } catch (ParseException e) {
-            throw new ParseDateException();
+            patientToResponse.setIllnesses(illnessService.findByPatientId(patientToResponse.getId()));
+            return PatientDtoConverter.convertToDto(patientToResponse);
         }
     }
 
     public PatientResponseDto update(Long id, PatientRequestDto patientRequestDto) {
-        try {
-            Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
-            patient.setId(id);
-            if (!patientService.isPatientExist(patient.getId())) {
-                throw new PatientNotExistException();
-            } else if (patientService
-                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
-                throw new AnyPatientExistWithSameIdentificationNumberException();
-            } else {
-                patientService.update(patient);
+        Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
+        patient.setId(id);
+        if (!patientService.isPatientExist(patient.getId())) {
+            throw new PatientNotExistException();
+        } else if (patientService
+                .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
+            throw new AnyPatientExistWithSameIdentificationNumberException();
+        } else {
+            patientService.update(patient);
 
-                Patient patientToResponse = patientService.get(id);
-                solveRefPatientIllness(patient, id);
-                patientToResponse.setIllnesses(illnessService.findByPatientId(id));
-                return PatientDtoConverter.convertToDto(patientToResponse);
-            }
-        } catch (ParseException e) {
-            throw new ParseDateException();
+            Patient patientToResponse = patientService.get(id);
+
+            solveRefPatientIllness(patient, id);
+            patientToResponse.setIllnesses(illnessService.findByPatientId(id));
+            return PatientDtoConverter.convertToDto(patientToResponse);
         }
     }
 
@@ -102,32 +95,28 @@ public class PatientFacade {
     }
 
     public PatientResponseDto partialUpdate(Long id, PatientPartialRequestDto patientPartialRequestDto) {
-        try {
-            Patient patient = PatientDtoConverter.partialConvertToEntity(patientPartialRequestDto);
-            patient.setId(id);
+        Patient patient = PatientDtoConverter.partialConvertToEntity(patientPartialRequestDto);
+        patient.setId(id);
 
-            if (!patientService.isPatientExist(patient.getId())) {
-                throw new PatientNotExistException();
-            } else if (patientService
-                    .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
-                throw new AnyPatientExistWithSameIdentificationNumberException();
-            } else {
-                patientService.partialUpdate(patient);
-                Patient patientToResponse = patientService.get(id);
-                if (patient.getIllnesses() != null) {
-                    solveRefPatientIllness(patient, id);
-                    patientToResponse.setIllnesses(illnessService.findByPatientId(id));
-                }
-                return PatientDtoConverter.convertToDto(patientToResponse);
-            }
-        } catch (ParseException e) {
-            throw new ParseDateException();
+        if (!patientService.isPatientExist(patient.getId())) {
+            throw new PatientNotExistException();
+        } else if (patientService
+                .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
+            throw new AnyPatientExistWithSameIdentificationNumberException();
+        } else {
+            patientService.partialUpdate(patient);
+            Patient patientToResponse = patientService.get(id);
+            solveRefPatientIllness(patient, id);
+            patientToResponse.setIllnesses(illnessService.findByPatientId(id));
+            return PatientDtoConverter.convertToDto(patientToResponse);
         }
     }
 
     private void solveRefPatientIllness(Patient patient, Long id) {
         Set<Illness> oldIllnesses = illnessService.findByPatientId(id);
-        oldIllnesses.removeAll(patient.getIllnesses());
+        if (patient.getIllnesses() != null) {
+            oldIllnesses.removeAll(patient.getIllnesses());
+        }
         oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
         patient.getIllnesses().forEach(illness -> {
             if (!illnessService.isIllnessExist(illness.getName())) {
