@@ -35,10 +35,10 @@ public class PatientController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PatientResponseDto> getAll(
-            @RequestParam(value = "first", required = false, defaultValue = "") String searchByFirstName,
-            @RequestParam(value = "last", required = false, defaultValue = "") String searchByLastName,
-            @RequestParam(value = "middle", required = false, defaultValue = "") String searchByMiddleName,
-            @RequestParam(value = "name", required = false, defaultValue = "") String searchByIllnessName,
+            @RequestParam(value = "first", required = false) String searchByFirstName,
+            @RequestParam(value = "last", required = false) String searchByLastName,
+            @RequestParam(value = "middle", required = false) String searchByMiddleName,
+            @RequestParam(value = "name", required = false) String searchByIllnessName,
             @RequestParam(value = "sort", required = false) String sortBy,
             @RequestParam(value = "order", required = false) String order) {
         validateSortAndOrder(sortBy, order);
