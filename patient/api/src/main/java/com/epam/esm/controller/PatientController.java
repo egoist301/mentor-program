@@ -48,7 +48,7 @@ public class PatientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientResponseDto create(@RequestBody @Validated PatientRequestDto patientRequestDto) {
+    public PatientResponseDto create(@RequestBody @Valid PatientRequestDto patientRequestDto) {
         return patientFacade.create(patientRequestDto);
     }
 

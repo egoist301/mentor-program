@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-        return createResponse(new IncorrectPathVariableException(), HttpStatus.BAD_REQUEST);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(status.value());
+        errorDto.setStatus(status);
+        errorDto.setMessage(ex.getBindingResult().getFieldError().getDefaultMessage());
+        return new ResponseEntity<>(errorDto, headers, status);
     }
 
     @ExceptionHandler({IllnessAlreadyExistException.class, PatientAlreadyExistException.class,
@@ -46,7 +50,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return createResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<Object> createResponse(RuntimeException ex, HttpStatus status) {
+    private ResponseEntity<Object> createResponse(Exception ex, HttpStatus status) {
         ErrorDto error = new ErrorDto();
         error.setStatus(status);
         error.setCode(status.value());
