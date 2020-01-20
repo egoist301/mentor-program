@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-        return createResponse(new RuntimeException(ex), status);
+        return createResponse(new IncorrectPathVariableException(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({IllnessAlreadyExistException.class, PatientAlreadyExistException.class,

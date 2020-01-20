@@ -8,19 +8,19 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class IllnessRequestDto {
-    @NotNull
-    @Size(min = 4, max = 30)
+    @NotNull(message = "name can't be null")
+    @Size(min = 4, max = 30, message = "name can be 4 to 30 characters long")
     @JsonProperty("name")
     private String name;
 
-    @NotNull
-    @Size(min = 4, max = 250)
+    @NotNull(message = "description can't be null")
+    @Size(min = 4, max = 250, message = "description can be 4 to 250 characters long")
     @JsonProperty("description")
     private String description;
 
-    @NotNull
-    @Min(0)
-    @Max(100)
+    @NotNull(message = "chance to die can't be null")
+    @Min(value = 0, message = "minimum 0%")
+    @Max(value = 100, message = "maximum 100%")
     @JsonProperty("chance_to_die")
     private Integer chanceToDie;
 

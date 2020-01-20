@@ -11,10 +11,15 @@ SELECT DISTINCT patient.id,
                 patient.create_date,
                 patient.update_date
 FROM patient
-         JOIN patient_illness ON patient_id = patient.id
-         JOIN illness ON illness_id = illness.id
+         LEFT JOIN patient_illness ON patient_id = patient.id
+         LEFT JOIN illness ON illness_id = illness.id
 WHERE first_name LIKE CONCAT('%', $1, '%')
   AND last_name LIKE CONCAT('%', $2, '%')
   AND middle_name LIKE CONCAT('%', $3, '%')
-  AND name LIKE CONCAT('%', $4, '%');
+  AND CASE
+          WHEN $4 != '' THEN
+              name LIKE CONCAT('%', $4, '%')
+          ELSE name IS NULL OR name IS NOT NULL
+    END
 $$ LANGUAGE SQL;
+

@@ -7,16 +7,16 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 public class IllnessPartialRequestDto {
-    @Size(min = 4, max = 30)
+    @Size(min = 4, max = 30, message = "name can be 4 to 30 characters long")
     @JsonProperty("name")
     private String name;
 
-    @Size(min = 4, max = 250)
+    @Size(min = 4, max = 250, message = "description can be 4 to 250 characters long")
     @JsonProperty("description")
     private String description;
 
-    @Min(0)
-    @Max(100)
+    @Min(value = 0, message = "minimum 0%")
+    @Max(value = 100, message = "maximum 100%")
     @JsonProperty("chance_to_die")
     private Integer chanceToDie;
 

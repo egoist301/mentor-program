@@ -116,9 +116,8 @@ public class PatientFacade {
         Set<Illness> oldIllnesses = illnessService.findByPatientId(id);
         if (patient.getIllnesses() != null) {
             oldIllnesses.removeAll(patient.getIllnesses());
-        }
-        oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
-        patient.getIllnesses().forEach(illness -> {
+            oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
+            patient.getIllnesses().forEach(illness -> {
             if (!illnessService.isIllnessExist(illness.getName())) {
                 illnessService.create(illness);
                 illness.setId(illnessService.findByName(illness.getName()).getId());
@@ -129,6 +128,7 @@ public class PatientFacade {
                     patientService.saveRefPatientIlness(id, illness.getId());
                 }
             }
-        });
+            });
+        }
     }
 }
