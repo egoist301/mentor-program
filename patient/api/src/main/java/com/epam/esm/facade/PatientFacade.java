@@ -14,6 +14,7 @@ import com.epam.esm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -115,22 +116,28 @@ public class PatientFacade {
     }
 
     private void solveRefPatientIllness(Patient patient, Long id) {
-        Set<Illness> oldIllnesses = illnessService.findByPatientId(id);
+        List<Illness> oldIllnesses = new ArrayList<>(illnessService.findByPatientId(id));
         if (patient.getIllnesses() != null) {
-            oldIllnesses.removeAll(patient.getIllnesses());
-            oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
             patient.getIllnesses().forEach(illness -> {
                 if (!illnessService.isIllnessExist(illness.getName())) {
                     illnessService.create(illness);
-                    illness.setId(illnessService.findByName(illness.getName()).getId());
+                    Illness temp = illnessService.findByName(illness.getName());
+                    illness.setId(temp.getId());
+                    illness.setCreateDate(temp.getCreateDate());
+                    illness.setUpdateDate(temp.getUpdateDate());
                     patientService.saveRefPatientIlness(id, illness.getId());
                 } else {
-                    illness.setId(illnessService.findByName(illness.getName()).getId());
+                    Illness temp = illnessService.findByName(illness.getName());
+                    illness.setId(temp.getId());
+                    illness.setCreateDate(temp.getCreateDate());
+                    illness.setUpdateDate(temp.getUpdateDate());
                     if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
                         patientService.saveRefPatientIlness(id, illness.getId());
                     }
                 }
             });
+            oldIllnesses.removeAll(patient.getIllnesses().stream().collect(Collectors.toList()));
+            oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
         }
     }
 }

@@ -39,7 +39,7 @@ public class IllnessFacade {
     public IllnessResponseDto create(IllnessRequestDto illnessRequestDto) {
         Illness illness = IllnessDtoConverter.convertToEntity(illnessRequestDto);
         if (illnessService.isIllnessExist(illness.getName())) {
-            throw new IllnessAlreadyExistException();
+            throw new IllnessAlreadyExistException("illness already exist");
         } else {
             illnessService.create(illness);
             return IllnessDtoConverter.convertToDto(illnessService.findByName(illness.getName()));
@@ -50,9 +50,10 @@ public class IllnessFacade {
         Illness illness = IllnessDtoConverter.convertToEntity(illnessRequestDto);
         illness.setId(id);
         if (!illnessService.isIllnessExist(illness.getId())) {
-            throw new IllnessNotExistException();
+            throw new IllnessNotExistException("illness is not exist");
         } else if (illnessService.isAnyIllnessExistWithName(illness.getId(), illness.getName())) {
-            throw new AnyIllnessExistWithSameNameException();
+            throw new AnyIllnessExistWithSameNameException(
+                    "illness with this name:" + illness.getName() + " already exist");
         } else {
             illnessService.update(illness);
             return IllnessDtoConverter.convertToDto(illnessService.get(id));
@@ -67,10 +68,11 @@ public class IllnessFacade {
         Illness illness = IllnessDtoConverter.partialConvertToEntity(illnessPartialRequestDto);
         illness.setId(id);
         if (!illnessService.isIllnessExist(illness.getId())) {
-            throw new IllnessNotExistException();
+            throw new IllnessNotExistException("illness is not exist");
         } else if (illness.getName() != null &&
                 illnessService.isAnyIllnessExistWithName(illness.getId(), illness.getName())) {
-            throw new AnyIllnessExistWithSameNameException();
+            throw new AnyIllnessExistWithSameNameException(
+                    "illness with this name:" + illness.getName() + " already exist");
         } else {
             illnessService.partialUpdate(illness);
             return IllnessDtoConverter.convertToDto(illnessService.get(id));

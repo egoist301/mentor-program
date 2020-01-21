@@ -1,9 +1,11 @@
 package com.epam.esm.dto;
 
 import com.epam.esm.converter.LocalDateDeserializer;
+import com.epam.esm.converter.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 
@@ -20,14 +22,18 @@ public class IllnessResponseDto {
     @JsonProperty("chance_to_die")
     private Integer chanceToDie;
 
-    @JsonProperty("create_date")
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonProperty("create_date")
     private LocalDate createDate;
 
-    @JsonProperty("update_date")
+
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonProperty("update_date")
     private LocalDate updateDate;
 
     public IllnessResponseDto() {

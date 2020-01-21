@@ -185,7 +185,8 @@ public class PatientDao {
     }
 
     public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {
-        List<Integer> integers = jdbcTemplate.query(CHECK_REF, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
+        List<Integer> integers =
+                jdbcTemplate.query(CHECK_REF, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
 
         if (integers.isEmpty()) {
             return null;

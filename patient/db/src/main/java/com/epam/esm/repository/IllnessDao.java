@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -124,6 +124,6 @@ public class IllnessDao {
     }
 
     public Set<Illness> findByPatientId(Long patientId) {
-        return new LinkedHashSet<>(jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId));
+        return new HashSet<>(jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId));
     }
 }
