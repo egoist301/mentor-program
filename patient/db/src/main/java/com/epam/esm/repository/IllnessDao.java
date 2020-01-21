@@ -21,6 +21,21 @@ public class IllnessDao {
     private static final String ALL_FIELDS =
             ID + ", " + NAME + ", " + DESCRIPTION + ", " + CHANCE_TO_DIE + ", " + CREATE_DATE + ", " + UPDATE_DATE;
     private static final String TABLE_NAME = "illness";
+    private static final String FIND_BY_ID = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+    private static final String FIND_BY_NAME =
+            "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ?";
+    private static final String FIND_BY_NAME_WITH_DIFFERENT_ID =
+            "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ? AND " + ID + " <> ?";
+    private static final String GET_ALL = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME;
+    private static final String INSERT =
+            "INSERT INTO " + TABLE_NAME + "(" + NAME + ", " + DESCRIPTION + ", " + CHANCE_TO_DIE + ", " +
+                    CREATE_DATE + ", " + UPDATE_DATE + ") VALUES (?,?,?,current_date,current_date)";
+    private static final String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+    private static final String UPDATE =
+            "UPDATE " + TABLE_NAME + " SET " + NAME + " = ?, " + DESCRIPTION + " = ?, " + CHANCE_TO_DIE + " = ?, " +
+                    UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
+    private static final String FIND_BY_PATIENT_ID =
+            "SELECT i.* FROM illness i JOIN patient_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -30,8 +45,7 @@ public class IllnessDao {
     }
 
     public Illness findById(Long id) {
-        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), id);
+        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_ID, new IllnessMapper(), id);
 
         if (illnesses.isEmpty()) {
             return null;
@@ -41,8 +55,7 @@ public class IllnessDao {
     }
 
     public Illness findByName(String name) {
-        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ?";
-        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), name);
+        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_NAME, new IllnessMapper(), name);
 
         if (illnesses.isEmpty()) {
             return null;
@@ -52,9 +65,7 @@ public class IllnessDao {
     }
 
     public Illness findByNameWithDifferentId(String name, Long id) {
-        final String QUERY =
-                "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + NAME + " = ? AND " + ID + " <> ?";
-        List<Illness> illnesses = jdbcTemplate.query(QUERY, new IllnessMapper(), name, id);
+        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_NAME_WITH_DIFFERENT_ID, new IllnessMapper(), name, id);
         if (illnesses.isEmpty()) {
             return null;
         } else {
@@ -63,28 +74,20 @@ public class IllnessDao {
     }
 
     public List<Illness> getAll() {
-        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME;
-        return jdbcTemplate.query(QUERY, new IllnessMapper());
+        return jdbcTemplate.query(GET_ALL, new IllnessMapper());
     }
 
     public void create(Illness illness) {
-        final String QUERY =
-                "INSERT INTO " + TABLE_NAME + "(" + NAME + ", " + DESCRIPTION + ", " + CHANCE_TO_DIE + ", " +
-                        CREATE_DATE + ", " + UPDATE_DATE + ") VALUES (?,?,?,current_date,current_date)";
-        jdbcTemplate.update(QUERY, illness.getName(), illness.getDescription(), illness.getChanceToDie());
+        jdbcTemplate.update(INSERT, illness.getName(), illness.getDescription(), illness.getChanceToDie());
     }
 
     public void delete(Long id) {
-        final String QUERY = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        jdbcTemplate.update(QUERY, id);
+        jdbcTemplate.update(DELETE, id);
     }
 
     public void update(Illness illness) {
-        final String QUERY =
-                "UPDATE " + TABLE_NAME + " SET " + NAME + " = ?, " + DESCRIPTION + " = ?, " + CHANCE_TO_DIE + " = ?, " +
-                        UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
         jdbcTemplate
-                .update(QUERY, illness.getName(), illness.getDescription(), illness.getChanceToDie(), illness.getId());
+                .update(UPDATE, illness.getName(), illness.getDescription(), illness.getChanceToDie(), illness.getId());
     }
 
     public void partialUpdate(Illness illness) {
@@ -121,8 +124,6 @@ public class IllnessDao {
     }
 
     public Set<Illness> findByPatientId(Long patientId) {
-        final String FIND_BY_PATIENT_ID =
-                "SELECT i.* FROM illness i JOIN patient_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
         return new LinkedHashSet<>(jdbcTemplate.query(FIND_BY_PATIENT_ID, new IllnessMapper(), patientId));
     }
 }

@@ -26,6 +26,24 @@ public class PatientDao {
     private static final String TABLE_NAME = "patient";
 
     private final JdbcTemplate jdbcTemplate;
+    public static final String FIND_BY_ID = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+    public static final String FIND_BY_IDENTIFICATION_NUMBER =
+            "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ?";
+    public static final String INSERT =
+            "INSERT INTO " + TABLE_NAME + "(" + FIRST_NAME + ", " + LAST_NAME + ", " + MIDDLE_NAME + ", " +
+                    PHONE_NUMBER + ", " + DATE_OF_BIRTH + ", " + IDENTIFICATION_NUMBER + ", " + CREATE_DATE + ", " +
+                    UPDATE_DATE + ") VALUES (?,?,?,?,?,?,current_date,current_date)";
+    public static final String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
+    public static final String UPDATE =
+            "UPDATE " + TABLE_NAME + " SET " + FIRST_NAME + " = ?, " + LAST_NAME + " = ?, " + MIDDLE_NAME +
+                    " = ?, " + PHONE_NUMBER + " = ?, " + DATE_OF_BIRTH + " = ?, " + IDENTIFICATION_NUMBER +
+                    " = ?, " + UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
+    public static final String SAVE_REF = "INSERT INTO patient_illness(patient_id, illness_id) VALUES (?,?)";
+    public static final String REMOVE_REF = "DELETE FROM patient_illness WHERE patient_id = ? AND illness_id = ?";
+    public static final String FIND_BY_IDENTIFICATION_NUMBER_WITH_DIFFERENT_ID =
+            "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ? AND " + ID +
+                    " <> ?";
+    public static final String CHECK_REF = "SELECT id FROM patient_illness WHERE patient_id = ? AND illness_id = ?";
 
     @Autowired
     public PatientDao(JdbcTemplate jdbcTemplate) {
@@ -33,8 +51,7 @@ public class PatientDao {
     }
 
     public Patient findById(Long id) {
-        final String QUERY = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), id);
+        List<Patient> patients = jdbcTemplate.query(FIND_BY_ID, new PatientMapper(), id);
 
         if (patients.isEmpty()) {
             return null;
@@ -44,9 +61,8 @@ public class PatientDao {
     }
 
     public Patient findByIdentificationNumber(String identificationNumber) {
-        final String QUERY =
-                "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ?";
-        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber);
+        List<Patient> patients =
+                jdbcTemplate.query(FIND_BY_IDENTIFICATION_NUMBER, new PatientMapper(), identificationNumber);
 
         if (patients.isEmpty()) {
             return null;
@@ -56,25 +72,16 @@ public class PatientDao {
     }
 
     public void create(Patient patient) {
-        final String QUERY =
-                "INSERT INTO " + TABLE_NAME + "(" + FIRST_NAME + ", " + LAST_NAME + ", " + MIDDLE_NAME + ", " +
-                        PHONE_NUMBER + ", " + DATE_OF_BIRTH + ", " + IDENTIFICATION_NUMBER + ", " + CREATE_DATE + ", " +
-                        UPDATE_DATE + ") VALUES (?,?,?,?,?,?,current_date,current_date)";
-        jdbcTemplate.update(QUERY, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),
+        jdbcTemplate.update(INSERT, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),
                 patient.getPhoneNumber(), patient.getDateOfBirth(), patient.getIdentificationNumber());
     }
 
     public void delete(Long id) {
-        final String QUERY = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
-        jdbcTemplate.update(QUERY, id);
+        jdbcTemplate.update(DELETE, id);
     }
 
     public void update(Patient patient) {
-        final String QUERY =
-                "UPDATE " + TABLE_NAME + " SET " + FIRST_NAME + " = ?, " + LAST_NAME + " = ?, " + MIDDLE_NAME +
-                        " = ?, " + PHONE_NUMBER + " = ?, " + DATE_OF_BIRTH + " = ?, " + IDENTIFICATION_NUMBER +
-                        " = ?, " + UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
-        jdbcTemplate.update(QUERY, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),
+        jdbcTemplate.update(UPDATE, patient.getFirstName(), patient.getLastName(), patient.getMiddleName(),
                 patient.getPhoneNumber(), patient.getDateOfBirth(), patient.getIdentificationNumber(), patient.getId());
     }
 
@@ -159,20 +166,16 @@ public class PatientDao {
     }
 
     public void saveRefPatientIllness(Long patientId, Long illnessId) {
-        final String QUERY = "INSERT INTO patient_illness(patient_id, illness_id) VALUES (?,?)";
-        jdbcTemplate.update(QUERY, patientId, illnessId);
+        jdbcTemplate.update(SAVE_REF, patientId, illnessId);
     }
 
     public void removeRefPatientIllness(Long patientId, Long illnessId) {
-        final String QUERY = "DELETE FROM patient_illness WHERE patient_id = ? AND illness_id = ?";
-        jdbcTemplate.update(QUERY, patientId, illnessId);
+        jdbcTemplate.update(REMOVE_REF, patientId, illnessId);
     }
 
     public Patient findByIdentificationNumberWithDifferentId(Long id, String identificationNumber) {
-        final String QUERY =
-                "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + IDENTIFICATION_NUMBER + " = ? AND " + ID +
-                        " <> ?";
-        List<Patient> patients = jdbcTemplate.query(QUERY, new PatientMapper(), identificationNumber, id);
+        List<Patient> patients = jdbcTemplate
+                .query(FIND_BY_IDENTIFICATION_NUMBER_WITH_DIFFERENT_ID, new PatientMapper(), identificationNumber, id);
 
         if (patients.isEmpty()) {
             return null;
@@ -182,8 +185,7 @@ public class PatientDao {
     }
 
     public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {
-        final String QUERY = "SELECT id FROM patient_illness WHERE patient_id = ? AND illness_id = ?";
-        List<Integer> integers = jdbcTemplate.query(QUERY, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
+        List<Integer> integers = jdbcTemplate.query(CHECK_REF, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
 
         if (integers.isEmpty()) {
             return null;

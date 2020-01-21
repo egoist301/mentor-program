@@ -1,4 +1,4 @@
-package com.epam.esm.repository;
+package com.epam.esm.config;
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres;
 import org.springframework.context.annotation.Bean;

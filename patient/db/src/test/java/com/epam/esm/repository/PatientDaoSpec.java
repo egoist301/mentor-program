@@ -1,9 +1,9 @@
 package com.epam.esm.repository;
 
+import com.epam.esm.config.TestConfig;
 import com.epam.esm.repository.config.ConnectionConfig;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
-import com.epam.esm.util.DateFormatter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.util.Set;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {ConnectionConfig.class, TestConfig.class})
 @ActiveProfiles("dev")
-public class PatientDaoSpecTest {
+public class PatientDaoSpec {
     @Autowired
     private PatientDao patientDao;
     private Patient patient;

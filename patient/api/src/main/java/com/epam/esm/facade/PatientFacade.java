@@ -42,9 +42,7 @@ public class PatientFacade {
                                            String searchByIllnessName, String sortBy, String order) {
         List<Patient> patients = patientService
                 .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
-        patients.forEach(patient -> {
-            patient.setIllnesses(illnessService.findByPatientId(patient.getId()));
-        });
+        patients.forEach(patient -> patient.setIllnesses(illnessService.findByPatientId(patient.getId())));
         return patients.stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
     }
 
@@ -90,8 +88,12 @@ public class PatientFacade {
         }
     }
 
-    public void delete(Long id) {
-        patientService.delete(id);
+    public void delete(Long id) {//проверка
+        if (patientService.isPatientExist(id)) {
+            patientService.delete(id);
+        } else {
+            throw new PatientNotExistException("patient not exist");
+        }
     }
 
     public PatientResponseDto partialUpdate(Long id, PatientPartialRequestDto patientPartialRequestDto) {
@@ -118,16 +120,16 @@ public class PatientFacade {
             oldIllnesses.removeAll(patient.getIllnesses());
             oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
             patient.getIllnesses().forEach(illness -> {
-            if (!illnessService.isIllnessExist(illness.getName())) {
-                illnessService.create(illness);
-                illness.setId(illnessService.findByName(illness.getName()).getId());
-                patientService.saveRefPatientIlness(id, illness.getId());
-            } else {
-                illness.setId(illnessService.findByName(illness.getName()).getId());
-                if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
+                if (!illnessService.isIllnessExist(illness.getName())) {
+                    illnessService.create(illness);
+                    illness.setId(illnessService.findByName(illness.getName()).getId());
                     patientService.saveRefPatientIlness(id, illness.getId());
+                } else {
+                    illness.setId(illnessService.findByName(illness.getName()).getId());
+                    if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
+                        patientService.saveRefPatientIlness(id, illness.getId());
+                    }
                 }
-            }
             });
         }
     }
