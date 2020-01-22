@@ -4,23 +4,24 @@ import com.epam.esm.converter.PatientDtoConverter;
 import com.epam.esm.dto.PatientPartialRequestDto;
 import com.epam.esm.dto.PatientRequestDto;
 import com.epam.esm.dto.PatientResponseDto;
-import com.epam.esm.exception.AnyPatientExistWithSameIdentificationNumberException;
-import com.epam.esm.exception.PatientAlreadyExistException;
-import com.epam.esm.exception.PatientNotExistException;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
+import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.service.IllnessService;
 import com.epam.esm.service.PatientService;
+import com.epam.esm.util.NumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PatientFacade {
+    private static final int LENGTH_OF_IDENTIFICATION_NUMBER = 14;
+    private static final String PATIENT_IS_NOT_EXIST = "patient is not exist";
     private PatientService patientService;
     private IllnessService illnessService;
 
@@ -49,8 +50,9 @@ public class PatientFacade {
 
     public PatientResponseDto create(PatientRequestDto patientRequestDto) {
         Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
+        patient.setIdentificationNumber(NumberGenerator.generateIdentificationNumber(LENGTH_OF_IDENTIFICATION_NUMBER));
         if (patientService.isPatientExist(patient.getIdentificationNumber())) {
-            throw new PatientAlreadyExistException();
+            throw new EntityIsAlreadyExistException("patient already exist");
         } else {
             patientService.create(patient);
             Patient patientToResponse =
@@ -62,7 +64,7 @@ public class PatientFacade {
                         illnessService.create(illness);
                     }
                     illness.setId(illnessService.findByName(illness.getName()).getId());
-                    patientService.saveRefPatientIlness(patient.getId(), illness.getId());
+                    patientService.saveRefPatientIllness(patient.getId(), illness.getId());
                 });
             }
             patientToResponse.setIllnesses(illnessService.findByPatientId(patientToResponse.getId()));
@@ -74,10 +76,7 @@ public class PatientFacade {
         Patient patient = PatientDtoConverter.convertToEntity(patientRequestDto);
         patient.setId(id);
         if (!patientService.isPatientExist(patient.getId())) {
-            throw new PatientNotExistException();
-        } else if (patientService
-                .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
-            throw new AnyPatientExistWithSameIdentificationNumberException();
+            throw new EntityIsNotExistException(PATIENT_IS_NOT_EXIST);
         } else {
             patientService.update(patient);
 
@@ -89,11 +88,11 @@ public class PatientFacade {
         }
     }
 
-    public void delete(Long id) {//проверка
+    public void delete(Long id) {
         if (patientService.isPatientExist(id)) {
             patientService.delete(id);
         } else {
-            throw new PatientNotExistException("patient not exist");
+            throw new EntityIsNotExistException(PATIENT_IS_NOT_EXIST);
         }
     }
 
@@ -102,10 +101,7 @@ public class PatientFacade {
         patient.setId(id);
 
         if (!patientService.isPatientExist(patient.getId())) {
-            throw new PatientNotExistException();
-        } else if (patientService
-                .isAnyPatientExistWithIdentificationNumber(id, patient.getIdentificationNumber())) {
-            throw new AnyPatientExistWithSameIdentificationNumberException();
+            throw new EntityIsNotExistException(PATIENT_IS_NOT_EXIST);
         } else {
             patientService.partialUpdate(patient);
             Patient patientToResponse = patientService.get(id);
@@ -125,14 +121,14 @@ public class PatientFacade {
                     illness.setId(temp.getId());
                     illness.setCreateDate(temp.getCreateDate());
                     illness.setUpdateDate(temp.getUpdateDate());
-                    patientService.saveRefPatientIlness(id, illness.getId());
+                    patientService.saveRefPatientIllness(id, illness.getId());
                 } else {
                     Illness temp = illnessService.findByName(illness.getName());
                     illness.setId(temp.getId());
                     illness.setCreateDate(temp.getCreateDate());
                     illness.setUpdateDate(temp.getUpdateDate());
                     if (!patientService.isRefPatientIllnessExist(id, illness.getId())) {
-                        patientService.saveRefPatientIlness(id, illness.getId());
+                        patientService.saveRefPatientIllness(id, illness.getId());
                     }
                 }
             });

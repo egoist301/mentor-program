@@ -34,7 +34,7 @@ public class PatientService {
         patientDao.update(entity);
     }
 
-    public void saveRefPatientIlness(Long patientId, Long illnessId) {
+    public void saveRefPatientIllness(Long patientId, Long illnessId) {
         patientDao.saveRefPatientIllness(patientId, illnessId);
     }
 
@@ -57,10 +57,6 @@ public class PatientService {
 
     public boolean isPatientExist(Long id) {
         return patientDao.findById(id) != null;
-    }
-
-    public boolean isAnyPatientExistWithIdentificationNumber(Long id, String identificationNumber) {
-        return patientDao.findByIdentificationNumberWithDifferentId(id, identificationNumber) != null;
     }
 
     public boolean isRefPatientIllnessExist(Long patientId, Long illnessId) {

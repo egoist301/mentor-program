@@ -1,7 +1,10 @@
 package com.epam.esm.handler;
 
 import com.epam.esm.dto.ErrorDto;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
+import com.epam.esm.exception.EntityIsNotExistException;
+import com.epam.esm.exception.IncorrectPathVariableException;
+import com.epam.esm.exception.ParseDateException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +20,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(status.value());
-        errorDto.setStatus(status);
-        errorDto.setMessage(ex.getBindingResult().getFieldError().getDefaultMessage());
-        return new ResponseEntity<>(errorDto, headers, status);
+        return createResponse(new RuntimeException(ex.getBindingResult().getFieldError().getDefaultMessage(), ex),
+                status);
     }
 
-    @ExceptionHandler({IllnessAlreadyExistException.class, PatientAlreadyExistException.class,
-            AnyIllnessExistWithSameNameException.class, AnyPatientExistWithSameIdentificationNumberException.class})
+    @ExceptionHandler(EntityIsAlreadyExistException.class)
     public ResponseEntity<Object> handleExistException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({IllnessNotExistException.class, PatientNotExistException.class})
+    @ExceptionHandler(EntityIsNotExistException.class)
     public ResponseEntity<Object> handleNotExistException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.NOT_FOUND);
     }

@@ -2,7 +2,15 @@ package com.epam.esm.util;
 
 import com.epam.esm.exception.IncorrectPathVariableException;
 
+import java.util.Arrays;
+
 public final class Validator {
+
+    private static final String FIRST_NAME = "first_name";
+    private static final String LAST_NAME = "last_name";
+    private static final String MIDDLE_NAME = "middle_name";
+    private static final String DATE_OF_BIRTH = "date_of_birth";
+
     private Validator() {
     }
 
@@ -14,8 +22,7 @@ public final class Validator {
 
     public static void validateSortAndOrder(String sortBy, String order) {
         if ((sortBy != null &&
-                !(sortBy.equals("first_name") || sortBy.equals("last_name") || sortBy.equals("middle_name") ||
-                        sortBy.equals("date_of_birth"))) ||
+                !(Arrays.asList(FIRST_NAME, LAST_NAME, MIDDLE_NAME, DATE_OF_BIRTH).contains(sortBy))) ||
                 (order != null && !(order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc")))) {
             throw new IncorrectPathVariableException();
         }

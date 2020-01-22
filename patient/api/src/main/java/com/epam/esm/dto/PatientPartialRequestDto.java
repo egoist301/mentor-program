@@ -40,10 +40,6 @@ public class PatientPartialRequestDto {
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Size(min = 14, max = 14, message = "identification number must be 14 characters long")
-    @JsonProperty("identification_number")
-    private String identificationNumber;
-
     @Valid
     @JsonProperty("illnesses")
     private Set<IllnessPartialRequestDto> illnesses;
@@ -82,18 +78,6 @@ public class PatientPartialRequestDto {
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getIdentificationNumber() {
-        return identificationNumber;
-    }
-
-    public void setIdentificationNumber(String identificationNumber) {
-        this.identificationNumber = identificationNumber;
     }
 
     public Set<IllnessPartialRequestDto> getIllnesses() {

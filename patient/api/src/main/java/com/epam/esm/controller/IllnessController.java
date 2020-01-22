@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.IllnessPartialRequestDto;
 import com.epam.esm.dto.IllnessRequestDto;
 import com.epam.esm.dto.IllnessResponseDto;
-import com.epam.esm.exception.IncorrectPathVariableException;
 import com.epam.esm.facade.IllnessFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/illness")
+@RequestMapping("/illnesses")
 public class IllnessController {
     private final IllnessFacade illnessFacade;
 

@@ -128,18 +128,6 @@ public class PatientServiceTest {
     }
 
     @Test
-    public void isAnyPatientExistWithIdentificationNumber_setCorrectParam_shouldBeTrue() {
-        Mockito.when(patientDao.findByIdentificationNumberWithDifferentId(id, idNumber)).thenReturn(patient);
-        Assert.assertTrue(patientService.isAnyPatientExistWithIdentificationNumber(id, idNumber));
-    }
-
-    @Test
-    public void isAnyPatientExistWithIdentificationNumber_setIncorrectParam_shouldBeFalse() {
-        Mockito.when(patientDao.findByIdentificationNumberWithDifferentId(id, idNumber)).thenReturn(null);
-        Assert.assertFalse(patientService.isAnyPatientExistWithIdentificationNumber(id, idNumber));
-    }
-
-    @Test
     public void findByIdentificationNumber_setCorrectIdentificationNumber_shouldBeReturnPatient() {
         Mockito.when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(patient);
         Assert.assertNotNull(patientService.findByIdentificationNumber(idNumber));

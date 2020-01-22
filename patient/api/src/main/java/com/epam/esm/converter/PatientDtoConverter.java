@@ -34,7 +34,6 @@ public final class PatientDtoConverter {
         patient.setLastName(patientRequestDto.getLastName());
         patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
         patient.setDateOfBirth(patientRequestDto.getDateOfBirth());
-        patient.setIdentificationNumber(patientRequestDto.getIdentificationNumber());
         if (patientRequestDto.getIllnesses() != null) {
             patient.setIllnesses(
                     patientRequestDto.getIllnesses().stream().map(IllnessDtoConverter::convertToEntity).collect(
@@ -50,7 +49,6 @@ public final class PatientDtoConverter {
         patient.setLastName(patientPartialRequestDto.getLastName());
         patient.setPhoneNumber(patientPartialRequestDto.getPhoneNumber());
         patient.setDateOfBirth(patientPartialRequestDto.getDateOfBirth());
-        patient.setIdentificationNumber(patientPartialRequestDto.getIdentificationNumber());
         if (patientPartialRequestDto.getIllnesses() != null) {
             patient.setIllnesses(
                     patientPartialRequestDto.getIllnesses().stream().map(IllnessDtoConverter::partialConvertToEntity)

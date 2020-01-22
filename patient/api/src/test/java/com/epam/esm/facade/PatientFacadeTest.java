@@ -5,7 +5,7 @@ import com.epam.esm.converter.PatientDtoConverter;
 import com.epam.esm.dto.IllnessRequestDto;
 import com.epam.esm.dto.PatientRequestDto;
 import com.epam.esm.dto.PatientResponseDto;
-import com.epam.esm.exception.PatientAlreadyExistException;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.service.IllnessService;
@@ -55,7 +55,6 @@ public class PatientFacadeTest {
         id = 1l;
         idNumber = "1234567890qwer";
         patientRequestDto = new PatientRequestDto();
-        patientRequestDto.setIdentificationNumber(idNumber);
         patientRequestDto.setIllnesses(illnessRequestDtos);
         //patientRequestDto.setDateOfBirth("2000-01-01");
 
@@ -150,7 +149,7 @@ public class PatientFacadeTest {
         Assert.assertNotNull(facade.getAll(param, param, param, param, param, param));
     }
 
-    @Test(expected = PatientAlreadyExistException.class)
+    @Test(expected = EntityIsAlreadyExistException.class)
     public void create_setIncorrectPatient_shouldBeReturnException() {
         Mockito.when(patientService.isPatientExist(idNumber)).thenReturn(true);
         Assert.assertNotNull(facade.create(patientRequestDto));

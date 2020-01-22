@@ -3,20 +3,18 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.PatientPartialRequestDto;
 import com.epam.esm.dto.PatientRequestDto;
 import com.epam.esm.dto.PatientResponseDto;
-import com.epam.esm.exception.IncorrectPathVariableException;
 import com.epam.esm.facade.PatientFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/patient",
+@RequestMapping(value = "/patients",
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PatientController {
     private final PatientFacade patientFacade;

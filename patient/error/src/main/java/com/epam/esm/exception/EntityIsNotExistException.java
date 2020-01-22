@@ -1,12 +1,12 @@
 package com.epam.esm.exception;
 
-public class PatientNotExistException extends RuntimeException {
+public class EntityIsNotExistException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public PatientNotExistException() {
+    public EntityIsNotExistException() {
     }
 
     /**
@@ -17,7 +17,7 @@ public class PatientNotExistException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public PatientNotExistException(String message) {
+    public EntityIsNotExistException(String message) {
         super(message);
     }
 
@@ -35,7 +35,7 @@ public class PatientNotExistException extends RuntimeException {
      *                unknown.)
      * @since 1.4
      */
-    public PatientNotExistException(String message, Throwable cause) {
+    public EntityIsNotExistException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -52,7 +52,7 @@ public class PatientNotExistException extends RuntimeException {
      *              unknown.)
      * @since 1.4
      */
-    public PatientNotExistException(Throwable cause) {
+    public EntityIsNotExistException(Throwable cause) {
         super(cause);
     }
 }

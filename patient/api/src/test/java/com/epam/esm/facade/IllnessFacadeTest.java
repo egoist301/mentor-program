@@ -2,7 +2,7 @@ package com.epam.esm.facade;
 
 import com.epam.esm.config.RootConfig;
 import com.epam.esm.dto.IllnessRequestDto;
-import com.epam.esm.exception.IllnessAlreadyExistException;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.junit.Assert;
@@ -97,7 +97,7 @@ public class IllnessFacadeTest {
         Assert.assertNotNull(facade.create(illnessRequestDto));
     }
 
-    @Test(expected = IllnessAlreadyExistException.class)
+    @Test(expected = EntityIsAlreadyExistException.class)
     public void create_setIncorrectIllnessRequest_shouldBeIllnessResponse() {
         Mockito.when(illnessService.isIllnessExist(illness.getName())).thenReturn(true);
         Mockito.when(illnessService.findByName(illness.getName())).thenReturn(illness);

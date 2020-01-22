@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Repository
 public class IllnessDao {
-    private static final String ID = "id";
+    private static final String ID = "illness.id";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String CHANCE_TO_DIE = "chance_to_die";
@@ -34,8 +34,8 @@ public class IllnessDao {
     private static final String UPDATE =
             "UPDATE " + TABLE_NAME + " SET " + NAME + " = ?, " + DESCRIPTION + " = ?, " + CHANCE_TO_DIE + " = ?, " +
                     UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
-    private static final String FIND_BY_PATIENT_ID =
-            "SELECT i.* FROM illness i JOIN patient_illness pi ON i.id = pi.illness_id WHERE patient_id = ?";
+    private static final String FIND_BY_PATIENT_ID = "SELECT " + ALL_FIELDS
+            + " FROM illness JOIN patient_illness pi ON illness.id = pi.illness_id WHERE patient_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -117,10 +117,7 @@ public class IllnessDao {
     }
 
     private String addCommaAndSpace(String query, int fieldCount) {
-        if (fieldCount != 0) {
-            query = query.concat(", ");
-        }
-        return query;
+        return fieldCount != 0 ? query.concat(", ") : query;
     }
 
     public Set<Illness> findByPatientId(Long patientId) {

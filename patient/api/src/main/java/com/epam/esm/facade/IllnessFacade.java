@@ -4,9 +4,8 @@ import com.epam.esm.converter.IllnessDtoConverter;
 import com.epam.esm.dto.IllnessPartialRequestDto;
 import com.epam.esm.dto.IllnessRequestDto;
 import com.epam.esm.dto.IllnessResponseDto;
-import com.epam.esm.exception.AnyIllnessExistWithSameNameException;
-import com.epam.esm.exception.IllnessAlreadyExistException;
-import com.epam.esm.exception.IllnessNotExistException;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
+import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class IllnessFacade {
+    private static final String ILLNESS_IS_NOT_EXIST = "illness is not exist";
     private IllnessService illnessService;
 
     @Autowired
@@ -39,7 +39,7 @@ public class IllnessFacade {
     public IllnessResponseDto create(IllnessRequestDto illnessRequestDto) {
         Illness illness = IllnessDtoConverter.convertToEntity(illnessRequestDto);
         if (illnessService.isIllnessExist(illness.getName())) {
-            throw new IllnessAlreadyExistException("illness already exist");
+            throw new EntityIsAlreadyExistException("illness already exist");
         } else {
             illnessService.create(illness);
             return IllnessDtoConverter.convertToDto(illnessService.findByName(illness.getName()));
@@ -50,9 +50,9 @@ public class IllnessFacade {
         Illness illness = IllnessDtoConverter.convertToEntity(illnessRequestDto);
         illness.setId(id);
         if (!illnessService.isIllnessExist(illness.getId())) {
-            throw new IllnessNotExistException("illness is not exist");
+            throw new EntityIsNotExistException(ILLNESS_IS_NOT_EXIST);
         } else if (illnessService.isAnyIllnessExistWithName(illness.getId(), illness.getName())) {
-            throw new AnyIllnessExistWithSameNameException(
+            throw new EntityIsAlreadyExistException(
                     "illness with this name:" + illness.getName() + " already exist");
         } else {
             illnessService.update(illness);
@@ -61,17 +61,21 @@ public class IllnessFacade {
     }
 
     public void delete(Long id) {
-        illnessService.delete(id);
+        if (illnessService.isIllnessExist(id)) {
+            illnessService.delete(id);
+        } else {
+            throw new EntityIsNotExistException(ILLNESS_IS_NOT_EXIST);
+        }
     }
 
     public IllnessResponseDto partialUpdate(Long id, IllnessPartialRequestDto illnessPartialRequestDto) {
         Illness illness = IllnessDtoConverter.partialConvertToEntity(illnessPartialRequestDto);
         illness.setId(id);
         if (!illnessService.isIllnessExist(illness.getId())) {
-            throw new IllnessNotExistException("illness is not exist");
+            throw new EntityIsNotExistException(ILLNESS_IS_NOT_EXIST);
         } else if (illness.getName() != null &&
                 illnessService.isAnyIllnessExistWithName(illness.getId(), illness.getName())) {
-            throw new AnyIllnessExistWithSameNameException(
+            throw new EntityIsAlreadyExistException(
                     "illness with this name:" + illness.getName() + " already exist");
         } else {
             illnessService.partialUpdate(illness);
