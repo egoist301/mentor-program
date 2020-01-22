@@ -32,12 +32,13 @@ public class PatientFacade {
     }
 
     public PatientResponseDto get(Long id) {
-        Patient patient = patientService.get(id);
-        if (patient == null) {
-            return null;
+        if (patientService.isPatientExist(id)) {
+            Patient patient = patientService.get(id);
+            patient.setIllnesses(illnessService.findByPatientId(id));
+            return PatientDtoConverter.convertToDto(patient);
+        } else {
+            throw new EntityIsNotExistException("patient is not exist");
         }
-        patient.setIllnesses(illnessService.findByPatientId(id));
-        return PatientDtoConverter.convertToDto(patient);
     }
 
     public List<PatientResponseDto> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
@@ -79,9 +80,7 @@ public class PatientFacade {
             throw new EntityIsNotExistException(PATIENT_IS_NOT_EXIST);
         } else {
             patientService.update(patient);
-
             Patient patientToResponse = patientService.get(id);
-
             solveRefPatientIllness(patient, id);
             patientToResponse.setIllnesses(illnessService.findByPatientId(id));
             return PatientDtoConverter.convertToDto(patientToResponse);

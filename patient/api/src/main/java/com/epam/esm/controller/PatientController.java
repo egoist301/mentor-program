@@ -6,9 +6,22 @@ import com.epam.esm.dto.PatientResponseDto;
 import com.epam.esm.facade.PatientFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,15 +38,13 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PatientResponseDto get(@PathVariable("id") Long id) {
+    public ResponseEntity<PatientResponseDto> get(@PathVariable("id") Long id) {
         Validator.validateId(id);
-        return patientFacade.get(id);
+        return new ResponseEntity<>(patientFacade.get(id), HttpStatus.OK);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<PatientResponseDto> getAll(
+    public ResponseEntity<List<PatientResponseDto>> getAll(
             @RequestParam(value = "first_name", required = false) String searchByFirstName,
             @RequestParam(value = "last_name", required = false) String searchByLastName,
             @RequestParam(value = "middle_name", required = false) String searchByMiddleName,
@@ -41,30 +52,33 @@ public class PatientController {
             @RequestParam(value = "sort", required = false) String sortBy,
             @RequestParam(value = "order", required = false) String order) {
         Validator.validateSortAndOrder(sortBy, order);
-        return patientFacade
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
+        return new ResponseEntity<>(patientFacade
+                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order),
+                HttpStatus.OK);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PatientResponseDto create(@RequestBody @Valid PatientRequestDto patientRequestDto) {
-        return patientFacade.create(patientRequestDto);
+    public ResponseEntity<PatientResponseDto> create(@RequestBody @Valid PatientRequestDto patientRequestDto) {
+        PatientResponseDto patientResponseDto = patientFacade.create(patientRequestDto);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(patientResponseDto.getId()).toUri());
+        return new ResponseEntity<>(patientResponseDto, httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PatientResponseDto update(@PathVariable("id") Long id,
-                                     @RequestBody @Valid PatientRequestDto patientRequestDto) {
+    public ResponseEntity<PatientResponseDto> update(@PathVariable("id") Long id,
+                                                     @RequestBody @Valid PatientRequestDto patientRequestDto) {
         Validator.validateId(id);
-        return patientFacade.update(id, patientRequestDto);
+        return new ResponseEntity<>(patientFacade.update(id, patientRequestDto), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PatientResponseDto partialUpdate(@PathVariable("id") Long id,
-                                            @RequestBody @Valid PatientPartialRequestDto patientPartialRequestDto) {
+    public ResponseEntity<PatientResponseDto> partialUpdate(@PathVariable("id") Long id,
+                                                            @RequestBody
+                                                            @Valid PatientPartialRequestDto patientPartialRequestDto) {
         Validator.validateId(id);
-        return patientFacade.partialUpdate(id, patientPartialRequestDto);
+        return new ResponseEntity<>(patientFacade.partialUpdate(id, patientPartialRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

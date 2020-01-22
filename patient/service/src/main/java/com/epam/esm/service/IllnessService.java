@@ -18,7 +18,7 @@ public class IllnessService {
     }
 
     public Illness get(Long id) {
-        return illnessDao.findById(id);
+        return illnessDao.findById(id).get(0);
     }
 
     public List<Illness> getAll() {
@@ -42,11 +42,11 @@ public class IllnessService {
     }
 
     public Illness findByName(String name) {
-        return illnessDao.findByName(name);
+        return illnessDao.findByName(name).get(0);
     }
 
     public boolean isIllnessExist(String name) {
-        return illnessDao.findByName(name) != null;
+        return !illnessDao.findByName(name).isEmpty();
     }
 
     public Set<Illness> findByPatientId(Long patientId) {
@@ -54,10 +54,10 @@ public class IllnessService {
     }
 
     public boolean isIllnessExist(Long id) {
-        return illnessDao.findById(id) != null;
+        return !illnessDao.findById(id).isEmpty();
     }
 
     public boolean isAnyIllnessExistWithName(Long id, String name) {
-        return illnessDao.findByNameWithDifferentId(name, id) != null;
+        return !illnessDao.findByNameWithDifferentId(name, id).isEmpty();
     }
 }

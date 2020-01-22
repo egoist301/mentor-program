@@ -25,11 +25,11 @@ public class IllnessFacade {
     }
 
     public IllnessResponseDto get(Long id) {
-        Illness illness = illnessService.get(id);
-        if (illness == null) {
-            return null;
+        if (illnessService.isIllnessExist(id)) {
+            return IllnessDtoConverter.convertToDto(illnessService.get(id));
+        } else {
+            throw new EntityIsNotExistException("illness is not exist");
         }
-        return IllnessDtoConverter.convertToDto(illness);
     }
 
     public List<IllnessResponseDto> getAll() {

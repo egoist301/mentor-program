@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -22,6 +23,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                                                                   WebRequest request) {
         return createResponse(new RuntimeException(ex.getBindingResult().getFieldError().getDefaultMessage(), ex),
                 status);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handlePathException(RuntimeException e, WebRequest request) {
+        return createResponse(new RuntimeException("incorrect path URI", e), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EntityIsAlreadyExistException.class)

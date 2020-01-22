@@ -12,8 +12,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class IllnessServiceTest {
     @Mock
@@ -64,68 +69,68 @@ public class IllnessServiceTest {
 
     @Test
     public void isIllnessExist_setCorrectId_shouldBeTrue() {
-        Mockito.when(illnessDao.findById(id)).thenReturn(illness);
-        Assert.assertTrue(illnessService.isIllnessExist(id));
+        when(illnessDao.findById(id)).thenReturn(Collections.singletonList(illness));
+        assertTrue(illnessService.isIllnessExist(id));
     }
 
     @Test
     public void isIllnessExist_setIncorrectId_shouldBeFalse() {
-        Mockito.when(illnessDao.findById(id)).thenReturn(null);
-        Assert.assertFalse(illnessService.isIllnessExist(id));
+        when(illnessDao.findById(id)).thenReturn(null);
+        assertFalse(illnessService.isIllnessExist(id));
     }
 
     @Test
     public void get_setCorrectId_shouldBeIllness() {
-        Mockito.when(illnessDao.findById(id)).thenReturn(illness);
-        Assert.assertNotNull(illnessService.get(id));
+        when(illnessDao.findById(id)).thenReturn(Collections.singletonList(illness));
+        assertNotNull(illnessService.get(id));
     }
 
     @Test
     public void get_setIncorrectId_shouldBeNull() {
-        Mockito.when(illnessDao.findById(id)).thenReturn(null);
-        Assert.assertNull(illnessService.get(id));
+        when(illnessDao.findById(id)).thenReturn(null);
+        assertNull(illnessService.get(id));
     }
 
     @Test
     public void isAnyIllnessExistWithName_setCorrectNameAndId_ShouldBeTrue() {
-        Mockito.when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(illness);
-        Assert.assertTrue(illnessService.isAnyIllnessExistWithName(id, name));
+        when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(Collections.singletonList(illness));
+        assertTrue(illnessService.isAnyIllnessExistWithName(id, name));
     }
 
     @Test
     public void isAnyIllnessExistWithName_setIncorrectNameAndId_shouldBeFalse() {
-        Mockito.when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(null);
-        Assert.assertFalse(illnessService.isAnyIllnessExistWithName(id, name));
+        when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(null);
+        assertFalse(illnessService.isAnyIllnessExistWithName(id, name));
     }
 
     @Test
     public void isIllnessExist_setCorrectName_shouldBeIllness() {
-        Mockito.when(illnessDao.findByName(name)).thenReturn(illness);
-        Assert.assertTrue(illnessService.isIllnessExist(name));
+        when(illnessDao.findByName(name)).thenReturn(Collections.singletonList(illness));
+        assertTrue(illnessService.isIllnessExist(name));
     }
 
     @Test
     public void isIllnessExist_setIncorrectName_shouldBeFalse() {
-        Mockito.when(illnessDao.findByName(name)).thenReturn(null);
-        Assert.assertFalse(illnessService.isIllnessExist(name));
+        when(illnessDao.findByName(name)).thenReturn(null);
+        assertFalse(illnessService.isIllnessExist(name));
     }
 
     @Test
     public void getAll_shouldBeReturnAll() {
-        Mockito.when(illnessDao.getAll()).thenReturn(illnesses);
-        Assert.assertEquals(illnessService.getAll(), illnesses);
+        when(illnessDao.getAll()).thenReturn(illnesses);
+        assertEquals(illnessService.getAll(), illnesses);
 
     }
 
     @Test
     public void findByPatientId_setCorrectId_shouldBeReturnIllnesses() {
-        Mockito.when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>(illnesses));
-        Assert.assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>(illnesses));
+        when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>(illnesses));
+        assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>(illnesses));
     }
 
     @Test
     public void findByPatientId_setIncorrectId_shouldBeReturnEmptySet() {
-        Mockito.when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>());
-        Assert.assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>());
+        when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>());
+        assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>());
     }
 }

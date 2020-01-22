@@ -47,25 +47,12 @@ public class PatientDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Patient findById(Long id) {
-        List<Patient> patients = jdbcTemplate.query(FIND_BY_ID, new PatientMapper(), id);
-
-        if (patients.isEmpty()) {
-            return null;
-        } else {
-            return patients.get(0);
-        }
+    public List<Patient> findById(Long id) {
+        return jdbcTemplate.query(FIND_BY_ID, new PatientMapper(), id);
     }
 
-    public Patient findByIdentificationNumber(String identificationNumber) {
-        List<Patient> patients =
-                jdbcTemplate.query(FIND_BY_IDENTIFICATION_NUMBER, new PatientMapper(), identificationNumber);
-
-        if (patients.isEmpty()) {
-            return null;
-        } else {
-            return patients.get(0);
-        }
+    public List<Patient> findByIdentificationNumber(String identificationNumber) {
+        return jdbcTemplate.query(FIND_BY_IDENTIFICATION_NUMBER, new PatientMapper(), identificationNumber);
     }
 
     public void create(Patient patient) {
@@ -140,7 +127,8 @@ public class PatientDao {
     }
 
     private String getQuery(String sortBy, String order) {
-        String search = "SELECT " + ALL_FIELDS + " FROM searchPatient(?,?,?,?)";
+        String search = new StringBuilder().append("SELECT ").append(ALL_FIELDS).append(" FROM searchPatient(?,?,?,?)")
+                .toString();
         if (sortBy != null && (sortBy.equals(FIRST_NAME) || sortBy.equals(LAST_NAME) || sortBy.equals(MIDDLE_NAME) ||
                 sortBy.equals(DATE_OF_BIRTH))) {
             search = search.concat(" ORDER BY ".concat(sortBy));
@@ -160,14 +148,7 @@ public class PatientDao {
         jdbcTemplate.update(REMOVE_REF, patientId, illnessId);
     }
 
-    public Integer isRefPatientIllnessExist(Long patientId, Long illnessId) {
-        List<Integer> integers =
-                jdbcTemplate.query(CHECK_REF, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
-
-        if (integers.isEmpty()) {
-            return null;
-        } else {
-            return integers.get(0);
-        }
+    public List<Integer> isRefPatientIllnessExist(Long patientId, Long illnessId) {
+        return jdbcTemplate.query(CHECK_REF, (resultSet, i) -> resultSet.getInt(1), patientId, illnessId);
     }
 }

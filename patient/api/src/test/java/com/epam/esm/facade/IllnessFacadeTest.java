@@ -3,20 +3,23 @@ package com.epam.esm.facade;
 import com.epam.esm.config.RootConfig;
 import com.epam.esm.dto.IllnessRequestDto;
 import com.epam.esm.exception.EntityIsAlreadyExistException;
+import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.service.IllnessService;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = RootConfig.class)
 public class IllnessFacadeTest {
@@ -74,33 +77,33 @@ public class IllnessFacadeTest {
 
     @Test
     public void getAll_shouldBeReturnAll() {
-        Mockito.when(illnessService.getAll()).thenReturn(illnesses);
-        Assert.assertNotNull(facade.getAll());
+        when(illnessService.getAll()).thenReturn(illnesses);
+        assertNotNull(facade.getAll());
     }
 
-    @Test
+    @Test(expected = EntityIsNotExistException.class)
     public void get_setCorrectId_shouldBeIllnessResponseDto() {
-        Mockito.when(illnessService.get(id)).thenReturn(illness);
-        Assert.assertNotNull(facade.get(id));
+        when(illnessService.get(id)).thenReturn(illness);
+        assertNotNull(facade.get(id));
     }
 
     @Test
     public void get_setIncorrectId_shouldBeNull() {
-        Mockito.when(illnessService.get(id)).thenReturn(null);
-        Assert.assertNull(illnessService.get(id));
+        when(illnessService.get(id)).thenReturn(null);
+        assertNull(illnessService.get(id));
     }
 
     @Test
     public void create_setCorrectIllnessRequest_shouldBeIllnessResponse() {
-        Mockito.when(illnessService.isIllnessExist(illness.getName())).thenReturn(false);
-        Mockito.when(illnessService.findByName(illness.getName())).thenReturn(illness);
-        Assert.assertNotNull(facade.create(illnessRequestDto));
+        when(illnessService.isIllnessExist(illness.getName())).thenReturn(false);
+        when(illnessService.findByName(illness.getName())).thenReturn(illness);
+        assertNotNull(facade.create(illnessRequestDto));
     }
 
     @Test(expected = EntityIsAlreadyExistException.class)
     public void create_setIncorrectIllnessRequest_shouldBeIllnessResponse() {
-        Mockito.when(illnessService.isIllnessExist(illness.getName())).thenReturn(true);
-        Mockito.when(illnessService.findByName(illness.getName())).thenReturn(illness);
-        Assert.assertNotNull(facade.create(illnessRequestDto));
+        when(illnessService.isIllnessExist(illness.getName())).thenReturn(true);
+        when(illnessService.findByName(illness.getName())).thenReturn(illness);
+        assertNotNull(facade.create(illnessRequestDto));
     }
 }

@@ -13,9 +13,14 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class PatientServiceTest {
     @Mock
@@ -86,56 +91,56 @@ public class PatientServiceTest {
 
     @Test
     public void get_setCorrectId_shouldBeReturnPatient() {
-        Mockito.when(patientDao.findById(id)).thenReturn(patient);
-        Assert.assertNotNull(patientService.get(id));
+        when(patientDao.findById(id)).thenReturn(Collections.singletonList(patient));
+        assertNotNull(patientService.get(id));
     }
 
     @Test
     public void get_setIncorrectId_shouldBeReturnNull() {
-        Mockito.when(patientDao.findById(id)).thenReturn(null);
-        Assert.assertNull(patientService.get(id));
+        when(patientDao.findById(id)).thenReturn(null);
+        assertNull(patientService.get(id));
     }
 
     @Test
     public void getAll_shouldBeReturnAll() {
         String param = "";
-        Mockito.when(patientDao.getAll(param, param, param, param, param, param)).thenReturn(patients);
-        Assert.assertEquals(patientService.getAll(param, param, param, param, param, param), patients);
+        when(patientDao.getAll(param, param, param, param, param, param)).thenReturn(patients);
+        assertEquals(patientService.getAll(param, param, param, param, param, param), patients);
     }
 
     @Test
     public void isPatientExist_setCorrectIdentificationNumber_shouldBeTrue() {
-        Mockito.when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(patient);
-        Assert.assertTrue(patientService.isPatientExist(idNumber));
+        when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(Collections.singletonList(patient));
+        assertTrue(patientService.isPatientExist(idNumber));
     }
 
     @Test
     public void isPatientExist_setIncorrectIdentificationNumber_shouldBeFalse() {
-        Mockito.when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(null);
-        Assert.assertFalse(patientService.isPatientExist(idNumber));
+        when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(null);
+        assertFalse(patientService.isPatientExist(idNumber));
     }
 
     @Test
     public void isPatientExist_setCorrectId_shouldBeTrue() {
-        Mockito.when(patientDao.findById(id)).thenReturn(patient);
-        Assert.assertTrue(patientService.isPatientExist(id));
+        when(patientDao.findById(id)).thenReturn(Collections.singletonList(patient));
+        assertTrue(patientService.isPatientExist(id));
     }
 
     @Test
     public void isPatientExist_setIncorrectId_shouldBeFalse() {
-        Mockito.when(patientDao.findById(id)).thenReturn(null);
-        Assert.assertFalse(patientService.isPatientExist(id));
+        when(patientDao.findById(id)).thenReturn(null);
+        assertFalse(patientService.isPatientExist(id));
     }
 
     @Test
     public void findByIdentificationNumber_setCorrectIdentificationNumber_shouldBeReturnPatient() {
-        Mockito.when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(patient);
-        Assert.assertNotNull(patientService.findByIdentificationNumber(idNumber));
+        when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(Collections.singletonList(patient));
+        assertNotNull(patientService.findByIdentificationNumber(idNumber));
     }
 
     @Test
     public void findByIdentificationNumber_setIncorrectIdentificationNumber_shouldBeReturnNull() {
-        Mockito.when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(null);
-        Assert.assertNull(patientService.findByIdentificationNumber(idNumber));
+        when(patientDao.findByIdentificationNumber(idNumber)).thenReturn(null);
+        assertNull(patientService.findByIdentificationNumber(idNumber));
     }
 }

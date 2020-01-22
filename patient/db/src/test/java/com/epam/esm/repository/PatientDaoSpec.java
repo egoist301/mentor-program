@@ -4,7 +4,6 @@ import com.epam.esm.config.TestConfig;
 import com.epam.esm.repository.config.ConnectionConfig;
 import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {ConnectionConfig.class, TestConfig.class})
@@ -87,6 +88,6 @@ public class PatientDaoSpec {
 
     @Test
     public void findById_setCorrectId_shouldReturnPatient() {
-        Assert.assertEquals(patientDao.findById(id), patient);
+        assertEquals(patientDao.findById(id), patient);
     }
 }

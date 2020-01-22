@@ -35,7 +35,7 @@ public class IllnessDao {
             "UPDATE " + TABLE_NAME + " SET " + NAME + " = ?, " + DESCRIPTION + " = ?, " + CHANCE_TO_DIE + " = ?, " +
                     UPDATE_DATE + " = current_date WHERE " + ID + " = ?";
     private static final String FIND_BY_PATIENT_ID = "SELECT " + ALL_FIELDS
-            + " FROM illness JOIN patient_illness pi ON illness.id = pi.illness_id WHERE patient_id = ?";
+            + " FROM " + TABLE_NAME + " JOIN patient_illness pi ON illness.id = pi.illness_id WHERE patient_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -44,33 +44,16 @@ public class IllnessDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Illness findById(Long id) {
-        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_ID, new IllnessMapper(), id);
-
-        if (illnesses.isEmpty()) {
-            return null;
-        } else {
-            return illnesses.get(0);
-        }
+    public List<Illness> findById(Long id) {
+        return jdbcTemplate.query(FIND_BY_ID, new IllnessMapper(), id);
     }
 
-    public Illness findByName(String name) {
-        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_NAME, new IllnessMapper(), name);
-
-        if (illnesses.isEmpty()) {
-            return null;
-        } else {
-            return illnesses.get(0);
-        }
+    public List<Illness> findByName(String name) {
+        return jdbcTemplate.query(FIND_BY_NAME, new IllnessMapper(), name);
     }
 
-    public Illness findByNameWithDifferentId(String name, Long id) {
-        List<Illness> illnesses = jdbcTemplate.query(FIND_BY_NAME_WITH_DIFFERENT_ID, new IllnessMapper(), name, id);
-        if (illnesses.isEmpty()) {
-            return null;
-        } else {
-            return illnesses.get(0);
-        }
+    public List<Illness> findByNameWithDifferentId(String name, Long id) {
+        return jdbcTemplate.query(FIND_BY_NAME_WITH_DIFFERENT_ID, new IllnessMapper(), name, id);
     }
 
     public List<Illness> getAll() {

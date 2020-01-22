@@ -17,7 +17,7 @@ public class PatientService {
     }
 
     public Patient get(Long id) {
-        return patientDao.findById(id);
+        return patientDao.findById(id).get(0);
     }
 
     public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
@@ -48,19 +48,19 @@ public class PatientService {
     }
 
     public Patient findByIdentificationNumber(String identificationNumber) {
-        return patientDao.findByIdentificationNumber(identificationNumber);
+        return patientDao.findByIdentificationNumber(identificationNumber).get(0);
     }
 
     public boolean isPatientExist(String identificationNumber) {
-        return patientDao.findByIdentificationNumber(identificationNumber) != null;
+        return !patientDao.findByIdentificationNumber(identificationNumber).isEmpty();
     }
 
     public boolean isPatientExist(Long id) {
-        return patientDao.findById(id) != null;
+        return !patientDao.findById(id).isEmpty();
     }
 
     public boolean isRefPatientIllnessExist(Long patientId, Long illnessId) {
-        return patientDao.isRefPatientIllnessExist(patientId, illnessId) != null;
+        return !patientDao.isRefPatientIllnessExist(patientId, illnessId).isEmpty();
     }
 
     public void removeRefPatientIllness(Long patientId, Long illnessId) {
