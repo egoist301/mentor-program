@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -32,13 +33,13 @@ public class PatientRequestDto {
     @JsonProperty("middle_name")
     private String middleName;
 
-    @NotBlank(message = "phone number can't be null")
+    @NotNull(message = "phone number can't be null")
     @Min(value = 1000000, message = "phone number must be 7 digits long")
     @Max(value = 9999999, message = "phone number must be 7 digits long")
     @JsonProperty("phone_number")
     private Integer phoneNumber;
 
-    @NotBlank(message = "date of birth can't be null")
+    @NotNull(message = "date of birth can't be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
