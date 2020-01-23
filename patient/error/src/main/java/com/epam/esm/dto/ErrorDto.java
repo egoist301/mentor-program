@@ -2,7 +2,9 @@ package com.epam.esm.dto;
 
 import org.springframework.http.HttpStatus;
 
-public class ErrorDto {
+import java.io.Serializable;
+
+public class ErrorDto implements Serializable {
     private int code;
     private HttpStatus status;
     private String message;

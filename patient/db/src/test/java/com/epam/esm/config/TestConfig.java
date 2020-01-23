@@ -14,8 +14,8 @@ import java.util.Scanner;
 
 @Configuration
 public class TestConfig {
-    private static final String SCHEMA_CREATION_SCRIPT_FILE_PATH = "db/src/test/resources/create_table.sql";
-    private static final String TEST_DATA_SCRIPT_SILE_PATH = "db/src/test/resources/fill_table.sql";
+    private static final String SCHEMA_CREATION_SCRIPT_FILE_PATH = "src/test/resources/create_table.sql";
+    private static final String TEST_DATA_SCRIPT_SILE_PATH = "src/test/resources/fill_table.sql";
 
     @Profile("dev")
     @Bean

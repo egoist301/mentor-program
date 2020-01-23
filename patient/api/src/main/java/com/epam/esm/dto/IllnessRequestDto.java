@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class IllnessRequestDto {
@@ -18,7 +19,7 @@ public class IllnessRequestDto {
     @JsonProperty("description")
     private String description;
 
-    @NotBlank(message = "chance to die can't be null")
+    @NotNull(message = "chance to die can't be null")
     @Min(value = 0, message = "minimum 0%")
     @Max(value = 100, message = "maximum 100%")
     @JsonProperty("chance_to_die")

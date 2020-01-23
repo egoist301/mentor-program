@@ -11,24 +11,25 @@ import com.epam.esm.repository.entity.Illness;
 import com.epam.esm.repository.entity.Patient;
 import com.epam.esm.service.IllnessService;
 import com.epam.esm.service.PatientService;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = RootConfig.class)
 public class PatientFacadeTest {
@@ -144,25 +145,31 @@ public class PatientFacadeTest {
 
     @Test
     public void getAll_shouldBeReturnAll() {
-        String param = "";
+        String firstName = "";
+        String middleName = "";
+        String lastName = "";
+        String illnessName = "";
+        String sortBy = "name";
+        String order = "";
         List<PatientResponseDto> patientResponseDtos =
                 patients.stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
 
-        when(patientService.getAll(param, param, param, param, param, param)).thenReturn(patients);
+        when(patientService.getAll(Arrays.asList(firstName, lastName, middleName, illnessName), sortBy, order))
+                .thenReturn(patients);
 
-        assertNotNull(facade.getAll(param, param, param, param, param, param));
+        assertNotNull(facade.getAll(Arrays.asList(firstName, lastName, middleName, illnessName), sortBy, order));
     }
 
     @Test(expected = EntityIsAlreadyExistException.class)
     public void create_setIncorrectPatient_shouldBeReturnException() {
-        when(patientService.isPatientExist(idNumber)).thenReturn(true);
+        when(patientService.isPatientExist(anyString())).thenReturn(true);
         assertNotNull(facade.create(patientRequestDto));
     }
 
     @Test
     public void create_setCorrectPatient_shouldBeReturnResponseDto() {
         when(patientService.isPatientExist(idNumber)).thenReturn(false);
-        when(patientService.findByIdentificationNumber(idNumber)).thenReturn(patient);
+        when(patientService.findByIdentificationNumber(anyString())).thenReturn(patient);
         when(illnessService.findByName(firstIllness.getName())).thenReturn(firstIllness);
         when(illnessService.findByName(secondIllness.getName())).thenReturn(secondIllness);
 

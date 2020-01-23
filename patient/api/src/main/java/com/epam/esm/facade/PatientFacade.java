@@ -41,10 +41,8 @@ public class PatientFacade {
         }
     }
 
-    public List<PatientResponseDto> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                                           String searchByIllnessName, String sortBy, String order) {
-        List<Patient> patients = patientService
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
+    public List<PatientResponseDto> getAll(List<String> filters, String sortBy, String order) {
+        List<Patient> patients = patientService.getAll(filters, sortBy, order);
         patients.forEach(patient -> patient.setIllnesses(illnessService.findByPatientId(patient.getId())));
         return patients.stream().map(PatientDtoConverter::convertToDto).collect(Collectors.toList());
     }

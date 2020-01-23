@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,6 +89,6 @@ public class PatientDaoSpec {
 
     @Test
     public void findById_setCorrectId_shouldReturnPatient() {
-        assertEquals(patientDao.findById(id), patient);
+        assertEquals(patientDao.findById(id), Collections.singletonList(patient));
     }
 }

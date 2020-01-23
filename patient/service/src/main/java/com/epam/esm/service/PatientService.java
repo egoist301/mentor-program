@@ -20,10 +20,8 @@ public class PatientService {
         return patientDao.findById(id).get(0);
     }
 
-    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                                String searchByIllnessName, String sortBy, String order) {
-        return patientDao
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order);
+    public List<Patient> getAll(List<String> filters, String sortBy, String order) {
+        return patientDao.getAll(filters, sortBy, order);
     }
 
     public void create(Patient patient) {

@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 public class IllnessPartialRequestDto {
+
     @Size(min = 4, max = 30, message = "name can be 4 to 30 characters long")
     @JsonProperty("name")
     private String name;

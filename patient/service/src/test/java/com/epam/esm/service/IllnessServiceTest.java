@@ -2,12 +2,10 @@ package com.epam.esm.service;
 
 import com.epam.esm.repository.IllnessDao;
 import com.epam.esm.repository.entity.Illness;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
@@ -62,9 +60,7 @@ public class IllnessServiceTest {
         illness2.setDescription("description2");
         illness2.setUpdateDate(date);
         illness2.setUpdateDate(date);
-
-        illnesses.add(illness1);
-        illnesses.add(illness2);
+        illnesses = Arrays.asList(illness1, illness2);
     }
 
     @Test
@@ -75,7 +71,7 @@ public class IllnessServiceTest {
 
     @Test
     public void isIllnessExist_setIncorrectId_shouldBeFalse() {
-        when(illnessDao.findById(id)).thenReturn(null);
+        when(illnessDao.findById(id)).thenReturn(Collections.emptyList());
         assertFalse(illnessService.isIllnessExist(id));
     }
 
@@ -85,10 +81,10 @@ public class IllnessServiceTest {
         assertNotNull(illnessService.get(id));
     }
 
-    @Test
-    public void get_setIncorrectId_shouldBeNull() {
-        when(illnessDao.findById(id)).thenReturn(null);
-        assertNull(illnessService.get(id));
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void get_setIncorrectId_shouldBeException() {
+        when(illnessDao.findById(id)).thenReturn(Collections.emptyList());
+        assertEquals(illnessService.get(id), Collections.emptyList());
     }
 
     @Test
@@ -99,7 +95,7 @@ public class IllnessServiceTest {
 
     @Test
     public void isAnyIllnessExistWithName_setIncorrectNameAndId_shouldBeFalse() {
-        when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(null);
+        when(illnessDao.findByNameWithDifferentId(name, id)).thenReturn(Collections.emptyList());
         assertFalse(illnessService.isAnyIllnessExistWithName(id, name));
     }
 
@@ -111,7 +107,7 @@ public class IllnessServiceTest {
 
     @Test
     public void isIllnessExist_setIncorrectName_shouldBeFalse() {
-        when(illnessDao.findByName(name)).thenReturn(null);
+        when(illnessDao.findByName(name)).thenReturn(Collections.emptyList());
         assertFalse(illnessService.isIllnessExist(name));
     }
 
@@ -132,5 +128,17 @@ public class IllnessServiceTest {
     public void findByPatientId_setIncorrectId_shouldBeReturnEmptySet() {
         when(illnessDao.findByPatientId(id)).thenReturn(new LinkedHashSet<>());
         assertEquals(illnessService.findByPatientId(id), new LinkedHashSet<>());
+    }
+
+    @Test
+    public void findByName_setCorrectName_shouldBeReturnIllness() {
+        when(illnessDao.findByName(name)).thenReturn(Collections.singletonList(illness));
+        assertEquals(illnessService.findByName(name), illness);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void findByName_setIncorrectName_shouldBeReturnException() {
+        when(illnessDao.findByName(name)).thenReturn(Collections.emptyList());
+        assertEquals(illnessService.findByName(name), Collections.emptyList());
     }
 }

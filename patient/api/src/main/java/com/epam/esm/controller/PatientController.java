@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -53,8 +54,8 @@ public class PatientController {
             @RequestParam(value = "order", required = false) String order) {
         Validator.validateSortAndOrder(sortBy, order);
         return new ResponseEntity<>(patientFacade
-                .getAll(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName, sortBy, order),
-                HttpStatus.OK);
+                .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName),
+                        sortBy, order), HttpStatus.OK);
     }
 
     @PostMapping

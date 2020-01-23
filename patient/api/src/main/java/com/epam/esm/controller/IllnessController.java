@@ -72,7 +72,7 @@ public class IllnessController {
     //mentor requirement
     @PatchMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> partialUpdate(@PathVariable("id") Long id, @RequestBody
-            IllnessPartialRequestDto illnessPartialRequestDto) {
+            @Valid IllnessPartialRequestDto illnessPartialRequestDto) {
         return new ResponseEntity<>(illnessFacade.partialUpdate(id, illnessPartialRequestDto), HttpStatus.OK);
     }
 

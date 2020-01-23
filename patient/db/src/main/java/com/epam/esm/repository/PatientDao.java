@@ -120,10 +120,8 @@ public class PatientDao {
     }
 
 
-    public List<Patient> getAll(String searchByFirstName, String searchByLastName, String searchByMiddleName,
-                                String searchByIllnessName, String sortBy, String order) {
-        return jdbcTemplate.query(getQuery(sortBy, order), new PatientMapper(), searchByFirstName, searchByLastName,
-                searchByMiddleName, searchByIllnessName);
+    public List<Patient> getAll(List<String> filters, String sortBy, String order) {
+        return jdbcTemplate.query(getQuery(sortBy, order), new PatientMapper(), filters.toArray());
     }
 
     private String getQuery(String sortBy, String order) {
