@@ -9,12 +9,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class IllnessRequestDto {
-    @NotBlank(message = "name can't be null")
+    @NotBlank(message = "name can't be null or empty")
     @Size(min = 4, max = 30, message = "name can be 4 to 30 characters long")
     @JsonProperty("name")
     private String name;
 
-    @NotBlank(message = "description can't be null")
+    @NotBlank(message = "description can't be null or empty")
     @Size(min = 4, max = 250, message = "description can be 4 to 250 characters long")
     @JsonProperty("description")
     private String description;

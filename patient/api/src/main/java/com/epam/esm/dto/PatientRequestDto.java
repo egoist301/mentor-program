@@ -18,17 +18,17 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class PatientRequestDto {
-    @NotBlank(message = "first name can't be null")
+    @NotBlank(message = "first name can't be null or empty")
     @Size(min = 2, max = 16, message = "first name can be 2 to 16 characters long")
     @JsonProperty("first_name")
     private String firstName;
 
-    @NotBlank(message = "last name can't be null")
+    @NotBlank(message = "last name can't be null or empty")
     @Size(min = 2, max = 16, message = "last name can be 2 to 16 characters long")
     @JsonProperty("last_name")
     private String lastName;
 
-    @NotBlank(message = "middle name can't be null")
+    @NotBlank(message = "middle name can't be null or empty")
     @Size(min = 4, max = 16, message = "middle name can be 4 to 16 characters long")
     @JsonProperty("middle_name")
     private String middleName;
