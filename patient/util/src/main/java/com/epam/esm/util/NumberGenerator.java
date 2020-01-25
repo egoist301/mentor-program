@@ -18,4 +18,9 @@ public final class NumberGenerator {
         }
         return result.toString();
     }
+
+    public static int generateNumber(int length) {
+        Random random = new Random();
+        return random.nextInt(length);
+    }
 }

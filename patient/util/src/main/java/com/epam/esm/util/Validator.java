@@ -1,5 +1,6 @@
 package com.epam.esm.util;
 
+import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.exception.IncorrectPathVariableException;
 
 import java.util.Arrays;
@@ -15,8 +16,11 @@ public final class Validator {
     }
 
     public static void validateId(Long id) {
-        if (id <= 0) {
+        if (id < 0) {
             throw new IncorrectPathVariableException("Incorrect id (should be positive)");
+        }
+        if (id == 0) {
+            throw new EntityIsNotExistException("object is not exist");
         }
     }
 
@@ -24,7 +28,7 @@ public final class Validator {
         if ((sortBy != null &&
                 !(Arrays.asList(FIRST_NAME, LAST_NAME, MIDDLE_NAME, DATE_OF_BIRTH).contains(sortBy))) ||
                 (order != null && !(order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc")))) {
-            throw new IncorrectPathVariableException();
+            throw new IncorrectPathVariableException("incorrect sort param:" + sortBy + " or order param:" + order);
         }
     }
 }

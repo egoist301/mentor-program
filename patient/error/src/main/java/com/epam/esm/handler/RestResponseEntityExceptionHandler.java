@@ -28,7 +28,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handlePathException(RuntimeException e, WebRequest request) {
-        return createResponse(new RuntimeException("incorrect path URI", e), HttpStatus.NOT_FOUND);
+        return createResponse(new RuntimeException("incorrect path URI", e), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityIsAlreadyExistException.class)

@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
             List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter(
                 new Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
+                        .serializationInclusion(JsonInclude.Include.NON_EMPTY)
                         .visibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                         .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY).build()));
     }

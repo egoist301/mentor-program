@@ -34,8 +34,8 @@ public class PatientRequestDto {
     private String middleName;
 
     @NotNull(message = "phone number can't be null")
-    @Min(value = 1000000, message = "phone number must be 7 digits long")
-    @Max(value = 9999999, message = "phone number must be 7 digits long")
+    @Min(value = 1000000, message = "phone number must be 7 digits long(positive)")
+    @Max(value = 9999999, message = "phone number must be 7 digits long(positive)")
     @JsonProperty("phone_number")
     private Integer phoneNumber;
 
