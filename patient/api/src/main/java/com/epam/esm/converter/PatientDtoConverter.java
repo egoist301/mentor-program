@@ -32,7 +32,7 @@ public final class PatientDtoConverter {
         patient.setFirstName(patientRequestDto.getFirstName());
         patient.setMiddleName(patientRequestDto.getMiddleName());
         patient.setLastName(patientRequestDto.getLastName());
-        patient.setPhoneNumber(patientRequestDto.getPhoneNumber());
+        patient.setPhoneNumber(patientRequestDto.getPhoneNumber().intValue());
         patient.setDateOfBirth(patientRequestDto.getDateOfBirth());
         if (patientRequestDto.getIllnesses() != null) {
             patient.setIllnesses(

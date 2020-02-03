@@ -6,6 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class IllnessRequestDto {
@@ -20,6 +21,7 @@ public class IllnessRequestDto {
     private String description;
 
     @NotNull(message = "chance to die can't be null")
+    @Pattern(regexp = "[0-9]{3}", message = "should be numbers")
     @Min(value = 0, message = "minimum 0%")
     @Max(value = 100, message = "maximum 100%")
     @JsonProperty("chance_to_die")

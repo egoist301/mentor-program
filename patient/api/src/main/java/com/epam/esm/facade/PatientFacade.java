@@ -129,7 +129,7 @@ public class PatientFacade {
                     }
                 }
             });
-            oldIllnesses.removeAll(patient.getIllnesses().stream().collect(Collectors.toList()));
+            oldIllnesses.removeAll(new ArrayList<>(patient.getIllnesses()));
             oldIllnesses.forEach(illness -> patientService.removeRefPatientIllness(id, illness.getId()));
         }
     }

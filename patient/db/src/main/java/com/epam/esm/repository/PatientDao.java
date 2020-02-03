@@ -21,8 +21,7 @@ public class PatientDao {
     private static final String CREATE_DATE = "create_date";
     private static final String UPDATE_DATE = "update_date";
     private static final String ALL_FIELDS =
-            ID + ", " + FIRST_NAME + ", " + LAST_NAME + ", " + MIDDLE_NAME + ", " + PHONE_NUMBER + ", " +
-                    DATE_OF_BIRTH + ", " + IDENTIFICATION_NUMBER + ", " + CREATE_DATE + ", " + UPDATE_DATE;
+            "id, first_name, last_name, middle_name, phone_number, date_of_birth, identification_number, create_date, update_date";
     private static final String TABLE_NAME = "patient";
     private static final String FIND_BY_ID = "SELECT " + ALL_FIELDS + " FROM " + TABLE_NAME + " WHERE " + ID + " = ?";
     private static final String FIND_BY_IDENTIFICATION_NUMBER =

@@ -6,14 +6,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -34,13 +39,13 @@ public class PatientRequestDto {
     private String middleName;
 
     @NotNull(message = "phone number can't be null")
-    @Min(value = 1000000, message = "phone number must be 7 digits long(positive)")
-    @Max(value = 9999999, message = "phone number must be 7 digits long(positive)")
+    @Digits(integer = 7, fraction = 0, message = "help me")
     @JsonProperty("phone_number")
-    private Integer phoneNumber;
+    private BigInteger phoneNumber;
 
     @NotNull(message = "date of birth can't be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @PastOrPresent(message = "date can be past or present")
@@ -75,11 +80,11 @@ public class PatientRequestDto {
         this.middleName = middleName;
     }
 
-    public Integer getPhoneNumber() {
+    public BigInteger getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(BigInteger phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -12,12 +12,6 @@ public class ErrorDto implements Serializable {
     public ErrorDto() {
     }
 
-    public ErrorDto(int code, HttpStatus status, String message) {
-        this.code = code;
-        this.status = status;
-        this.message = message;
-    }
-
     public int getCode() {
         return code;
     }
