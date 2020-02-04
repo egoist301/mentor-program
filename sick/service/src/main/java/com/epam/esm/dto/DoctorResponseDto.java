@@ -1,11 +1,6 @@
 package com.epam.esm.dto;
 
-import com.epam.esm.converter.LocalDateDeserializer;
-import com.epam.esm.converter.LocalDateSerializer;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,24 +25,15 @@ public class DoctorResponseDto {
     @JsonProperty("price_per_consultation")
     private BigDecimal pricePerConsultation;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
 
     @JsonProperty("identification_number")
     private String identificationNumber;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty("create_date")
     private LocalDate createDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonProperty("update_date")
     private LocalDate updateDate;
 

@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;

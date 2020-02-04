@@ -1,12 +1,6 @@
 package com.epam.esm.dto;
 
-import com.epam.esm.converter.LocalDateDeserializer;
-import com.epam.esm.converter.LocalDateSerializer;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
@@ -48,10 +42,6 @@ public class DoctorRequestDto {
     private BigDecimal pricePerConsultation;
 
     @NotNull(message = "date of birth can't be null")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     @PastOrPresent(message = "date can be past or present")
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
