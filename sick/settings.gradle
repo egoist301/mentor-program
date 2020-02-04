@@ -1,7 +1,0 @@
-rootProject.name = 'sick'
-include (':error')
-include (':util')
-include (':api')
-include (':db')
-include (':service')
-
