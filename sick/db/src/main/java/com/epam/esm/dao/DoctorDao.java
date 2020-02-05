@@ -19,7 +19,7 @@ public class DoctorDao {
     private static final String ALL_FIELDS =
             "id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date";
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public Doctor findById(Long id) {
         return entityManager.find(Doctor.class, id);
@@ -46,7 +46,7 @@ public class DoctorDao {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-    public List<Doctor> getAll(List<String> filters, String sortBy, String order) {
+    public List<Doctor> findAll(List<String> filters, String sortBy, String order) {
         return entityManager.createNativeQuery(getQuery(sortBy, order), Doctor.class)
                 .setParameter("firstName", filters.get(0)).setParameter("lastName", filters.get(1))
                 .setParameter("middleName", filters.get(2)).setParameter("name", filters.get(3)).getResultList();

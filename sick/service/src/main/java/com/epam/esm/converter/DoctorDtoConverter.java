@@ -1,8 +1,8 @@
 package com.epam.esm.converter;
 
-import com.epam.esm.dto.DoctorPartialRequestDto;
-import com.epam.esm.dto.DoctorRequestDto;
-import com.epam.esm.dto.DoctorResponseDto;
+import com.epam.esm.dto.doctor.DoctorPartialRequestDto;
+import com.epam.esm.dto.doctor.DoctorRequestDto;
+import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.entity.Doctor;
 
 import java.util.stream.Collectors;

@@ -1,54 +1,56 @@
-package com.epam.esm.dto;
+package com.epam.esm.dto.doctor;
 
+import com.epam.esm.dto.illness.IllnessResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class DoctorRequestDto {
-    @NotBlank(message = "first name can't be null or empty")
-    @Size(min = 2, max = 16, message = "first name can be 2 to 16 characters long")
+public class DoctorResponseDto {
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("first_name")
     private String firstName;
 
-    @NotBlank(message = "last name can't be null or empty")
-    @Size(min = 2, max = 16, message = "last name can be 2 to 16 characters long")
     @JsonProperty("last_name")
     private String lastName;
 
-    @NotBlank(message = "middle name can't be null or empty")
-    @Size(min = 4, max = 16, message = "middle name can be 4 to 16 characters long")
     @JsonProperty("middle_name")
     private String middleName;
 
-    @NotNull(message = "phone number can't be null")
-    @Digits(integer = 7, fraction = 0, message = "7 digits")
     @JsonProperty("phone_number")
-    private BigInteger phoneNumber;
+    private Integer phoneNumber;
 
-    @NotNull(message = "price per consultation can't be null")
-    @Positive(message = "price only positive")
-    @Digits(integer = 11, fraction = 2, message = "11 digits")
     @JsonProperty("price_per_consultation")
     private BigDecimal pricePerConsultation;
 
-    @NotNull(message = "date of birth can't be null")
-    @PastOrPresent(message = "date can be past or present")
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Valid
+    @JsonProperty("identification_number")
+    private String identificationNumber;
+
+    @JsonProperty("create_date")
+    private LocalDate createDate;
+
+    @JsonProperty("update_date")
+    private LocalDate updateDate;
+
     @JsonProperty("illnesses")
-    private Set<IllnessRequestDto> illnesses;
+    private Set<IllnessResponseDto> illnesses;
+
+    public DoctorResponseDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -74,11 +76,11 @@ public class DoctorRequestDto {
         this.middleName = middleName;
     }
 
-    public BigInteger getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(BigInteger phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -90,11 +92,35 @@ public class DoctorRequestDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Set<IllnessRequestDto> getIllnesses() {
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Set<IllnessResponseDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(Set<IllnessRequestDto> illnesses) {
+    public void setIllnesses(Set<IllnessResponseDto> illnesses) {
         this.illnesses = illnesses;
     }
 

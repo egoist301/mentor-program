@@ -3,8 +3,8 @@ package com.epam.esm.service;
 import com.epam.esm.converter.DoctorDtoConverter;
 import com.epam.esm.dao.DoctorDao;
 import com.epam.esm.dao.IllnessDao;
-import com.epam.esm.dto.DoctorRequestDto;
-import com.epam.esm.dto.DoctorResponseDto;
+import com.epam.esm.dto.doctor.DoctorRequestDto;
+import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.entity.Doctor;
 import com.epam.esm.entity.Illness;
 import com.epam.esm.exception.EntityIsNotExistException;
@@ -33,7 +33,7 @@ public class DoctorService {
     }
 
     public List<DoctorResponseDto> getAll(List<String> filters, String sortBy, String order) {
-        return doctorDao.getAll(filters, sortBy, order).stream().map(DoctorDtoConverter::convertToDto).collect(
+        return doctorDao.findAll(filters, sortBy, order).stream().map(DoctorDtoConverter::convertToDto).collect(
                 Collectors.toList());
     }
 
@@ -72,7 +72,7 @@ public class DoctorService {
     }
 
     private void fillExistIllnesses(Doctor doctor) {
-        if (doctor.getIllnesses() != null)
+        if (doctor.getIllnesses() != null) {
             doctor.getIllnesses().forEach(illness -> {
                 if (!illnessDao.existsByName(illness.getName()).isEmpty()) {
                     Illness illnessFromDB = illnessDao.findByName(illness.getName());
@@ -81,6 +81,7 @@ public class DoctorService {
                     illness.setUpdateDate(illnessFromDB.getUpdateDate());
                 }
             });
+        }
     }
 
     private void isDoctorNotExist(Long id) {

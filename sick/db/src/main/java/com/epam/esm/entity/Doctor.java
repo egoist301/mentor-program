@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -22,22 +23,22 @@ import java.util.Set;
 
 @Entity
 @Table(name = "doctor")
-public class Doctor {
+public class Doctor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private Long id;
-    @Column(name = "first_name")
+    @Column(name = "first_name", length = 20)
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "last_name", length = 20)
     private String lastName;
-    @Column(name = "middle_name")
+    @Column(name = "middle_name", length = 20)
     private String middleName;
     @Column(name = "phone_number")
     private Integer phoneNumber;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-    @Column(name = "identification_number", unique = true, updatable = false)
+    @Column(name = "identification_number", unique = true, updatable = false, length = 14)
     private String identificationNumber;
     @Column(name = "price_per_consultation")
     private BigDecimal pricePerConsultation;
@@ -48,9 +49,9 @@ public class Doctor {
     @Column(name = "update_date")
     private LocalDate updateDate;
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="doctor_illness",
-            joinColumns={@JoinColumn(name="doctor_id")},
-            inverseJoinColumns={@JoinColumn(name="illness_id")})
+    @JoinTable(name = "doctor_illness",
+            joinColumns = {@JoinColumn(name = "doctor_id")},
+            inverseJoinColumns = {@JoinColumn(name = "illness_id")})
     private Set<Illness> illnesses;
 
     public Doctor() {
@@ -145,12 +146,12 @@ public class Doctor {
     }
 
     @PrePersist
-    protected void onCreate() {
+    private void onCreate() {
         createDate = LocalDate.now();
     }
 
     @PreUpdate
-    protected void onUpdate() {
+    private void onUpdate() {
         updateDate = LocalDate.now();
     }
 

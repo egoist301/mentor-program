@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public class IllnessDao {
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public Illness findById(Long id) {
         return entityManager.find(Illness.class, id);

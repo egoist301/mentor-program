@@ -1,4 +1,4 @@
-package com.epam.esm.dto;
+package com.epam.esm.dto.illness;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

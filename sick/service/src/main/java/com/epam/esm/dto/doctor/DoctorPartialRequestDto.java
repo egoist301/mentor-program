@@ -1,5 +1,6 @@
-package com.epam.esm.dto;
+package com.epam.esm.dto.doctor;
 
+import com.epam.esm.dto.illness.IllnessPartialRequestDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;

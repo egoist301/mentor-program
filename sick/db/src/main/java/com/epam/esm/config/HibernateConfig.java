@@ -19,7 +19,6 @@ public class HibernateConfig {
     private static final String DIALECT = "spring.jpa.properties.hibernate.dialect";
     private static final String SHOW_SQL = "spring.jpa.properties.hibernate.show_sql";
     private static final String FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
-    private static final String DRIVER = "spring.jpa.properties.driver";
     private static final String USERNAME = "spring.datasource.username";
     private static final String PASSWORD = "spring.datasource.password";
     private static final String URL = "spring.datasource.url";

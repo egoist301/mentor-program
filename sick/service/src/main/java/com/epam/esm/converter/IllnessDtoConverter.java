@@ -1,8 +1,8 @@
 package com.epam.esm.converter;
 
-import com.epam.esm.dto.IllnessPartialRequestDto;
-import com.epam.esm.dto.IllnessRequestDto;
-import com.epam.esm.dto.IllnessResponseDto;
+import com.epam.esm.dto.illness.IllnessPartialRequestDto;
+import com.epam.esm.dto.illness.IllnessRequestDto;
+import com.epam.esm.dto.illness.IllnessResponseDto;
 import com.epam.esm.entity.Illness;
 
 public final class IllnessDtoConverter {

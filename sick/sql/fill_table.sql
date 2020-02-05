@@ -1,6 +1,6 @@
 insert into doctor( first_name, last_name, middle_name, phone_number
-                   , date_of_birth, identification_number, create_date
-                   , update_date)
+                  , date_of_birth, identification_number, create_date
+                  , update_date)
 values ('Yauheni', 'Filipovich', 'Aleksandrovich', 3221114, '2000-08-27',
         '1234567890QWER', '2020-01-26', '2020-01-26'),
        ('Vladislav', 'Korotkevich', 'Ruslanovich', 1234567, '2000-03-04',

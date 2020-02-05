@@ -1,6 +1,7 @@
 dependencies {
     compile project(':db')
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.4.RELEASE'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.4.RELEASE'
     compile project(":error")
     compile project(":util")

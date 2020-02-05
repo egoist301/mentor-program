@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION searchPatient(text, text, text, text)
+CREATE
+OR
+REPLACE FUNCTION searchPatient(text, text, text, text)
     RETURNS SETOF doctor AS
     $$
 SELECT DISTINCT doctor.id,

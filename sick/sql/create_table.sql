@@ -36,8 +36,8 @@ create table doctor_illness
 create table users
 (
     id          serial,
-    username    VARCHAR(30)                      not null,
-    password    VARCHAR(30)                      not null,
+    username    VARCHAR(30) UNIQUE               not null,
+    password    VARCHAR(60)                      not null,
     role        int CHECK (role BETWEEN 0 AND 1) not null,
     create_date date                             not null,
     update_date date                             not null,

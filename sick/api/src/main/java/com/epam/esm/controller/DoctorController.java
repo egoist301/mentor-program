@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dto.DoctorRequestDto;
-import com.epam.esm.dto.DoctorResponseDto;
+import com.epam.esm.dto.doctor.DoctorRequestDto;
+import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.service.DoctorService;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
