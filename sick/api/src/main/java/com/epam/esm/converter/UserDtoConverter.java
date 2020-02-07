@@ -4,8 +4,6 @@ import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
 import com.epam.esm.entity.User;
 
-import java.util.stream.Collectors;
-
 public class UserDtoConverter {
     public static User convertToEntity(UserRequestDto userRequestDto) {
         User user = new User();

@@ -32,11 +32,11 @@ public class OrderFacade {
         }
     }
 
-    public List<OrderResponseDto> getAll() {
+    public List<OrderResponseDto> getAll(int page, int size) {
         UserPrincipal userPrincipal =
                 (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return orderService.findAll(convertToUser(userPrincipal).getId()).stream().map(OrderDtoConverter::convertToDto)
-                .collect(Collectors.toList());
+        return orderService.findAll(convertToUser(userPrincipal).getId(), page, size).stream()
+                .map(OrderDtoConverter::convertToDto).collect(Collectors.toList());
     }
 
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {

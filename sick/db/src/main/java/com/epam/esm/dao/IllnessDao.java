@@ -19,11 +19,12 @@ public class IllnessDao {
         return entityManager.find(Illness.class, id);
     }
 
-    public List<Illness> findAll() {
+    public List<Illness> findAll(int page, int size) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Illness> criteriaQuery = criteriaBuilder.createQuery(Illness.class);
         criteriaQuery.select(criteriaQuery.from(Illness.class));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+                .setMaxResults(size).getResultList();
     }
 
     public void create(Illness illness) {

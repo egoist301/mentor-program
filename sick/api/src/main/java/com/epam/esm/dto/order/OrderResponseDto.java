@@ -1,7 +1,6 @@
 package com.epam.esm.dto.order;
 
 import com.epam.esm.dto.doctor.DoctorResponseDto;
-import com.epam.esm.dto.user.UserResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;

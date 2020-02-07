@@ -50,11 +50,12 @@ public class UserDao {
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
-    public List<User> findAll() {
+    public List<User> findAll(int page, int size) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         criteriaQuery.select(criteriaQuery.from(User.class));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+                .setMaxResults(size).getResultList();
     }
 
     public boolean isAnyUserExistWithUsername(Long id, String username) {

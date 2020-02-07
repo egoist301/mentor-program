@@ -1,9 +1,9 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.doctor.DoctorPartialRequestDto;
 import com.epam.esm.dto.doctor.DoctorRequestDto;
 import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.facade.DoctorFacade;
-import com.epam.esm.service.DoctorService;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,6 +70,13 @@ public class DoctorController {
                                                     @RequestBody @Valid DoctorRequestDto doctorRequestDto) {
         Validator.validateId(id);
         return new ResponseEntity<>(doctorService.update(id, doctorRequestDto), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<DoctorResponseDto> partialUpdate(@PathVariable("id") Long id, @RequestBody
+    @Valid DoctorPartialRequestDto doctorPartialRequestDto) {
+        Validator.validateId(id);
+        return new ResponseEntity<>(doctorService.partialUpdate(id, doctorPartialRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

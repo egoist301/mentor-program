@@ -40,11 +40,12 @@ public class OrderDao {
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
-    public List<Order> findAll(Long userId) {
+    public List<Order> findAll(Long userId, int page, int size) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> userRoot = criteriaQuery.from(Order.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("user_id"), userId));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+                .setMaxResults(size).getResultList();
     }
 }

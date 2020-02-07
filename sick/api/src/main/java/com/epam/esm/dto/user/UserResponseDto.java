@@ -1,11 +1,9 @@
 package com.epam.esm.dto.user;
 
-import com.epam.esm.dto.order.OrderResponseDto;
 import com.epam.esm.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 public class UserResponseDto {
     @JsonProperty("id")

@@ -1,10 +1,10 @@
 package com.epam.esm.facade;
 
 import com.epam.esm.converter.DoctorDtoConverter;
+import com.epam.esm.dto.doctor.DoctorPartialRequestDto;
 import com.epam.esm.dto.doctor.DoctorRequestDto;
 import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.entity.Doctor;
-import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.service.DoctorService;
 import com.epam.esm.util.NumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,7 @@ public class DoctorFacade {
     }
 
     public DoctorResponseDto get(Long id) {
-        if (doctorService.isDoctorExist(id)) {
-            return DoctorDtoConverter.convertToDto(doctorService.findById(id));
-        } else {
-            throw new EntityIsNotExistException("doctor is not exist");
-        }
-
+        return DoctorDtoConverter.convertToDto(doctorService.findById(id));
     }
 
     public List<DoctorResponseDto> getAll(List<String> filters, String sortBy, String order) {
@@ -38,8 +33,7 @@ public class DoctorFacade {
 
     public DoctorResponseDto create(DoctorRequestDto doctorRequestDto) {
         Doctor doctor = DoctorDtoConverter.convertToEntity(doctorRequestDto);
-        doctor.setIdentificationNumber(NumberGenerator.generateIdentificationNumber(14));
-        doctorService.fillExistIllnesses(doctor);
+        doctor.setIdentificationNumber(generateIdentificationNumber(14));
         doctorService.create(doctor);
         return DoctorDtoConverter
                 .convertToDto(doctorService.findByIdentificationNumber(doctor.getIdentificationNumber()));
@@ -48,22 +42,19 @@ public class DoctorFacade {
     public DoctorResponseDto update(Long id, DoctorRequestDto doctorRequestDto) {
         Doctor doctor = DoctorDtoConverter.convertToEntity(doctorRequestDto);
         doctor.setId(id);
-        if (doctorService.isDoctorExist(id)) {
-            doctorService.fillExistIllnesses(doctor);
-            doctorService.update(doctor);
-            return DoctorDtoConverter.convertToDto(doctorService.findById(id));
-        } else {
-            throw new EntityIsNotExistException("doctor is not exist");
-        }
+        doctorService.update(doctor);
+        return DoctorDtoConverter.convertToDto(doctorService.findById(id));
+    }
+
+    public DoctorResponseDto partialUpdate(Long id, DoctorPartialRequestDto doctorPartialRequestDto) {
+        Doctor doctor = DoctorDtoConverter.partialConvertToEntity(doctorPartialRequestDto);
+        doctor.setId(id);
+        doctorService.partialUpdate(doctor);
+        return DoctorDtoConverter.convertToDto(doctorService.findById(id));
     }
 
     public void delete(Long id) {
-        if (doctorService.isDoctorExist(id)) {
-            doctorService.delete(id);
-        } else {
-            throw new EntityIsNotExistException("doctor is not exist");
-        }
-
+        doctorService.delete(id);
     }
 
     private String generateIdentificationNumber(int length) {

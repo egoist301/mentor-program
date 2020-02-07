@@ -25,8 +25,8 @@ public class OrderService {
         return orderDao.findById(id);
     }
 
-    public List<Order> findAll(Long userId) {
-        return orderDao.findAll(userId);
+    public List<Order> findAll(Long userId, int page, int size) {
+        return orderDao.findAll(userId, page, size);
     }
 
     @Transactional

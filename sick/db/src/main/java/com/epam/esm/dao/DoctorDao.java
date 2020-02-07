@@ -76,11 +76,8 @@ public class DoctorDao {
     }
 
     public boolean existByIdentificationNumber(String number) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
-        Root<Doctor> userRoot = criteriaQuery.from(Doctor.class);
-        criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
-                userRoot.get("identification_number"), number));
-        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
+        return !entityManager.createNativeQuery("SELECT " + ALL_FIELDS
+                        + " FROM doctor JOIN doctor_illness di on doctor.id = di.doctor_id JOIN illness i on di.illness_id = i.id WHERE identification_number = :identification_number",
+                Doctor.class).setParameter("identification_number", number).getResultList().isEmpty();
     }
 }
