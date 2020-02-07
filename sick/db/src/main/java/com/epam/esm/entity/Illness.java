@@ -1,9 +1,6 @@
 package com.epam.esm.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,10 +28,8 @@ public class Illness implements Serializable {
     private String description;
     @Column(name = "chance_to_die")
     private Integer chanceToDie;
-    @CreationTimestamp
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
-    @UpdateTimestamp
     @Column(name = "update_date")
     private LocalDate updateDate;
 
@@ -72,6 +67,7 @@ public class Illness implements Serializable {
     @PrePersist
     private void onCreate() {
         createDate = LocalDate.now();
+        updateDate = LocalDate.now();
     }
 
     @PreUpdate

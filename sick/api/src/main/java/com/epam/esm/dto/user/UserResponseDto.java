@@ -18,8 +18,6 @@ public class UserResponseDto {
     private LocalDate createDate;
     @JsonProperty("update_date")
     private LocalDate updateDate;
-    @JsonProperty("orders")
-    private Set<OrderResponseDto> orderResponseDtos;
 
     public UserResponseDto() {
     }
@@ -62,13 +60,5 @@ public class UserResponseDto {
 
     public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public Set<OrderResponseDto> getOrderResponseDtos() {
-        return orderResponseDtos;
-    }
-
-    public void setOrderResponseDtos(Set<OrderResponseDto> orderResponseDtos) {
-        this.orderResponseDtos = orderResponseDtos;
     }
 }

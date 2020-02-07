@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.doctor.DoctorRequestDto;
 import com.epam.esm.dto.doctor.DoctorResponseDto;
+import com.epam.esm.facade.DoctorFacade;
 import com.epam.esm.service.DoctorService;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/doctors")
 public class DoctorController {
-    private DoctorService doctorService;
+    private DoctorFacade doctorService;
 
     @Autowired
-    public DoctorController(DoctorService doctorService) {
+    public DoctorController(DoctorFacade doctorService) {
         this.doctorService = doctorService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
-        return new ResponseEntity<>(doctorService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(doctorService.get(id), HttpStatus.OK);
     }
 
     @GetMapping

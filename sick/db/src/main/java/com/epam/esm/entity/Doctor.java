@@ -1,8 +1,5 @@
 package com.epam.esm.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,13 +39,11 @@ public class Doctor implements Serializable {
     private String identificationNumber;
     @Column(name = "price_per_consultation")
     private BigDecimal pricePerConsultation;
-    @CreationTimestamp
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
-    @UpdateTimestamp
     @Column(name = "update_date")
     private LocalDate updateDate;
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "doctor_illness",
             joinColumns = {@JoinColumn(name = "doctor_id")},
             inverseJoinColumns = {@JoinColumn(name = "illness_id")})
@@ -148,6 +143,7 @@ public class Doctor implements Serializable {
     @PrePersist
     private void onCreate() {
         createDate = LocalDate.now();
+        updateDate = LocalDate.now();
     }
 
     @PreUpdate

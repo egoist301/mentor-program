@@ -2,9 +2,10 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
-import com.epam.esm.service.UserService;
+import com.epam.esm.facade.UserFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,32 +26,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private UserFacade userFacade;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService,
+    public UserController(UserFacade userFacade,
                           PasswordEncoder passwordEncoder) {
-        this.userService = userService;
+        this.userFacade = userFacade;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
-        return new ResponseEntity<>(userService.get(id), HttpStatus.OK);
+        return new ResponseEntity<>(userFacade.get(id), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAll() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(userFacade.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userService.create(userRequestDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        UserResponseDto userResponseDto = userFacade.create(userRequestDto);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(userResponseDto.getId()).toUri());
+        return new ResponseEntity<>(userResponseDto, httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -57,14 +62,14 @@ public class UserController {
                                                   @RequestBody @Valid UserRequestDto userRequestDto) {
         Validator.validateId(id);
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userService.update(id, userRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return new ResponseEntity<>(userFacade.update(id, userRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         Validator.validateId(id);
-        userService.delete(id);
+        userFacade.delete(id);
     }
 }

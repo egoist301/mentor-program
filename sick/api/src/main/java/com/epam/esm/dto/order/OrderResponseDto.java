@@ -10,8 +10,6 @@ import java.util.Set;
 public class OrderResponseDto {
     @JsonProperty("id")
     private Long id;
-    @JsonProperty("user")
-    private UserResponseDto userResponseDto;
     @JsonProperty("doctors")
     private Set<DoctorResponseDto> doctorResponseDtos;
     @JsonProperty("create_date")
@@ -26,14 +24,6 @@ public class OrderResponseDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UserResponseDto getUserResponseDto() {
-        return userResponseDto;
-    }
-
-    public void setUserResponseDto(UserResponseDto userResponseDto) {
-        this.userResponseDto = userResponseDto;
     }
 
     public Set<DoctorResponseDto> getDoctorResponseDtos() {

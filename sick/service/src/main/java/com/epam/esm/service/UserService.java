@@ -1,19 +1,12 @@
 package com.epam.esm.service;
 
-import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dao.UserDao;
-import com.epam.esm.dto.user.UserRequestDto;
-import com.epam.esm.dto.user.UserResponseDto;
-import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.EntityIsAlreadyExistException;
-import com.epam.esm.exception.EntityIsNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,54 +17,42 @@ public class UserService {
         this.userDao = userDao;
     }
 
+    public User findById(Long id) {
+        return userDao.findById(id);
+    }
+
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
+
     @Transactional
-    public void create(UserRequestDto userRequestDto) {
-        User user = UserDtoConverter.convertToEntity(userRequestDto);
-        isUserExist(user.getUsername());
+    public void create(User user) {
         userDao.create(user);
     }
 
-    public UserResponseDto get(Long id) {
-        isUserNotExist(id);
-        return UserDtoConverter.convertToDto(userDao.findById(id));
-    }
-
-    public List<UserResponseDto> getAll() {
-        return userDao.findAll().stream().map(UserDtoConverter::convertToDto).collect(Collectors.toList());
+    @Transactional
+    public void update(User user) {
+        userDao.update(user);
     }
 
     @Transactional
     public void delete(Long id) {
-        isUserNotExist(id);
         userDao.delete(id);
     }
 
-    @Transactional
-    public void update(Long id, UserRequestDto userRequestDto) {
-        User user = UserDtoConverter.convertToEntity(userRequestDto);
-        user.setId(id);
-
-        isUserNotExist(id);
-        isAnyUserExistWithUsername(id, user.getUsername());
-
-        userDao.update(user);
+    public boolean isUserExist(Long id) {
+        return userDao.existsById(id);
     }
 
-    private void isUserNotExist(Long id) {
-        if (userDao.existsById(id).isEmpty()) {
-            throw new EntityIsNotExistException("user is not exist");
-        }
+    public boolean isUserExist(String username) {
+        return userDao.existsByUsername(username);
     }
 
-    private void isUserExist(String username) {
-        if (!userDao.existsByUsername(username).isEmpty()) {
-            throw new EntityIsAlreadyExistException("user already exist");
-        }
+    public User findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 
-    private void isAnyUserExistWithUsername(Long id, String username) {
-        if (!userDao.findByUsernameWithDifferentId(id, username).isEmpty()) {
-            throw new EntityIsAlreadyExistException("username with this name:" + username + " already exist");
-        }
+    public boolean isAnyUserExistWithUsername(Long id, String username) {
+        return userDao.isAnyUserExistWithUsername(id, username);
     }
 }

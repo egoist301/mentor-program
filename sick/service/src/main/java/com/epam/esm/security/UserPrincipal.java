@@ -1,5 +1,6 @@
 package com.epam.esm.security;
 
+import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ public class UserPrincipal implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    private Role role;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(User user) {
@@ -19,6 +21,7 @@ public class UserPrincipal implements UserDetails {
         username = user.getUsername();
         password = user.getPassword();
         authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+        role = user.getRole();
     }
 
     @Override
@@ -58,5 +61,9 @@ public class UserPrincipal implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

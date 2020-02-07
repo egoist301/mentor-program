@@ -21,10 +21,6 @@ public class UserDtoConverter {
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setCreateDate(user.getCreateDate());
         userResponseDto.setUpdateDate(user.getUpdateDate());
-        if (user.getOrders() != null) {
-            userResponseDto.setOrderResponseDtos(user.getOrders().stream().map(OrderDtoConverter::convertToDto).collect(
-                    Collectors.toSet()));
-        }
         return userResponseDto;
     }
 }

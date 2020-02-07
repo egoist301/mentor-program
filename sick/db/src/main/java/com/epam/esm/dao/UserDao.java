@@ -41,13 +41,13 @@ public class UserDao {
         entityManager.remove(entityManager.find(User.class, id));
     }
 
-    public List<User> existsById(Long id) {
+    public boolean existsById(Long id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("id"), id));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
     public List<User> findAll() {
@@ -57,22 +57,22 @@ public class UserDao {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-    public List<User> findByUsernameWithDifferentId(Long id, String username) {
+    public boolean isAnyUserExistWithUsername(Long id, String username) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("username"), username),
                 criteriaBuilder.and(criteriaBuilder.notEqual(userRoot.get("id"), id)));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
-    public List<User> existsByUsername(String username) {
+    public boolean existsByUsername(String username) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("username"), username));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 }

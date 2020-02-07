@@ -1,12 +1,11 @@
 package com.epam.esm.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,14 +32,10 @@ public class User implements Serializable {
     @Column(name = "role", updatable = false)
     @Enumerated(EnumType.ORDINAL)
     private Role role;
-    @CreationTimestamp
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
-    @UpdateTimestamp
     @Column(name = "update_date")
     private LocalDate updateDate;
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
 
     public User() {
     }
@@ -48,6 +43,7 @@ public class User implements Serializable {
     @PrePersist
     private void onCreate() {
         createDate = LocalDate.now();
+        updateDate = LocalDate.now();
         role = Role.USER;
     }
 
@@ -104,14 +100,6 @@ public class User implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -126,13 +114,12 @@ public class User implements Serializable {
                 Objects.equals(getPassword(), user.getPassword()) &&
                 getRole() == user.getRole() &&
                 Objects.equals(getCreateDate(), user.getCreateDate()) &&
-                Objects.equals(getUpdateDate(), user.getUpdateDate()) &&
-                Objects.equals(getOrders(), user.getOrders());
+                Objects.equals(getUpdateDate(), user.getUpdateDate());
     }
 
     @Override
     public int hashCode() {
         return Objects
-                .hash(getId(), getUsername(), getPassword(), getRole(), getCreateDate(), getUpdateDate(), getOrders());
+                .hash(getId(), getUsername(), getPassword(), getRole(), getCreateDate(), getUpdateDate());
     }
 }

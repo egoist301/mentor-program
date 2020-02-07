@@ -34,13 +34,13 @@ public class IllnessDao {
         entityManager.remove(entityManager.find(Illness.class, id));
     }
 
-    public List<Illness> existsById(Long id) {
+    public boolean existsById(Long id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Illness> criteriaQuery = criteriaBuilder.createQuery(Illness.class);
         Root<Illness> userRoot = criteriaQuery.from(Illness.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("id"), id));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
     public Illness findByName(String name) {
@@ -52,25 +52,25 @@ public class IllnessDao {
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
-    public List<Illness> findByNameWithDifferentId(Long id, String name) {
+    public boolean isAnyIllnessExistWithName(Long id, String name) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Illness> criteriaQuery = criteriaBuilder.createQuery(Illness.class);
         Root<Illness> userRoot = criteriaQuery.from(Illness.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("name"), name), criteriaBuilder.and(criteriaBuilder.notEqual(userRoot.get("id"), id)));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
     public Illness update(Illness illness) {
         return entityManager.merge(illness);
     }
 
-    public List<Illness> existsByName(String name) {
+    public boolean existsByName(String name) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Illness> criteriaQuery = criteriaBuilder.createQuery(Illness.class);
         Root<Illness> userRoot = criteriaQuery.from(Illness.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("name"), name));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 }

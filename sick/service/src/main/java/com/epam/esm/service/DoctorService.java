@@ -1,20 +1,15 @@
 package com.epam.esm.service;
 
-import com.epam.esm.converter.DoctorDtoConverter;
 import com.epam.esm.dao.DoctorDao;
 import com.epam.esm.dao.IllnessDao;
-import com.epam.esm.dto.doctor.DoctorRequestDto;
-import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.entity.Doctor;
 import com.epam.esm.entity.Illness;
-import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.util.NumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
@@ -27,54 +22,33 @@ public class DoctorService {
         this.illnessDao = illnessDao;
     }
 
-    public DoctorResponseDto findById(Long id) {
-        isDoctorNotExist(id);
-        return DoctorDtoConverter.convertToDto(doctorDao.findById(id));
+    public Doctor findById(Long id) {
+        return doctorDao.findById(id);
     }
 
-    public List<DoctorResponseDto> getAll(List<String> filters, String sortBy, String order) {
-        return doctorDao.findAll(filters, sortBy, order).stream().map(DoctorDtoConverter::convertToDto).collect(
-                Collectors.toList());
+    public List<Doctor> findAll(List<String> filters, String sortBy, String order) {
+        return doctorDao.findAll(filters, sortBy, order);
     }
 
     @Transactional
-    public DoctorResponseDto create(DoctorRequestDto doctorRequestDto) {
-        Doctor doctor = DoctorDtoConverter.convertToEntity(doctorRequestDto);
-        doctor.setIdentificationNumber(NumberGenerator.generateIdentificationNumber(14));
-        fillExistIllnesses(doctor);
+    public void create(Doctor doctor) {
         doctorDao.create(doctor);
-        return DoctorDtoConverter.convertToDto(doctor);
-    }
-
-    private String generateIdentificationNumber(int length) {
-        String number = NumberGenerator.generateIdentificationNumber(length);
-        if (!doctorDao.existByIdentificationNumber(number).isEmpty()) {
-            return generateIdentificationNumber(length);
-        }
-        return number;
     }
 
     @Transactional
-    public DoctorResponseDto update(Long id, DoctorRequestDto doctorRequestDto) {
-        Doctor doctor = DoctorDtoConverter.convertToEntity(doctorRequestDto);
-        doctor.setId(id);
-        isDoctorNotExist(id);
-        doctor.setIdentificationNumber(doctorDao.findById(id).getIdentificationNumber());
-        fillExistIllnesses(doctor);
+    public void update(Doctor doctor) {
         doctorDao.update(doctor);
-        return null;
     }
 
     @Transactional
     public void delete(Long id) {
-        isDoctorNotExist(id);
         doctorDao.delete(id);
     }
 
-    private void fillExistIllnesses(Doctor doctor) {
+    public void fillExistIllnesses(Doctor doctor) {
         if (doctor.getIllnesses() != null) {
             doctor.getIllnesses().forEach(illness -> {
-                if (!illnessDao.existsByName(illness.getName()).isEmpty()) {
+                if (illnessDao.existsByName(illness.getName())) {
                     Illness illnessFromDB = illnessDao.findByName(illness.getName());
                     illness.setId(illnessFromDB.getId());
                     illness.setCreateDate(illnessFromDB.getCreateDate());
@@ -84,9 +58,15 @@ public class DoctorService {
         }
     }
 
-    private void isDoctorNotExist(Long id) {
-        if (doctorDao.existsById(id).isEmpty()) {
-            throw new EntityIsNotExistException("doctor is not exist");
-        }
+    public boolean isDoctorExist(Long id) {
+        return doctorDao.existsById(id);
+    }
+
+    public Doctor findByIdentificationNumber(String identificationNumber) {
+        return doctorDao.findByIdentificationNumber(identificationNumber);
+    }
+
+    public boolean existByIdentificationNumber(String number) {
+        return doctorDao.existByIdentificationNumber(number);
     }
 }

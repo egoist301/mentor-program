@@ -6,11 +6,11 @@ create table doctor
     middle_name            varchar(20)                                  not null,
     phone_number           int                                          not null
         CHECK ( phone_number BETWEEN 1000000 AND 9999999),
-    date_of_birth          date                                         not null,
+    date_of_birth          timestamp                                    not null,
     price_per_consultation DECIMAL CHECK ( price_per_consultation > 0 ) not null,
     identification_number  nchar(14) UNIQUE                             not null,
-    create_date            date                                         not null,
-    update_date            date                                         not null,
+    create_date            timestamp                                    not null,
+    update_date            timestamp                                    not null,
     constraint pk_doctor primary key (id)
 );
 create table illness
@@ -19,8 +19,8 @@ create table illness
     name          varchar(30) UNIQUE                          not null,
     description   varchar(250)                                not null,
     chance_to_die int CHECK (chance_to_die BETWEEN 0 AND 100) not null,
-    create_date   date                                        not null,
-    update_date   date                                        not null,
+    create_date   timestamp                                   not null,
+    update_date   timestamp                                   not null,
     constraint pk_illness primary key (id)
 );
 create table doctor_illness
@@ -39,15 +39,16 @@ create table users
     username    VARCHAR(30) UNIQUE               not null,
     password    VARCHAR(60)                      not null,
     role        int CHECK (role BETWEEN 0 AND 1) not null,
-    create_date date                             not null,
-    update_date date                             not null,
+    create_date timestamp                        not null,
+    update_date timestamp                        not null,
     constraint pk_user primary key (id)
 );
 create table orders
 (
     id          serial,
-    user_id     int  not null,
-    create_date date not null,
+    user_id     int                               not null,
+    total_price decimal CHECK ( total_price > 0 ) not null,
+    create_date timestamp                         not null,
     constraint pk_orders primary key (id),
     constraint fk_order_user foreign key (user_id) references users (id) on
         delete cascade

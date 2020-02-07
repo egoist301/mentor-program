@@ -17,7 +17,7 @@ public class DoctorDao {
     private static final String MIDDLE_NAME = "middle_name";
     private static final String DATE_OF_BIRTH = "date_of_birth";
     private static final String ALL_FIELDS =
-            "id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date";
+            "doctor.id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, doctor.create_date, doctor.update_date";
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -37,13 +37,13 @@ public class DoctorDao {
         entityManager.remove(entityManager.find(Doctor.class, id));
     }
 
-    public List<Doctor> existsById(Long id) {
+    public boolean existsById(Long id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
         Root<Doctor> userRoot = criteriaQuery.from(Doctor.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("id"), id));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
     public List<Doctor> findAll(List<String> filters, String sortBy, String order) {
@@ -54,7 +54,8 @@ public class DoctorDao {
 
     private String getQuery(String sortBy, String order) {
         String search =
-                new StringBuilder().append("SELECT ").append(ALL_FIELDS)
+                new StringBuilder().append("SELECT ")
+                        .append("id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date")
                         .append(" FROM searchPatient(:firstName,:lastName,:middleName,:name)")
                         .toString();
         if (sortBy != null && (sortBy.equals(FIRST_NAME) || sortBy.equals(LAST_NAME) || sortBy.equals(MIDDLE_NAME) ||
@@ -68,21 +69,18 @@ public class DoctorDao {
         return search;
     }
 
-    public Doctor findByName(String firstName) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
-        Root<Doctor> userRoot = criteriaQuery.from(Doctor.class);
-        criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
-                userRoot.get("first_name"), firstName));
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    public Doctor findByIdentificationNumber(String identificationNumber) {
+        return (Doctor) entityManager.createNativeQuery("SELECT " + ALL_FIELDS
+                        + " FROM doctor JOIN doctor_illness di on doctor.id = di.doctor_id JOIN illness i on di.illness_id = i.id WHERE identification_number = :identification_number",
+                Doctor.class).setParameter("identification_number", identificationNumber).getSingleResult();
     }
 
-    public List<Doctor> existByIdentificationNumber(String number) {
+    public boolean existByIdentificationNumber(String number) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
         Root<Doctor> userRoot = criteriaQuery.from(Doctor.class);
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("identification_number"), number));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 }

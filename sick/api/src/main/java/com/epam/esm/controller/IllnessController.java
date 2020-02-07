@@ -3,7 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.illness.IllnessPartialRequestDto;
 import com.epam.esm.dto.illness.IllnessRequestDto;
 import com.epam.esm.dto.illness.IllnessResponseDto;
-import com.epam.esm.service.IllnessService;
+import com.epam.esm.facade.IllnessFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,50 +27,50 @@ import java.util.List;
 @RestController
 @RequestMapping("/illnesses")
 public class IllnessController {
-    private IllnessService illnessService;
+    private IllnessFacade illnessFacade;
 
     @Autowired
-    public IllnessController(IllnessService illnessService) {
-        this.illnessService = illnessService;
+    public IllnessController(IllnessFacade illnessFacade) {
+        this.illnessFacade = illnessFacade;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> get(@PathVariable("id") Long id) {
         Validator.validateId(id);
-        return new ResponseEntity<>(illnessService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(illnessFacade.get(id), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<IllnessResponseDto>> getAll() {
+        return new ResponseEntity<>(illnessFacade.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<IllnessResponseDto> create(@RequestBody @Valid IllnessRequestDto illnessRequestDto) {
-        IllnessResponseDto illnessResponseDto = illnessService.create(illnessRequestDto);
+        IllnessResponseDto illnessResponseDto = illnessFacade.create(illnessRequestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(illnessResponseDto.getId()).toUri());
         return new ResponseEntity<>(illnessResponseDto, httpHeaders, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<IllnessResponseDto>> getAll() {
-        return new ResponseEntity<>(illnessService.getAll(), HttpStatus.OK);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> update(@PathVariable Long id,
                                                      @RequestBody @Valid IllnessRequestDto illnessRequestDto) {
-        return new ResponseEntity<>(illnessService.update(id, illnessRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(illnessFacade.update(id, illnessRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
         Validator.validateId(id);
-        illnessService.delete(id);
+        illnessFacade.delete(id);
     }
 
-    @PatchMapping("/{id}")
+   /* @PatchMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> partialUpdate(@PathVariable Long id, @RequestBody @Valid
             IllnessPartialRequestDto illnessPartialRequestDto) {
         Validator.validateId(id);
-        return new ResponseEntity<>(illnessService.partialUpdate(id, illnessPartialRequestDto), HttpStatus.OK);
-    }
+        return new ResponseEntity<>(illnessFacade.partialUpdate(id, illnessPartialRequestDto), HttpStatus.OK);
+    }*/
 }

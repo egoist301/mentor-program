@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.order.OrderRequestDto;
 import com.epam.esm.dto.order.OrderResponseDto;
-import com.epam.esm.service.OrderService;
+import com.epam.esm.facade.OrderFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,46 +18,46 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("users/{userId}/orders")
+@RequestMapping("/orders")
 public class OrderController {
-    private OrderService orderService;
+    private OrderFacade orderFacade;
 
     @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderFacade orderFacade) {
+        this.orderFacade = orderFacade;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> get(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<OrderResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
-        Validator.validateId(userId);
-        return new ResponseEntity<>(orderService.findById(id, userId), HttpStatus.OK);
+        return new ResponseEntity<>(orderFacade.get(id), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDto>> getAll() {
+        return new ResponseEntity<>(orderFacade.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> create(@PathVariable Long userId,
-                                                   @RequestBody @Valid OrderRequestDto orderRequestDto) {
-        Validator.validateId(userId);
-        orderService.create(orderRequestDto, userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<OrderResponseDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto) {
+        OrderResponseDto orderResponseDto = orderFacade.create(orderRequestDto);
+        return new ResponseEntity<>(orderResponseDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> update(@PathVariable Long id, @PathVariable Long userId,
+    /*@PutMapping("/{id}")
+    public ResponseEntity<OrderResponseDto> update(@PathVariable Long id,
                                                    @RequestBody @Valid OrderRequestDto orderRequestDto) {
         Validator.validateId(id);
-        Validator.validateId(userId);
-        orderService.update(id, userId, orderRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(orderFacade.update(id, orderRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id, @PathVariable Long userId) {
+    public void delete(@PathVariable Long id) {
         Validator.validateId(id);
-        Validator.validateId(userId);
-        orderService.delete(id, userId);
-    }
+        orderFacade.delete(id);
+    }*/
 }
