@@ -46,17 +46,18 @@ public class DoctorDao {
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
-    public List<Doctor> findAll(List<String> filters, String sortBy, String order) {
+    public List<Doctor> findAll(List<String> filtersByMainEntity, String sortBy, String order) {
         return entityManager.createNativeQuery(getQuery(sortBy, order), Doctor.class)
-                .setParameter("firstName", filters.get(0)).setParameter("lastName", filters.get(1))
-                .setParameter("middleName", filters.get(2)).setParameter("name", filters.get(3)).getResultList();
+                .setParameter("firstName", filtersByMainEntity.get(0))
+                .setParameter("lastName", filtersByMainEntity.get(1))
+                .setParameter("middleName", filtersByMainEntity.get(2)).getResultList();
     }
 
     private String getQuery(String sortBy, String order) {
         String search =
                 new StringBuilder().append("SELECT ")
                         .append("id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date")
-                        .append(" FROM searchPatient(:firstName,:lastName,:middleName,:name)")
+                        .append(" FROM searchPatient(:firstName,:lastName,:middleName)")
                         .toString();
         if (sortBy != null && (sortBy.equals(FIRST_NAME) || sortBy.equals(LAST_NAME) || sortBy.equals(MIDDLE_NAME) ||
                 sortBy.equals(DATE_OF_BIRTH))) {

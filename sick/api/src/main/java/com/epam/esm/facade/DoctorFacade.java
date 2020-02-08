@@ -26,9 +26,10 @@ public class DoctorFacade {
         return DoctorDtoConverter.convertToDto(doctorService.findById(id));
     }
 
-    public List<DoctorResponseDto> getAll(List<String> filters, String sortBy, String order) {
-        return doctorService.findAll(filters, sortBy, order).stream().map(DoctorDtoConverter::convertToDto).collect(
-                Collectors.toList());
+    public List<DoctorResponseDto> getAll(List<String> filtersByMainEntity, List<String> illnesses, String sortBy,
+                                          String order, int page, int size) {
+        return doctorService.findAll(filtersByMainEntity, illnesses, sortBy, order, page, size).stream()
+                .map(DoctorDtoConverter::convertToDto).collect(Collectors.toList());
     }
 
     public DoctorResponseDto create(DoctorRequestDto doctorRequestDto) {

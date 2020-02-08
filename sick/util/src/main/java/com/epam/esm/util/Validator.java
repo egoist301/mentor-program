@@ -1,6 +1,5 @@
 package com.epam.esm.util;
 
-import com.epam.esm.constant.AppConstants;
 import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.exception.IncorrectPathVariableException;
 
@@ -34,16 +33,11 @@ public final class Validator {
     }
 
     public static void validatePageNumberAndSize(int page, int size) {
-        if(page < 1) {
+        if (page < 1) {
             throw new IncorrectPathVariableException("Page number cannot be less than 1.");
         }
-
         if (size < 0) {
             throw new IncorrectPathVariableException("size cannot be less than zero.");
-        }
-
-        if(size > AppConstants.MAX_PAGE_SIZE) {
-            throw new IncorrectPathVariableException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
         }
     }
 }

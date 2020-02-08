@@ -1,9 +1,7 @@
-CREATE
-OR
-REPLACE FUNCTION searchPatient(text, text, text, text)
-    RETURNS SETOF doctor AS
-    $$
-SELECT DISTINCT doctor.id,
+CREATE OR REPLACE FUNCTION searchPatient(text, text, text)
+              RETURNS SETOF doctor AS
+              $$
+SELECT DISTINCT id,
                 first_name,
                 last_name,
                 middle_name,
@@ -11,11 +9,9 @@ SELECT DISTINCT doctor.id,
                 date_of_birth,
                 price_per_consultation,
                 identification_number,
-                doctor.create_date,
-                doctor.update_date
+                create_date,
+                update_date
 FROM doctor
-         LEFT JOIN doctor_illness ON doctor_id = doctor.id
-         LEFT JOIN illness ON illness_id = illness.id
 WHERE CASE
           WHEN $1 IS NOT NULL THEN first_name LIKE CONCAT('%', $1, '%')
           ELSE first_name IS NOT NULL END
@@ -24,10 +20,5 @@ WHERE CASE
           ELSE last_name IS NOT NULL END
   AND CASE
           WHEN $3 IS NOT NULL THEN middle_name LIKE CONCAT('%', $3, '%')
-          ELSE middle_name IS NOT NULL END
-  AND CASE
-          WHEN $4 IS NOT NULL THEN
-              name LIKE CONCAT('%', $4, '%')
-          ELSE name IS NULL OR name IS NOT NULL
-    END
-    $$ LANGUAGE SQL;
+          ELSE middle_name IS NOT NULL END;
+$$ LANGUAGE SQL;

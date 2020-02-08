@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.constant.AppConstants;
 import com.epam.esm.dto.doctor.DoctorPartialRequestDto;
 import com.epam.esm.dto.doctor.DoctorRequestDto;
 import com.epam.esm.dto.doctor.DoctorResponseDto;
@@ -47,13 +48,16 @@ public class DoctorController {
             @RequestParam(value = "first_name", required = false) String searchByFirstName,
             @RequestParam(value = "last_name", required = false) String searchByLastName,
             @RequestParam(value = "middle_name", required = false) String searchByMiddleName,
-            @RequestParam(value = "illness", required = false) String searchByIllnessName,
+            @RequestParam(value = "illness", required = false) List<String> searchByIllnessName,
             @RequestParam(value = "sort", required = false) String sortBy,
-            @RequestParam(value = "order", required = false) String order) {
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         Validator.validateSortAndOrder(sortBy, order);
+        Validator.validatePageNumberAndSize(page, size);
         return new ResponseEntity<>(doctorService
-                .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName, searchByIllnessName),
-                        sortBy, order), HttpStatus.OK);
+                .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName), searchByIllnessName,
+                        sortBy, order, page, size), HttpStatus.OK);
     }
 
     @PostMapping

@@ -51,6 +51,7 @@ public final class DoctorDtoConverter {
         doctor.setLastName(doctorPartialRequestDto.getLastName());
         doctor.setPhoneNumber(doctorPartialRequestDto.getPhoneNumber());
         doctor.setDateOfBirth(doctorPartialRequestDto.getDateOfBirth());
+        doctor.setPricePerConsultation(doctorPartialRequestDto.getPricePerConsultation());
         if (doctorPartialRequestDto.getIllnesses() != null) {
             doctor.setIllnesses(
                     doctorPartialRequestDto.getIllnesses().stream().map(IllnessDtoConverter::partialConvertToEntity)

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
@@ -30,8 +31,18 @@ public class DoctorService {
         }
     }
 
-    public List<Doctor> findAll(List<String> filters, String sortBy, String order) {
-        return doctorDao.findAll(filters, sortBy, order);
+    public List<Doctor> findAll(List<String> filtersByMainEntity, List<String> illnesses, String sortBy, String order,
+                                int page, int size) {
+        List<Doctor> doctors = doctorDao.findAll(filtersByMainEntity, sortBy, order);
+        if (illnesses != null) {
+            doctors = doctors.stream()
+                    .filter(doctor -> doctor.getIllnesses()
+                            .containsAll(illnesses.stream().map(name -> illnessDao.findByName(name))
+                                    .collect(Collectors.toList()))).collect(Collectors.toList());
+        }
+        int from = Math.min((page == 1) ? page - 1 : (page - 1) * size, doctors.size());
+        int to = (Math.min(size + from, doctors.size()));
+        return doctors.subList(from, to);
     }
 
     @Transactional

@@ -1,7 +1,5 @@
 package com.epam.esm.entity;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +14,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "illness")
-@DynamicUpdate
 public class Illness implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
