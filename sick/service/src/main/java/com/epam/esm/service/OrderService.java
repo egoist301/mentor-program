@@ -4,11 +4,14 @@ import com.epam.esm.dao.DoctorDao;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.entity.Doctor;
 import com.epam.esm.entity.Order;
+import com.epam.esm.exception.EntityIsNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderService {
@@ -22,7 +25,11 @@ public class OrderService {
     }
 
     public Order findById(Long id) {
-        return orderDao.findById(id);
+        if (orderDao.existsById(id)) {
+            return orderDao.findById(id);
+        } else {
+            throw new EntityIsNotExistException("order is not exist");
+        }
     }
 
     public List<Order> findAll(Long userId, int page, int size) {
@@ -31,8 +38,9 @@ public class OrderService {
 
     @Transactional
     public void create(Order order) {
+        fillDoctors(order);
+        order.setTotalPrice(calculateTotalPrice(order.getDoctors()));
         orderDao.create(order);
-
     }
 
     /*@Transactional
@@ -45,7 +53,15 @@ public class OrderService {
         orderDao.delete(id);
     }*/
 
-    public void fillDoctors(Order order) {
+    private BigDecimal calculateTotalPrice(Set<Doctor> doctors) {
+        BigDecimal price = BigDecimal.valueOf(0);
+        for (Doctor doctor : doctors) {
+            price = price.add(doctor.getPricePerConsultation());
+        }
+        return price;
+    }
+
+    private void fillDoctors(Order order) {
         order.getDoctors().forEach(doctor -> {
             Doctor temp = doctorDao.findById(doctor.getId());
             doctor.setIdentificationNumber(temp.getIdentificationNumber());
@@ -57,9 +73,5 @@ public class OrderService {
             doctor.setDateOfBirth(temp.getDateOfBirth());
             doctor.setIllnesses(temp.getIllnesses());
         });
-    }
-
-    public boolean isOrderExist(Long id) {
-        return orderDao.existsById(id);
     }
 }

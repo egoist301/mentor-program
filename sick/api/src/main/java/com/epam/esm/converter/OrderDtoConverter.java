@@ -12,6 +12,7 @@ public class OrderDtoConverter {
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderResponseDto.setId(order.getId());
         orderResponseDto.setCreateDate(order.getCreateDate());
+        orderResponseDto.setTotalPrice(order.getTotalPrice());
         orderResponseDto
                 .setDoctorResponseDtos(order.getDoctors().stream().map(DoctorDtoConverter::convertToDto).collect(
                         Collectors.toSet()));

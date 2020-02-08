@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class Order implements Serializable {
     private Long id;
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "order_doctor",
             joinColumns = {@JoinColumn(name = "order_id")},
@@ -76,6 +79,14 @@ public class Order implements Serializable {
         this.user = user;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -87,12 +98,13 @@ public class Order implements Serializable {
         Order order = (Order) o;
         return Objects.equals(getId(), order.getId()) &&
                 Objects.equals(getCreateDate(), order.getCreateDate()) &&
+                Objects.equals(getTotalPrice(), order.getTotalPrice()) &&
                 Objects.equals(getDoctors(), order.getDoctors()) &&
                 Objects.equals(getUser(), order.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCreateDate(), getDoctors(), getUser());
+        return Objects.hash(getId(), getCreateDate(), getTotalPrice(), getDoctors(), getUser());
     }
 }
