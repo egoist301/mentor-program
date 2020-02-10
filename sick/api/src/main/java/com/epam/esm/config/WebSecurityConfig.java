@@ -6,6 +6,7 @@ import com.epam.esm.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -64,8 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
@@ -73,10 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/signUp", "/doctors", "/illnesses", "/login", "/users").permitAll();
-        http.authorizeRequests()
-                .antMatchers("/orders/**", "/orders").access("hasRole('USER') or hasRole('ADMIN')");
-        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/", "/signUp", "/doctors", "/illnesses", "/login", "/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/doctors/{id}", "/illnesses/{id}").permitAll()
+                .antMatchers("/orders/**", "/orders").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/users/**", "/doctors/**", "/illnesses/**").hasRole("ADMIN");
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

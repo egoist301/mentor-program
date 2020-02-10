@@ -4,7 +4,6 @@ import com.epam.esm.dto.ErrorDto;
 import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.exception.IncorrectPathVariableException;
-import com.epam.esm.exception.ParseDateException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +38,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(EntityIsNotExistException.class)
     public ResponseEntity<Object> handleNotExistException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ParseDateException.class)
-    public ResponseEntity<Object> handleParseException(RuntimeException e, WebRequest request) {
-        return createResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IncorrectPathVariableException.class)
