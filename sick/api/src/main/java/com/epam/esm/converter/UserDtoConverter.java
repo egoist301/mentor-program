@@ -3,6 +3,7 @@ package com.epam.esm.converter;
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
 import com.epam.esm.entity.User;
+import com.epam.esm.security.UserPrincipal;
 
 public class UserDtoConverter {
     public static User convertToEntity(UserRequestDto userRequestDto) {
@@ -20,5 +21,14 @@ public class UserDtoConverter {
         userResponseDto.setCreateDate(user.getCreateDate());
         userResponseDto.setUpdateDate(user.getUpdateDate());
         return userResponseDto;
+    }
+
+    public static User convertToUser(UserPrincipal userPrincipal) {
+        User user = new User();
+        user.setId(userPrincipal.getId());
+        user.setUsername(userPrincipal.getUsername());
+        user.setPassword(userPrincipal.getPassword());
+        user.setRole(userPrincipal.getRole());
+        return user;
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dao.UserDao;
+import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.exception.EntityIsNotExistException;
@@ -22,6 +23,14 @@ public class UserService {
     public User findById(Long id) {
         if (userDao.existsById(id)) {
             return userDao.findById(id);
+        } else {
+            throw new EntityIsNotExistException("user is not exist");
+        }
+    }
+
+    public Role findRoleByUserId(Long id) {
+        if (userDao.existsById(id)) {
+            return userDao.findById(id).getRole();
         } else {
             throw new EntityIsNotExistException("user is not exist");
         }
@@ -67,5 +76,9 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    public Integer getCount() {
+        return userDao.getCount();
     }
 }

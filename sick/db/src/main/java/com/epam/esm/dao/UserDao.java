@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -75,5 +76,14 @@ public class UserDao {
         criteriaQuery.select(userRoot).where(criteriaBuilder.equal(
                 userRoot.get("username"), username));
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
+    }
+
+    public Integer getCount() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        criteriaQuery.select(criteriaQuery.from(User.class));
+        return entityManager.createQuery(criteriaQuery).getResultList().size();
+        //return (Integer) entityManager.createQuery("SELECT COUNT(*) FROM users").getSingleResult();
+        //return (Integer) entityManager.createNativeQuery("SELECT COUNT(*) FROM users").getSingleResult();
     }
 }

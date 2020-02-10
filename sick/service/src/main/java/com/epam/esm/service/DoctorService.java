@@ -35,6 +35,11 @@ public class DoctorService {
                                 int page, int size) {
         List<Doctor> doctors = doctorDao.findAll(filtersByMainEntity, sortBy, order);
         if (illnesses != null) {
+            illnesses.forEach(name -> {
+                if (!illnessDao.existsByName(name)) {
+                    throw new EntityIsNotExistException("illness with name: '" + name + "' is not exist");
+                }
+            });
             doctors = doctors.stream()
                     .filter(doctor -> doctor.getIllnesses()
                             .containsAll(illnesses.stream().map(name -> illnessDao.findByName(name))

@@ -73,9 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/signUp", "/doctors", "/illnesses", "/login", "/illnesses/**", "/doctors/**",
-                        "/users", "/users/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/", "/signUp", "/doctors", "/illnesses", "/login", "/users").permitAll();
+        http.authorizeRequests()
+                .antMatchers("/orders/**", "/orders").access("hasRole('USER') or hasRole('ADMIN')");
+        http.authorizeRequests()
+                .antMatchers("/users/**", "/doctors/**", "/illnesses/**").hasRole("ADMIN");
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

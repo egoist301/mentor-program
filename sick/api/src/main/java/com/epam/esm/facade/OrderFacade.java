@@ -1,6 +1,7 @@
 package com.epam.esm.facade;
 
 import com.epam.esm.converter.OrderDtoConverter;
+import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dto.order.OrderRequestDto;
 import com.epam.esm.dto.order.OrderResponseDto;
 import com.epam.esm.entity.Order;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class OrderFacade {
     private OrderService orderService;
+    private UserFacade userFacade;
 
     @Autowired
-    public OrderFacade(OrderService orderService) {
+    public OrderFacade(OrderService orderService, UserFacade userFacade) {
         this.orderService = orderService;
+        this.userFacade = userFacade;
     }
 
     public OrderResponseDto get(Long id) {
@@ -28,16 +31,13 @@ public class OrderFacade {
     }
 
     public List<OrderResponseDto> getAll(int page, int size) {
-        UserPrincipal userPrincipal =
-                (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return orderService.findAll(convertToUser(userPrincipal).getId(), page, size).stream()
+        User user = userFacade.getCurrentUser();
+        return orderService.findAll(user.getId(), page, size).stream()
                 .map(OrderDtoConverter::convertToDto).collect(Collectors.toList());
     }
 
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
-        UserPrincipal userPrincipal =
-                (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = convertToUser(userPrincipal);
+        User user = userFacade.getCurrentUser();
         Order order = OrderDtoConverter.convertToEntity(orderRequestDto);
         order.setUser(user);
         orderService.create(order);
@@ -67,13 +67,4 @@ public class OrderFacade {
             throw new EntityIsNotExistException("order is not exist");
         }
     }*/
-
-    private User convertToUser(UserPrincipal userPrincipal) {
-        User user = new User();
-        user.setId(userPrincipal.getId());
-        user.setUsername(userPrincipal.getUsername());
-        user.setPassword(userPrincipal.getPassword());
-        user.setRole(user.getRole());
-        return user;
-    }
 }

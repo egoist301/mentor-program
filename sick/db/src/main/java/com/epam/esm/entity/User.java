@@ -40,7 +40,7 @@ public class User implements Serializable {
     private void onCreate() {
         createDate = LocalDate.now();
         updateDate = LocalDate.now();
-        role = Role.USER;
+        role = Role.ROLE_USER;
     }
 
     @PreUpdate

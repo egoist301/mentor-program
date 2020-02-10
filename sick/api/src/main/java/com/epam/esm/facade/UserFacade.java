@@ -3,9 +3,12 @@ package com.epam.esm.facade;
 import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
+import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
+import com.epam.esm.security.UserPrincipal;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +47,10 @@ public class UserFacade {
 
     public void delete(Long id) {
         userService.delete(id);
+    }
+
+    User getCurrentUser() {
+        return UserDtoConverter
+                .convertToUser((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 }

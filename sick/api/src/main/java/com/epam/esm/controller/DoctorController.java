@@ -45,9 +45,9 @@ public class DoctorController {
 
     @GetMapping
     public ResponseEntity<List<DoctorResponseDto>> getAll(
-            @RequestParam(value = "first_name", required = false) String searchByFirstName,
-            @RequestParam(value = "last_name", required = false) String searchByLastName,
-            @RequestParam(value = "middle_name", required = false) String searchByMiddleName,
+            @RequestParam(value = "first_name", required = false, defaultValue = "") String searchByFirstName,
+            @RequestParam(value = "last_name", required = false, defaultValue = "") String searchByLastName,
+            @RequestParam(value = "middle_name", required = false, defaultValue = "") String searchByMiddleName,
             @RequestParam(value = "illness", required = false) List<String> searchByIllnessName,
             @RequestParam(value = "sort", required = false) String sortBy,
             @RequestParam(value = "order", required = false) String order,

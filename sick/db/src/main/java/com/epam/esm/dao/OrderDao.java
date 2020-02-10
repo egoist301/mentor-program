@@ -41,11 +41,16 @@ public class OrderDao {
     }
 
     public List<Order> findAll(Long userId, int page, int size) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
-        Root<Order> userRoot = criteriaQuery.from(Order.class);
-        criteriaQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("user_id"), userId));
-        return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+        return entityManager
+                .createNativeQuery("SELECT id, create_date, total_price, user_id FROM orders WHERE user_id = :user_ID",
+                        Order.class)
+                .setParameter("user_ID", userId).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
                 .setMaxResults(size).getResultList();
+    }
+
+    public Integer getCount(Long id) {
+        return  entityManager
+                .createNativeQuery("SELECT id, create_date, total_price, user_id FROM orders WHERE user_id = :user_ID",
+                        Order.class).setParameter("user_ID", id).getResultList().size();
     }
 }

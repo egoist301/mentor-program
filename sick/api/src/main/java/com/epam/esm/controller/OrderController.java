@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.constant.AppConstants;
 import com.epam.esm.dto.order.OrderRequestDto;
 import com.epam.esm.dto.order.OrderResponseDto;
+import com.epam.esm.entity.Role;
 import com.epam.esm.facade.OrderFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
     private OrderFacade orderFacade;
+    private List<Role> roles = Arrays.asList(Role.values());
 
     @Autowired
     public OrderController(OrderFacade orderFacade) {

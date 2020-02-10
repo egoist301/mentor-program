@@ -4,6 +4,7 @@ import com.epam.esm.constant.AppConstants;
 import com.epam.esm.dto.illness.IllnessRequestDto;
 import com.epam.esm.dto.illness.IllnessResponseDto;
 import com.epam.esm.facade.IllnessFacade;
+import com.epam.esm.facade.UserFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +49,11 @@ public class IllnessController {
         return new ResponseEntity<>(illnessFacade.getAll(page, size), HttpStatus.OK);
     }
 
+    @GetMapping("/get_widely_used")
+    public ResponseEntity<IllnessResponseDto> getWidelyUsed() {
+        return new ResponseEntity<>(illnessFacade.getWidelyUsed(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<IllnessResponseDto> create(@RequestBody @Valid IllnessRequestDto illnessRequestDto) {
         IllnessResponseDto illnessResponseDto = illnessFacade.create(illnessRequestDto);
@@ -60,6 +66,7 @@ public class IllnessController {
     @PutMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> update(@PathVariable Long id,
                                                      @RequestBody @Valid IllnessRequestDto illnessRequestDto) {
+        Validator.validateId(id);
         return new ResponseEntity<>(illnessFacade.update(id, illnessRequestDto), HttpStatus.OK);
     }
 
