@@ -70,12 +70,12 @@ public class UserService {
         }
     }
 
-    public boolean isUserExist(Long id) {
-        return userDao.existsById(id);
-    }
-
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    public boolean isExistByUsername(String username) {
+        return userDao.existsByUsername(username);
     }
 
     public Integer getCount() {

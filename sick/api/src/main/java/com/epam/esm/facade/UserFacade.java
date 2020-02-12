@@ -53,4 +53,8 @@ public class UserFacade {
         return UserDtoConverter
                 .convertToUser((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
+
+    public UserResponseDto findByUsername(String username) {
+        return UserDtoConverter.convertToDto(userService.findByUsername(username));
+    }
 }

@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dao.UserDao;
+import com.epam.esm.entity.User;
 import com.epam.esm.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return new UserPrincipal(userDao.findByUsername(s));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return new UserPrincipal(userDao.findByUsername(username));
     }
 
     public UserDetails loadUserById(Long id) {
         return new UserPrincipal(userDao.findById(id));
+    }
+
+    public boolean existByUsername(String username) {
+        return userDao.existsByUsername(username);
     }
 }
