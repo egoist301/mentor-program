@@ -52,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(userFacade.getAll(page, size), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/signUp")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         UserResponseDto userResponseDto = userFacade.create(userRequestDto);

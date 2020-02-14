@@ -4,6 +4,7 @@ import com.epam.esm.exception.EntityIsNotExistException;
 import com.epam.esm.exception.IncorrectPathVariableException;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public final class Validator {
 
@@ -25,9 +26,9 @@ public final class Validator {
     }
 
     public static void validateSortAndOrder(String sortBy, String order) {
-        if ((sortBy != null &&
+        if ((Objects.nonNull(sortBy) &&
                 !(Arrays.asList(FIRST_NAME, LAST_NAME, MIDDLE_NAME, DATE_OF_BIRTH).contains(sortBy))) ||
-                (order != null && !(order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc")))) {
+                ("asc".equalsIgnoreCase(order) || "desc".equalsIgnoreCase(order))) {
             throw new IncorrectPathVariableException("incorrect sort param:" + sortBy + " or order param:" + order);
         }
     }
@@ -36,8 +37,8 @@ public final class Validator {
         if (page < 1) {
             throw new IncorrectPathVariableException("Page number cannot be less than 1.");
         }
-        if (size < 0) {
-            throw new IncorrectPathVariableException("size cannot be less than zero.");
+        if (size < 1) {
+            throw new IncorrectPathVariableException("size cannot be less than 1.");
         }
     }
 }

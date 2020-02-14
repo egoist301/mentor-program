@@ -83,7 +83,5 @@ public class UserDao {
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         criteriaQuery.select(criteriaQuery.from(User.class));
         return entityManager.createQuery(criteriaQuery).getResultList().size();
-        //return (Integer) entityManager.createQuery("SELECT COUNT(*) FROM users").getSingleResult();
-        //return (Integer) entityManager.createNativeQuery("SELECT COUNT(*) FROM users").getSingleResult();
     }
 }

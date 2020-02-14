@@ -23,14 +23,6 @@ public class OrderDao {
         entityManager.merge(order);
     }
 
-    /*public void update(Order order) {
-        entityManager.merge(order);
-    }
-
-    public void delete(Long id) {
-        entityManager.remove(entityManager.find(Order.class, id));
-    }*/
-
     public boolean existsById(Long id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);

@@ -64,32 +64,4 @@ public class IllnessService {
     public Illness findByName(String name) {
         return illnessDao.findByName(name);
     }
-    /* @Transactional
-     public IllnessResponseDto partialUpdate(Long id, IllnessPartialRequestDto illnessPartialRequestDto) {
-         isIllnessNotExist(id);
-         Illness illness = IllnessDtoConverter.partialConvertToEntity(illnessPartialRequestDto);
-         illness.setId(id);
-         if (illness.getName() != null) {
-             isAnyIllnessExistWithName(illness.getId(), illness.getName());
-         }
-         Illness illnessFromDB = illnessDao.findById(id);
-         partialUpdate(illnessFromDB);
-         illnessDao.update(illnessFromDB);
-         return IllnessDtoConverter.convertToDto(illnessFromDB);
-     }
-
-     private void partialUpdate(Illness illness) {
-         String name = illness.getName();
-         String description = illness.getDescription();
-         Integer chance = illness.getChanceToDie();
-         if (name != null) {
-             illness.setName(name);
-         }
-         if (description != null) {
-             illness.setDescription(description);
-         }
-         if (chance != null) {
-             illness.setChanceToDie(chance);
-         }
-     }*/
 }

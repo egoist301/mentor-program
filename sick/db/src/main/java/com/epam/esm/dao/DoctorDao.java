@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class DoctorDao {
@@ -59,11 +60,11 @@ public class DoctorDao {
                         .append("id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date")
                         .append(" FROM searchPatient(:firstName,:lastName,:middleName)")
                         .toString();
-        if (sortBy != null && (sortBy.equals(FIRST_NAME) || sortBy.equals(LAST_NAME) || sortBy.equals(MIDDLE_NAME) ||
-                sortBy.equals(DATE_OF_BIRTH))) {
+        boolean isSortable = FIRST_NAME.equals(sortBy) || LAST_NAME.equals(sortBy) || MIDDLE_NAME.equals(sortBy)
+                || DATE_OF_BIRTH.equals(sortBy);
+        if (isSortable) {
             search = search.concat(" ORDER BY ".concat(sortBy));
-
-            if (order != null && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
+            if (Objects.nonNull(order)) {
                 search = search.concat(" ".concat(order));
             }
         }

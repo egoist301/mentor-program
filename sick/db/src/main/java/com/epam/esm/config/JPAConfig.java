@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
-public class HibernateConfig {
+public class JPAConfig {
     private final Environment environment;
     private static final String DIALECT = "spring.jpa.properties.hibernate.dialect";
     private static final String SHOW_SQL = "spring.jpa.properties.hibernate.show_sql";
@@ -24,7 +24,7 @@ public class HibernateConfig {
     private static final String URL = "spring.datasource.url";
 
     @Autowired
-    public HibernateConfig(Environment environment) {
+    public JPAConfig(Environment environment) {
         this.environment = environment;
     }
 

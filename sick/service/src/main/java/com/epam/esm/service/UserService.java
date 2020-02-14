@@ -28,14 +28,6 @@ public class UserService {
         }
     }
 
-    public Role findRoleByUserId(Long id) {
-        if (userDao.existsById(id)) {
-            return userDao.findById(id).getRole();
-        } else {
-            throw new EntityIsNotExistException("user is not exist");
-        }
-    }
-
     public List<User> findAll(int page, int size) {
         return userDao.findAll(page, size);
     }

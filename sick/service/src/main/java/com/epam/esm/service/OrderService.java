@@ -43,16 +43,6 @@ public class OrderService {
         orderDao.create(order);
     }
 
-    /*@Transactional
-    public void update(Order order) {
-        orderDao.update(order);
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        orderDao.delete(id);
-    }*/
-
     private BigDecimal calculateTotalPrice(Set<Doctor> doctors) {
         BigDecimal price = BigDecimal.valueOf(0);
         for (Doctor doctor : doctors) {

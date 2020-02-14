@@ -50,11 +50,4 @@ public class AuthenticationController {
         String jwt = jwtTokenProvider.createToken(authentication);
         return new ResponseEntity<>(new JwtAuthenticationResponse(jwt), HttpStatus.OK);
     }
-
-    @PostMapping("/signUp")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @Valid UserRequestDto userRequestDto) {
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userFacade.create(userRequestDto);
-    }
 }

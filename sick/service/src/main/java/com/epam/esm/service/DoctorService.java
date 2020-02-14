@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,25 +71,25 @@ public class DoctorService {
     public void partialUpdate(Doctor doctor) {
         if (doctorDao.existsById(doctor.getId())) {
             Doctor doctorFromDB = doctorDao.findById(doctor.getId());
-            if (doctor.getFirstName() != null) {
+            if (Objects.nonNull(doctor.getFirstName())) {
                 doctorFromDB.setFirstName(doctor.getFirstName());
             }
-            if (doctor.getLastName() != null) {
+            if (Objects.nonNull(doctor.getLastName())) {
                 doctorFromDB.setLastName(doctor.getLastName());
             }
-            if (doctor.getMiddleName() != null) {
+            if (Objects.nonNull(doctor.getMiddleName())) {
                 doctorFromDB.setMiddleName(doctor.getMiddleName());
             }
-            if (doctor.getPhoneNumber() != null) {
+            if (Objects.nonNull(doctor.getPhoneNumber())) {
                 doctorFromDB.setPhoneNumber(doctor.getPhoneNumber());
             }
-            if (doctor.getPricePerConsultation() != null) {
+            if (Objects.nonNull(doctor.getPricePerConsultation())) {
                 doctorFromDB.setPricePerConsultation(doctor.getPricePerConsultation());
             }
-            if (doctor.getDateOfBirth() != null) {
+            if (Objects.nonNull(doctor.getDateOfBirth())) {
                 doctorFromDB.setDateOfBirth(doctor.getDateOfBirth());
             }
-            if (doctor.getIllnesses() != null) {
+            if (Objects.nonNull(doctor.getIllnesses())) {
                 fillExistIllnesses(doctor);
                 doctorFromDB.setIllnesses(doctor.getIllnesses());
             }
@@ -108,7 +109,7 @@ public class DoctorService {
     }
 
     private void fillExistIllnesses(Doctor doctor) {
-        if (doctor.getIllnesses() != null) {
+        if (Objects.nonNull(doctor.getIllnesses())) {
             doctor.getIllnesses().forEach(illness -> {
                 if (illnessDao.existsByName(illness.getName())) {
                     Illness illnessFromDB = illnessDao.findByName(illness.getName());
