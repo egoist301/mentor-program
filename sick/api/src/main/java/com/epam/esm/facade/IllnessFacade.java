@@ -27,15 +27,10 @@ import java.util.stream.Collectors;
 @Service
 public class IllnessFacade {
     private IllnessService illnessService;
-    private UserService userService;
-    private OrderService orderService;
 
     @Autowired
-    public IllnessFacade(IllnessService illnessService, UserService userService,
-                         OrderService orderService) {
+    public IllnessFacade(IllnessService illnessService) {
         this.illnessService = illnessService;
-        this.userService = userService;
-        this.orderService = orderService;
     }
 
     public IllnessResponseDto get(Long id) {
@@ -65,50 +60,6 @@ public class IllnessFacade {
     }
 
     public IllnessResponseDto getWidelyUsed() {
-        int page = 1;
-        Integer maxUserSize = userService.getCount();
-        List<User> users = userService.findAll(page, maxUserSize);
-        Map<User, List<Order>> userOrdersMap = getUserOrdersMap(users, page);
-        Map<User, BigDecimal> userOrdersCostMap = getUserOrdersCostMap(userOrdersMap);
-        List<Illness> illnesses = getAllIllnessesForUser(userOrdersCostMap, page);
-        return IllnessDtoConverter.convertToDto(
-                illnesses.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                        .entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).get());
-    }
-
-    private Map<User, List<Order>> getUserOrdersMap(List<User> users, int page) {
-        Map<User, List<Order>> userOrdersMap = new HashMap<>();
-        users.forEach(user -> {
-            Integer maxOrderSizeByUser = orderService.getCount(user.getId());
-            userOrdersMap.put(user, orderService.findAll(user.getId(), page, maxOrderSizeByUser));
-        });
-        return userOrdersMap;
-    }
-
-    private Map<User, BigDecimal> getUserOrdersCostMap(Map<User, List<Order>> userOrdersMap) {
-        Map<User, BigDecimal> userOrdersCostMap = new HashMap<>();
-        userOrdersMap.forEach((user, orders) -> {
-            BigDecimal orderCost = BigDecimal.valueOf(0);
-            orders.forEach(order -> orderCost.add(order.getTotalPrice()));
-            userOrdersCostMap.put(user, orderCost);
-        });
-        return userOrdersCostMap;
-    }
-
-    private List<Illness> getAllIllnessesForUser(Map<User, BigDecimal> userOrdersCostMap, int page) {
-        User userWithMaxOrderCost =
-                Collections.max(userOrdersCostMap.entrySet(), Comparator.comparing(Map.Entry::getValue)).getKey();
-
-        Integer maxOrderSizeByUser = orderService.getCount(userWithMaxOrderCost.getId());
-
-        List<Set<Doctor>> doctorsSet =
-                orderService.findAll(userWithMaxOrderCost.getId(), page, maxOrderSizeByUser).stream()
-                        .map(Order::getDoctors).collect(Collectors.toList());
-
-        List<Illness> illnesses = new ArrayList<>();
-        doctorsSet.forEach(doctors -> {
-            doctors.forEach(doctor -> illnesses.addAll(doctor.getIllnesses()));
-        });
-        return illnesses;
+        return IllnessDtoConverter.convertToDto(illnessService.findWidelyUsed());
     }
 }

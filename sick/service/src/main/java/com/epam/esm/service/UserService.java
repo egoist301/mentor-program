@@ -69,8 +69,4 @@ public class UserService {
     public boolean isExistByUsername(String username) {
         return userDao.existsByUsername(username);
     }
-
-    public Integer getCount() {
-        return userDao.getCount();
-    }
 }

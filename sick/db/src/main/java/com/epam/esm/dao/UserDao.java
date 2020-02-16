@@ -77,11 +77,4 @@ public class UserDao {
                 userRoot.get("username"), username));
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
-
-    public Integer getCount() {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        criteriaQuery.select(criteriaQuery.from(User.class));
-        return entityManager.createQuery(criteriaQuery).getResultList().size();
-    }
 }

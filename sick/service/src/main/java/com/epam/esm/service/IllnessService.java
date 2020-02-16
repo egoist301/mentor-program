@@ -61,6 +61,10 @@ public class IllnessService {
         }
     }
 
+    public Illness findWidelyUsed() {
+        return illnessDao.findWidelyUsed();
+    }
+
     public Illness findByName(String name) {
         return illnessDao.findByName(name);
     }

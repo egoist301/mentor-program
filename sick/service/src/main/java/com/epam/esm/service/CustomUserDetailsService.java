@@ -26,8 +26,4 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserById(Long id) {
         return new UserPrincipal(userDao.findById(id));
     }
-
-    public boolean existByUsername(String username) {
-        return userDao.existsByUsername(username);
-    }
 }

@@ -43,28 +43,4 @@ public class OrderFacade {
         orderService.create(order);
         return null;
     }
-
-    /*public OrderResponseDto update(Long id, OrderRequestDto orderRequestDto) {
-        if (orderService.isOrderExist(id)) {
-            UserPrincipal principal =
-                    (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user = convertToUser(principal);
-            Order order = OrderDtoConverter.convertToEntity(orderRequestDto);
-            order.setId(id);
-            order.setUser(user);
-            orderService.fillDoctors(order);
-            orderService.update(order);
-            return OrderDtoConverter.convertToDto(orderService.findById(id));
-        } else {
-            throw new EntityIsNotExistException("order is not exist");
-        }
-    }
-
-    public void delete(Long id) {
-        if (orderService.isOrderExist(id)) {
-            orderService.delete(id);
-        } else {
-            throw new EntityIsNotExistException("order is not exist");
-        }
-    }*/
 }

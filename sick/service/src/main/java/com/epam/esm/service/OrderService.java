@@ -64,8 +64,4 @@ public class OrderService {
             doctor.setIllnesses(temp.getIllnesses());
         });
     }
-
-    public Integer getCount(Long id) {
-        return orderDao.getCount(id);
-    }
 }

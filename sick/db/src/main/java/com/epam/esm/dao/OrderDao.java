@@ -39,10 +39,4 @@ public class OrderDao {
                 .setParameter("user_ID", userId).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
                 .setMaxResults(size).getResultList();
     }
-
-    public Integer getCount(Long id) {
-        return  entityManager
-                .createNativeQuery("SELECT id, create_date, total_price, user_id FROM orders WHERE user_id = :user_ID",
-                        Order.class).setParameter("user_ID", id).getResultList().size();
-    }
 }
