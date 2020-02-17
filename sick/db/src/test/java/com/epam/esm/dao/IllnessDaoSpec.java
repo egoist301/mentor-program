@@ -40,7 +40,7 @@ public class IllnessDaoSpec {
         illness.setCreateDate(localDate);
         illness.setUpdateDate(localDate);
         illness.setChanceToDie(80);
-      //  flyway.migrate();
+        //  flyway.migrate();
     }
 
     @After

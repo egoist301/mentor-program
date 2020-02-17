@@ -1,5 +1,6 @@
 package com.epam.esm.dto.doctor;
 
+import com.epam.esm.dto.NullableNotBlank;
 import com.epam.esm.dto.illness.IllnessPartialRequestDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,14 +16,17 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class DoctorPartialRequestDto {
+    @NullableNotBlank
     @Size(min = 2, max = 16, message = "first name can be 2 to 16 characters long")
     @JsonProperty("first_name")
     private String firstName;
 
+    @NullableNotBlank
     @Size(min = 2, max = 16, message = "last name can be 2 to 16 characters long")
     @JsonProperty("last_name")
     private String lastName;
 
+    @NullableNotBlank
     @Size(min = 4, max = 16, message = "middle name can be 4 to 16 characters long")
     @JsonProperty("middle_name")
     private String middleName;
@@ -79,6 +83,10 @@ public class DoctorPartialRequestDto {
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public Set<IllnessPartialRequestDto> getIllnesses() {

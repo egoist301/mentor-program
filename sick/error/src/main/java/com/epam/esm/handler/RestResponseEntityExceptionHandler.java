@@ -7,6 +7,7 @@ import com.epam.esm.exception.IncorrectPathVariableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(IncorrectPathVariableException.class)
     public ResponseEntity<Object> handlePathVariableException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        return createResponse(ex, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(RuntimeException.class)

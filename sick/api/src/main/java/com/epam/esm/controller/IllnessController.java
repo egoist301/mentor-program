@@ -4,7 +4,6 @@ import com.epam.esm.constant.AppConstants;
 import com.epam.esm.dto.illness.IllnessRequestDto;
 import com.epam.esm.dto.illness.IllnessResponseDto;
 import com.epam.esm.facade.IllnessFacade;
-import com.epam.esm.facade.UserFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

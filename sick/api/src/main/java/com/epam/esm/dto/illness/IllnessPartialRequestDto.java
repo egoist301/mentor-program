@@ -1,5 +1,6 @@
 package com.epam.esm.dto.illness;
 
+import com.epam.esm.dto.NullableNotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Max;
@@ -7,11 +8,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 public class IllnessPartialRequestDto {
-
+    @NullableNotBlank
     @Size(min = 4, max = 30, message = "name can be 4 to 30 characters long")
     @JsonProperty("name")
     private String name;
 
+    @NullableNotBlank
     @Size(min = 4, max = 250, message = "description can be 4 to 250 characters long")
     @JsonProperty("description")
     private String description;

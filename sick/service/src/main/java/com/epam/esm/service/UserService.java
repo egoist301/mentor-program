@@ -1,7 +1,6 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dao.UserDao;
-import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.exception.EntityIsNotExistException;

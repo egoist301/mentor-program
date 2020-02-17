@@ -25,7 +25,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/doctors")
@@ -56,7 +58,8 @@ public class DoctorController {
         Validator.validateSortAndOrder(sortBy, order);
         Validator.validatePageNumberAndSize(page, size);
         return new ResponseEntity<>(doctorService
-                .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName), searchByIllnessName,
+                .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName),
+                        (Objects.nonNull(searchByIllnessName) ? searchByIllnessName : Collections.emptyList()),
                         sortBy, order, page, size), HttpStatus.OK);
     }
 

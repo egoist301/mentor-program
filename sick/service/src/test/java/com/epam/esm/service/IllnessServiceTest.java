@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 public class IllnessServiceTest {
@@ -35,10 +34,10 @@ public class IllnessServiceTest {
         illnessService = new IllnessService(illnessDao);
         illnesses = new ArrayList<>();
 
-        id = 1l;
+        id = 1L;
         name = "name";
         illness = new Illness();
-        illness.setId(1l);
+        illness.setId(1L);
         illness.setName("name");
         illness.setChanceToDie(30);
         illness.setDescription("description");
@@ -47,7 +46,7 @@ public class IllnessServiceTest {
         illness.setUpdateDate(date);
 
         Illness illness1 = new Illness();
-        illness1.setId(1l);
+        illness1.setId(1L);
         illness1.setName("name1");
         illness1.setChanceToDie(30);
         illness1.setDescription("description1");
@@ -55,7 +54,7 @@ public class IllnessServiceTest {
         illness1.setUpdateDate(date);
 
         Illness illness2 = new Illness();
-        illness2.setId(2l);
+        illness2.setId(2L);
         illness2.setName("name2");
         illness2.setChanceToDie(50);
         illness2.setDescription("description2");
@@ -68,38 +67,44 @@ public class IllnessServiceTest {
     public void get_setCorrectId_shouldBeIllness() {
         when(illnessDao.findById(id)).thenReturn(illness);
         when(illnessDao.existsById(id)).thenReturn(true);
-        assertNotNull(illnessService.findById(id));
+        assertEquals(illness, illnessService.findById(id));
     }
 
     @Test(expected = NoResultException.class)
     public void get_setIncorrectId_shouldBeSQLException() {
         when(illnessDao.findById(id)).thenThrow(NoResultException.class);
         when(illnessDao.existsById(id)).thenReturn(true);
-        assertEquals(illnessService.findById(id), illness);
+        assertEquals(illness, illnessService.findById(id));
     }
 
     @Test(expected = EntityIsNotExistException.class)
     public void get_setIncorrectId_shouldBeException() {
         when(illnessDao.existsById(id)).thenReturn(false);
-        assertEquals(illnessService.findById(id), illness);
+        assertEquals(illness, illnessService.findById(id));
     }
 
     @Test
     public void getAll_shouldBeReturnAll() {
         when(illnessDao.findAll(1, 2)).thenReturn(illnesses);
-        assertEquals(illnessService.findAll(1, 2), illnesses);
+        assertEquals(illnesses, illnessService.findAll(1, 2));
 
     }
 
     @Test
     public void findByName_setCorrectName_shouldBeReturnIllness() {
         when(illnessDao.findByName(name)).thenReturn(illness);
-        assertEquals(illnessService.findByName(name), illness);
+        assertEquals(illness, illnessService.findByName(name));
     }
 
     @Test(expected = NoResultException.class)
     public void findByName_setIncorrectName_shouldBeReturnException() {
         when(illnessDao.findByName(name)).thenThrow(NoResultException.class);
-        assertEquals(illnessService.findByName(name), illness);
+        assertEquals(illness, illnessService.findByName(name));
+    }
+
+    @Test
+    public void findWidelyUsed_shouldBeReturnIllness() {
+        when(illnessDao.findWidelyUsed()).thenReturn(illness);
+        assertEquals(illness, illnessService.findWidelyUsed());
     }
 }
