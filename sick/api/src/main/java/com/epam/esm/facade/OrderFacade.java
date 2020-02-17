@@ -1,15 +1,12 @@
 package com.epam.esm.facade;
 
 import com.epam.esm.converter.OrderDtoConverter;
-import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dto.order.OrderRequestDto;
 import com.epam.esm.dto.order.OrderResponseDto;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
-import com.epam.esm.security.UserPrincipal;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

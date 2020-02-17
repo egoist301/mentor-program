@@ -16,7 +16,6 @@ import org.mockito.internal.util.collections.Sets;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
@@ -35,40 +34,9 @@ public class DoctorServiceTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         doctorService = new DoctorService(doctorDao, illnessDao);
-        Set<Illness> illnesses;
-
         idNumber = "1234567890qwer";
         id = 1L;
-        doctor = new Doctor();
-        doctor.setId(1L);
-        doctor.setFirstName("first");
-        doctor.setLastName("last");
-        doctor.setMiddleName("middle");
-        doctor.setPricePerConsultation(BigDecimal.valueOf(2));
-        doctor.setIdentificationNumber("1234567890qwer");
-        doctor.setPhoneNumber(1234567);
-        LocalDate date = LocalDate.now();
-        doctor.setDateOfBirth(date);
-        doctor.setUpdateDate(date);
-        doctor.setCreateDate(date);
-
-        Illness firstIllness = new Illness();
-        firstIllness.setId(1L);
-        firstIllness.setName("name1");
-        firstIllness.setChanceToDie(30);
-        firstIllness.setDescription("description1");
-        firstIllness.setUpdateDate(date);
-        firstIllness.setCreateDate(date);
-
-        Illness secondIllness = new Illness();
-        secondIllness.setId(2L);
-        secondIllness.setName("name2");
-        secondIllness.setChanceToDie(50);
-        secondIllness.setDescription("description2");
-        secondIllness.setUpdateDate(date);
-        secondIllness.setCreateDate(date);
-        illnesses = Sets.newSet(firstIllness, secondIllness);
-        doctor.setIllnesses(illnesses);
+        doctor = createDoctor();
     }
 
     @Test
@@ -106,5 +74,38 @@ public class DoctorServiceTest {
     public void findByIdentificationNumber_setIncorrectIdentificationNumber_shouldBeReturnException() {
         when(doctorDao.findByIdentificationNumber(idNumber)).thenThrow(NoResultException.class);
         Assert.assertEquals(doctor, doctorService.findByIdentificationNumber(idNumber));
+    }
+
+    private Doctor createDoctor() {
+        Doctor doctor = new Doctor();
+        doctor.setId(1L);
+        doctor.setFirstName("first");
+        doctor.setLastName("last");
+        doctor.setMiddleName("middle");
+        doctor.setPricePerConsultation(BigDecimal.valueOf(2));
+        doctor.setIdentificationNumber("1234567890qwer");
+        doctor.setPhoneNumber(1234567);
+        LocalDate date = LocalDate.now();
+        doctor.setDateOfBirth(date);
+        doctor.setUpdateDate(date);
+        doctor.setCreateDate(date);
+
+        Illness firstIllness = new Illness();
+        firstIllness.setId(1L);
+        firstIllness.setName("name1");
+        firstIllness.setChanceToDie(30);
+        firstIllness.setDescription("description1");
+        firstIllness.setUpdateDate(date);
+        firstIllness.setCreateDate(date);
+
+        Illness secondIllness = new Illness();
+        secondIllness.setId(2L);
+        secondIllness.setName("name2");
+        secondIllness.setChanceToDie(50);
+        secondIllness.setDescription("description2");
+        secondIllness.setUpdateDate(date);
+        secondIllness.setCreateDate(date);
+        doctor.setIllnesses(Sets.newSet(firstIllness, secondIllness));
+        return doctor;
     }
 }

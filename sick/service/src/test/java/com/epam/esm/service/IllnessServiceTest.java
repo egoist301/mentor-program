@@ -11,7 +11,6 @@ import org.mockito.MockitoAnnotations;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,13 +26,13 @@ public class IllnessServiceTest {
     private Illness illness;
     private Long id;
     private String name;
+    private LocalDate date;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
         illnessService = new IllnessService(illnessDao);
-        illnesses = new ArrayList<>();
-
+        date = LocalDate.now();
         id = 1L;
         name = "name";
         illness = new Illness();
@@ -41,26 +40,9 @@ public class IllnessServiceTest {
         illness.setName("name");
         illness.setChanceToDie(30);
         illness.setDescription("description");
-        LocalDate date = LocalDate.now();
         illness.setUpdateDate(date);
         illness.setUpdateDate(date);
-
-        Illness illness1 = new Illness();
-        illness1.setId(1L);
-        illness1.setName("name1");
-        illness1.setChanceToDie(30);
-        illness1.setDescription("description1");
-        illness1.setUpdateDate(date);
-        illness1.setUpdateDate(date);
-
-        Illness illness2 = new Illness();
-        illness2.setId(2L);
-        illness2.setName("name2");
-        illness2.setChanceToDie(50);
-        illness2.setDescription("description2");
-        illness2.setUpdateDate(date);
-        illness2.setUpdateDate(date);
-        illnesses = Arrays.asList(illness1, illness2);
+        illnesses = createIllnesses();
     }
 
     @Test
@@ -106,5 +88,24 @@ public class IllnessServiceTest {
     public void findWidelyUsed_shouldBeReturnIllness() {
         when(illnessDao.findWidelyUsed()).thenReturn(illness);
         assertEquals(illness, illnessService.findWidelyUsed());
+    }
+
+    private List<Illness> createIllnesses() {
+        Illness illness1 = new Illness();
+        illness1.setId(1L);
+        illness1.setName("name1");
+        illness1.setChanceToDie(30);
+        illness1.setDescription("description1");
+        illness1.setUpdateDate(date);
+        illness1.setUpdateDate(date);
+
+        Illness illness2 = new Illness();
+        illness2.setId(2L);
+        illness2.setName("name2");
+        illness2.setChanceToDie(50);
+        illness2.setDescription("description2");
+        illness2.setUpdateDate(date);
+        illness2.setUpdateDate(date);
+        return Arrays.asList(illness1, illness2);
     }
 }

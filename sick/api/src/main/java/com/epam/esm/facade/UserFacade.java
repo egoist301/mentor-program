@@ -3,7 +3,6 @@ package com.epam.esm.facade;
 import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
-import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.security.UserPrincipal;
 import com.epam.esm.service.UserService;

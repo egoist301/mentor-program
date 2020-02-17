@@ -3,25 +3,12 @@ package com.epam.esm.facade;
 import com.epam.esm.converter.IllnessDtoConverter;
 import com.epam.esm.dto.illness.IllnessRequestDto;
 import com.epam.esm.dto.illness.IllnessResponseDto;
-import com.epam.esm.entity.Doctor;
 import com.epam.esm.entity.Illness;
-import com.epam.esm.entity.Order;
-import com.epam.esm.entity.User;
 import com.epam.esm.service.IllnessService;
-import com.epam.esm.service.OrderService;
-import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
