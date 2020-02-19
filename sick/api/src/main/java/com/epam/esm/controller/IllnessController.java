@@ -75,11 +75,4 @@ public class IllnessController {
         Validator.validateId(id);
         illnessFacade.delete(id);
     }
-
-   /* @PatchMapping("/{id}")
-    public ResponseEntity<IllnessResponseDto> partialUpdate(@PathVariable Long id, @RequestBody @Valid
-            IllnessPartialRequestDto illnessPartialRequestDto) {
-        Validator.validateId(id);
-        return new ResponseEntity<>(illnessFacade.partialUpdate(id, illnessPartialRequestDto), HttpStatus.OK);
-    }*/
 }

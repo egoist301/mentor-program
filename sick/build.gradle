@@ -20,7 +20,6 @@ subprojects {
     }
 
     dependencies {
-        // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin
         compile group: 'org.springframework.boot', name: 'spring-boot-maven-plugin', version: '2.2.4.RELEASE'
 
     }
