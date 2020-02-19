@@ -9,6 +9,7 @@ import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,19 +26,20 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
     private OrderFacade orderFacade;
-    private List<Role> roles = Arrays.asList(Role.values());
 
     @Autowired
     public OrderController(OrderFacade orderFacade) {
         this.orderFacade = orderFacade;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
         return new ResponseEntity<>(orderFacade.get(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<OrderResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -45,23 +47,10 @@ public class OrderController {
         return new ResponseEntity<>(orderFacade.getAll(page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto) {
         OrderResponseDto orderResponseDto = orderFacade.create(orderRequestDto);
         return new ResponseEntity<>(orderResponseDto, HttpStatus.CREATED);
     }
-
-    /*@PutMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> update(@PathVariable Long id,
-                                                   @RequestBody @Valid OrderRequestDto orderRequestDto) {
-        Validator.validateId(id);
-        return new ResponseEntity<>(orderFacade.update(id, orderRequestDto), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        Validator.validateId(id);
-        orderFacade.delete(id);
-    }*/
 }

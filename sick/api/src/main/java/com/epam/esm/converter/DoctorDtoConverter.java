@@ -5,6 +5,7 @@ import com.epam.esm.dto.doctor.DoctorRequestDto;
 import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.entity.Doctor;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class DoctorDtoConverter {
@@ -23,8 +24,11 @@ public final class DoctorDtoConverter {
         doctorResponseDto.setIdentificationNumber(doctor.getIdentificationNumber());
         doctorResponseDto.setCreateDate(doctor.getCreateDate());
         doctorResponseDto.setUpdateDate(doctor.getUpdateDate());
-        doctorResponseDto.setIllnesses(doctor.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
-                Collectors.toSet()));
+        if (Objects.nonNull(doctor.getIllnesses())) {
+            doctorResponseDto
+                    .setIllnesses(doctor.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
+                            Collectors.toSet()));
+        }
         return doctorResponseDto;
     }
 

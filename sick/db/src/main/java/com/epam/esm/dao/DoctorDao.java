@@ -73,7 +73,7 @@ public class DoctorDao {
 
     public Doctor findByIdentificationNumber(String identificationNumber) {
         return (Doctor) entityManager.createNativeQuery("SELECT " + ALL_FIELDS
-                        + " FROM doctor JOIN doctor_illness di on doctor.id = di.doctor_id JOIN illness i on di.illness_id = i.id WHERE identification_number = :identification_number",
+                        + " FROM doctor WHERE identification_number = :identification_number",
                 Doctor.class).setParameter("identification_number", identificationNumber).getSingleResult();
     }
 

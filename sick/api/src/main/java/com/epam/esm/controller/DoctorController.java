@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,12 +41,14 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
+    @PermitAll
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
         return new ResponseEntity<>(doctorService.get(id), HttpStatus.OK);
     }
 
+    @PermitAll
     @GetMapping
     public ResponseEntity<List<DoctorResponseDto>> getAll(
             @RequestParam(value = "first_name", required = false, defaultValue = "") String searchByFirstName,
@@ -63,6 +67,7 @@ public class DoctorController {
                         sortBy, order, page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DoctorResponseDto> create(@RequestBody @Valid DoctorRequestDto doctorRequestDto) {
         DoctorResponseDto doctorResponseDto = doctorService.create(doctorRequestDto);
@@ -72,6 +77,7 @@ public class DoctorController {
         return new ResponseEntity<>(doctorResponseDto, httpHeaders, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> update(@PathVariable("id") Long id,
                                                     @RequestBody @Valid DoctorRequestDto doctorRequestDto) {
@@ -79,6 +85,7 @@ public class DoctorController {
         return new ResponseEntity<>(doctorService.update(id, doctorRequestDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> partialUpdate(@PathVariable("id") Long id, @RequestBody
     @Valid DoctorPartialRequestDto doctorPartialRequestDto) {
@@ -86,6 +93,7 @@ public class DoctorController {
         return new ResponseEntity<>(doctorService.partialUpdate(id, doctorPartialRequestDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {

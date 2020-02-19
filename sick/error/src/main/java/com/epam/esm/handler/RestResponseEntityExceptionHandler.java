@@ -16,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.NoResultException;
+
 @ControllerAdvice(annotations = RestController.class)
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
@@ -36,7 +38,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return createResponse(e, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(EntityIsNotExistException.class)
+    @ExceptionHandler({EntityIsNotExistException.class, NoResultException.class})
     public ResponseEntity<Object> handleNotExistException(RuntimeException e, WebRequest request) {
         return createResponse(e, HttpStatus.NOT_FOUND);
     }
@@ -49,11 +51,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
         return createResponse(ex, HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleException(RuntimeException e, WebRequest request) {
-        return createResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<Object> createResponse(Exception ex, HttpStatus status) {

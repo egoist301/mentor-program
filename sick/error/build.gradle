@@ -1,5 +1,7 @@
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.4.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.4.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.3.Final'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.3.Final'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

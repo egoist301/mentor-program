@@ -20,20 +20,14 @@ import javax.validation.Valid;
 
 @RestController
 public class AuthenticationController {
-    private UserFacade userFacade;
     private AuthenticationManager authenticationManager;
     private TokenProvider jwtTokenProvider;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthenticationController(UserFacade userFacade,
-                                    AuthenticationManager authenticationManager,
-                                    TokenProvider jwtTokenProvider,
-                                    PasswordEncoder passwordEncoder) {
-        this.userFacade = userFacade;
+    public AuthenticationController(AuthenticationManager authenticationManager,
+                                    TokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")

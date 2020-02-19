@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -34,12 +36,14 @@ public class IllnessController {
         this.illnessFacade = illnessFacade;
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> get(@PathVariable("id") Long id) {
         Validator.validateId(id);
         return new ResponseEntity<>(illnessFacade.get(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<IllnessResponseDto>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -48,11 +52,13 @@ public class IllnessController {
         return new ResponseEntity<>(illnessFacade.getAll(page, size), HttpStatus.OK);
     }
 
+    @PermitAll
     @GetMapping("/get_widely_used")
     public ResponseEntity<IllnessResponseDto> getWidelyUsed() {
         return new ResponseEntity<>(illnessFacade.getWidelyUsed(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<IllnessResponseDto> create(@RequestBody @Valid IllnessRequestDto illnessRequestDto) {
         IllnessResponseDto illnessResponseDto = illnessFacade.create(illnessRequestDto);
@@ -62,6 +68,7 @@ public class IllnessController {
         return new ResponseEntity<>(illnessResponseDto, httpHeaders, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<IllnessResponseDto> update(@PathVariable Long id,
                                                      @RequestBody @Valid IllnessRequestDto illnessRequestDto) {
@@ -69,6 +76,7 @@ public class IllnessController {
         return new ResponseEntity<>(illnessFacade.update(id, illnessRequestDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
