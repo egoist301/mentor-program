@@ -32,8 +32,8 @@ public class OrderService {
         }
     }
 
-    public List<Order> findAll(Long userId, int page, int size) {
-        return orderDao.findAll(userId, page, size);
+    public List<Order> findAllForCurrentUser(Long userId, int page, int size) {
+        return orderDao.findAllForCurrentUser(userId, page, size);
     }
 
     @Transactional
@@ -63,5 +63,17 @@ public class OrderService {
             doctor.setDateOfBirth(temp.getDateOfBirth());
             doctor.setIllnesses(temp.getIllnesses());
         });
+    }
+
+    public List<Order> findAll(int page, int size) {
+        return orderDao.findAll(page, size);
+    }
+
+    public Order findByIdForCurrentUser(Long orderId, Long userId) {
+        if (orderDao.existsByIdForCurrentUser(orderId, userId)) {
+            return orderDao.findById(orderId);
+        } else {
+            throw new EntityIsNotExistException("order is not exist");
+        }
     }
 }

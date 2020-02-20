@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class IllnessController {
         return new ResponseEntity<>(illnessFacade.getAll(page, size), HttpStatus.OK);
     }
 
-    @PermitAll
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/get_widely_used")
     public ResponseEntity<IllnessResponseDto> getWidelyUsed() {
         return new ResponseEntity<>(illnessFacade.getWidelyUsed(), HttpStatus.OK);

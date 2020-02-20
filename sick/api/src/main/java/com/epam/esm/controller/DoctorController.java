@@ -41,14 +41,12 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PermitAll
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
         return new ResponseEntity<>(doctorService.get(id), HttpStatus.OK);
     }
 
-    @PermitAll
     @GetMapping
     public ResponseEntity<List<DoctorResponseDto>> getAll(
             @RequestParam(value = "first_name", required = false, defaultValue = "") String searchByFirstName,

@@ -2,16 +2,15 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.JwtAuthenticationResponse;
 import com.epam.esm.dto.user.UserRequestDto;
-import com.epam.esm.facade.UserFacade;
 import com.epam.esm.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +36,8 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtTokenProvider.createToken(authentication);
-        return new ResponseEntity<>(new JwtAuthenticationResponse(jwt), HttpStatus.OK);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", jwt);
+        return new ResponseEntity<>(new JwtAuthenticationResponse(jwt), httpHeaders, HttpStatus.OK);
     }
 }

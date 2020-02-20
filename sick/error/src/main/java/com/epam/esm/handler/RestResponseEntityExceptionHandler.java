@@ -7,7 +7,9 @@ import com.epam.esm.exception.IncorrectPathVariableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,9 +50,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return createResponse(e, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
-        return createResponse(ex, HttpStatus.FORBIDDEN);
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(RuntimeException ex) {
+        return createResponse(ex, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessException(RuntimeException e, WebRequest request) {
+        return createResponse(e, HttpStatus.FORBIDDEN);
     }
 
     private ResponseEntity<Object> createResponse(Exception ex, HttpStatus status) {
@@ -60,6 +67,4 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         error.setMessage(ex.getMessage());
         return new ResponseEntity<>(error, new HttpHeaders(), status);
     }
-
-
 }

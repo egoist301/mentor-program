@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.constant.AppConstants;
 import com.epam.esm.dto.order.OrderRequestDto;
 import com.epam.esm.dto.order.OrderResponseDto;
-import com.epam.esm.entity.Role;
 import com.epam.esm.facade.OrderFacade;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -32,7 +30,7 @@ public class OrderController {
         this.orderFacade = orderFacade;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
@@ -47,10 +45,19 @@ public class OrderController {
         return new ResponseEntity<>(orderFacade.getAll(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto) {
-        OrderResponseDto orderResponseDto = orderFacade.create(orderRequestDto);
+        OrderResponseDto orderResponseDto = orderFacade.createForCurrentUser(orderRequestDto);
+        return new ResponseEntity<>(orderResponseDto, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<OrderResponseDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto,
+                                                   @PathVariable Long userId) {
+        Validator.validateId(userId);
+        OrderResponseDto orderResponseDto = orderFacade.createForUser(orderRequestDto, userId);
         return new ResponseEntity<>(orderResponseDto, HttpStatus.CREATED);
     }
 }
