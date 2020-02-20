@@ -7,12 +7,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +34,8 @@ public class User implements Serializable {
     private LocalDate createDate;
     @Column(name = "update_date")
     private LocalDate updateDate;
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
 
     public User() {
     }
@@ -117,5 +121,13 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects
                 .hash(getId(), getUsername(), getPassword(), getRole(), getCreateDate(), getUpdateDate());
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
