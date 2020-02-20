@@ -1,12 +1,12 @@
-insert into doctor( first_name, last_name, middle_name, phone_number
-                  , date_of_birth, identification_number, create_date
-                  , update_date)
+insert into doctor(first_name, last_name, middle_name, phone_number
+    , date_of_birth, identification_number,
+                   price_per_consultation, create_date, update_date)
 values ('Yauheni', 'Filipovich', 'Aleksandrovich', 3221114, '2000-08-27',
-        '1234567890QWER', '2020-01-26', '2020-01-26'),
+        '1234567890QWER', '666', '2020-01-26', '2020-01-26'),
        ('Vladislav', 'Korotkevich', 'Ruslanovich', 1234567, '2000-03-04',
-        '123ABVC890qwer', '2020-01-26', '2020-01-26'),
+        '123ABVC890qwer', '123', '2020-01-26', '2020-01-26'),
        ('Vlad', 'Kondrashkov', 'Olegovich', 9876543, '2000-01-03',
-        'HGF4567890qwer', '2020-01-26', '2020-01-26');
+        'HGF4567890qwer', '123', '2020-01-26', '2020-01-26');
 
 insert into illness(name, description, chance_to_die, create_date, update_date)
 values ('сифилис',
@@ -69,7 +69,7 @@ values ('сифилис',
         'реагируют, если не знают, что взаимодействуют с химикатами.', 19,
         '2020-01-26', '2020-01-26');
 
-insert into patient_illness(patient_id, illness_id)
+insert into doctor_illness(doctor_id, illness_id)
 values (1, 2),
        (1, 1),
        (1, 3),

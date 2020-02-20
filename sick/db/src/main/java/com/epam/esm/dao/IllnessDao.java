@@ -14,7 +14,8 @@ import java.util.List;
 public class IllnessDao {
     private static final String FIND_MOST_USED_ILLNESS_OF_USER_WITH_HIGHEST_COST_OF_ALL_ORDERS
             =
-            "with user_with_highest_cost_of_all_orders as (select o.user_id from orders o group by o.user_id order by sum(o.total_price) desc limit 1), "
+            "with user_with_highest_cost_of_all_orders as (select o.user_id from orders o JOIN order_doctor od ON od.order_id = o.id JOIN doctor_illness di ON di.doctor_id = od.doctor_id "
+                    + "JOIN illness i ON i.id = di.illness_id group by o.user_id order by sum(o.total_price) desc limit 1), "
                     + "most_used_illness as (SELECT i.id, i.name, i.description, i.chance_to_die, i.update_date, i.create_date, count(*) as count_illness FROM orders o "
                     + "JOIN order_doctor od ON od.order_id = o.id JOIN doctor_illness di ON di.doctor_id = od.doctor_id "
                     + "JOIN illness i ON i.id = di.illness_id "

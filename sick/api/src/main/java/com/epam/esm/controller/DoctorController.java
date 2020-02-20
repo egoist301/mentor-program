@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,17 +36,17 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/doctors")
 public class DoctorController {
-    private DoctorFacade doctorService;
+    private DoctorFacade doctorFacade;
 
     @Autowired
-    public DoctorController(DoctorFacade doctorService) {
-        this.doctorService = doctorService;
+    public DoctorController(DoctorFacade doctorFacade) {
+        this.doctorFacade = doctorFacade;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponseDto> get(@PathVariable Long id) {
         Validator.validateId(id);
-        return new ResponseEntity<>(doctorService.get(id), HttpStatus.OK);
+        return new ResponseEntity<>(doctorFacade.get(id), HttpStatus.OK);
     }
 
     @GetMapping
@@ -59,7 +61,7 @@ public class DoctorController {
             @RequestParam(value = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         Validator.validateSortAndOrder(sortBy, order);
         Validator.validatePageNumberAndSize(page, size);
-        return new ResponseEntity<>(doctorService
+        return new ResponseEntity<>(doctorFacade
                 .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName),
                         (Objects.nonNull(searchByIllnessName) ? searchByIllnessName : Collections.emptyList()),
                         sortBy, order, page, size), HttpStatus.OK);
@@ -68,7 +70,7 @@ public class DoctorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DoctorResponseDto> create(@RequestBody @Valid DoctorRequestDto doctorRequestDto) {
-        DoctorResponseDto doctorResponseDto = doctorService.create(doctorRequestDto);
+        DoctorResponseDto doctorResponseDto = doctorFacade.create(doctorRequestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(doctorResponseDto.getId()).toUri());
@@ -80,7 +82,7 @@ public class DoctorController {
     public ResponseEntity<DoctorResponseDto> update(@PathVariable("id") Long id,
                                                     @RequestBody @Valid DoctorRequestDto doctorRequestDto) {
         Validator.validateId(id);
-        return new ResponseEntity<>(doctorService.update(id, doctorRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(doctorFacade.update(id, doctorRequestDto), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -88,7 +90,7 @@ public class DoctorController {
     public ResponseEntity<DoctorResponseDto> partialUpdate(@PathVariable("id") Long id, @RequestBody
     @Valid DoctorPartialRequestDto doctorPartialRequestDto) {
         Validator.validateId(id);
-        return new ResponseEntity<>(doctorService.partialUpdate(id, doctorPartialRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(doctorFacade.partialUpdate(id, doctorPartialRequestDto), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -96,6 +98,6 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
         Validator.validateId(id);
-        doctorService.delete(id);
+        doctorFacade.delete(id);
     }
 }
