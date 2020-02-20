@@ -76,4 +76,8 @@ public class OrderService {
             throw new EntityIsNotExistException("order is not exist");
         }
     }
+
+    public Order findLastOrderForUser(Long userId) {
+        return orderDao.findLastOrderForUser(userId);
+    }
 }

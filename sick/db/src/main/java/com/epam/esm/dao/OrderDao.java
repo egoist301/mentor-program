@@ -55,4 +55,12 @@ public class OrderDao {
                         Order.class)
                 .setParameter("user_ID", userId).setParameter("id", orderId).getResultList().isEmpty();
     }
+
+    public Order findLastOrderForUser(Long userId) {
+        return (Order) entityManager
+                .createNativeQuery(
+                        "SELECT id, create_date, total_price, user_id FROM orders WHERE user_id = :user_ID order by id desc limit 1",
+                        Order.class)
+                .setParameter("user_ID", userId).getSingleResult();
+    }
 }

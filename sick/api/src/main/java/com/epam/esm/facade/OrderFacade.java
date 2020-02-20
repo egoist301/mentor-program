@@ -60,6 +60,6 @@ public class OrderFacade {
         Order order = OrderDtoConverter.convertToEntity(orderRequestDto);
         order.setUser(user);
         orderService.create(order);
-        return null;
+        return OrderDtoConverter.convertToDto(orderService.findLastOrderForUser(user.getId()));
     }
 }
