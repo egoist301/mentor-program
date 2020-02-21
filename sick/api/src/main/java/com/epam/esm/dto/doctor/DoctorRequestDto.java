@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -32,9 +34,10 @@ public class DoctorRequestDto {
     private String middleName;
 
     @NotNull(message = "phone number can't be null")
-    @Digits(integer = 7, fraction = 0, message = "7 digits")
+    @Min(value = 1000000, message = "phone number must be 7 digits long")
+    @Max(value = 9999999, message = "phone number must be 7 digits long")
     @JsonProperty("phone_number")
-    private BigInteger phoneNumber;
+    private Integer phoneNumber;
 
     @NotNull(message = "price per consultation can't be null")
     @Positive(message = "price only positive")
@@ -75,11 +78,11 @@ public class DoctorRequestDto {
         this.middleName = middleName;
     }
 
-    public BigInteger getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(BigInteger phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

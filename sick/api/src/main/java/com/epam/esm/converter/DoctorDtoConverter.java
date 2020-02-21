@@ -37,7 +37,7 @@ public final class DoctorDtoConverter {
         doctor.setFirstName(doctorRequestDto.getFirstName());
         doctor.setMiddleName(doctorRequestDto.getMiddleName());
         doctor.setLastName(doctorRequestDto.getLastName());
-        doctor.setPhoneNumber(doctorRequestDto.getPhoneNumber().intValue());
+        doctor.setPhoneNumber(doctorRequestDto.getPhoneNumber());
         doctor.setDateOfBirth(doctorRequestDto.getDateOfBirth());
         doctor.setPricePerConsultation(doctorRequestDto.getPricePerConsultation());
         if (doctorRequestDto.getIllnesses() != null) {
