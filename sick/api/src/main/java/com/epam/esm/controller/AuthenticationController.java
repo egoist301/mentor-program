@@ -1,8 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.JwtAuthenticationResponse;
-import com.epam.esm.dto.user.UserRequestDto;
+import com.epam.esm.dto.user.AuthorizeDto;
 import com.epam.esm.security.TokenProvider;
+import com.epam.esm.security.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid UserRequestDto userRequestDto) {
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid AuthorizeDto authorizeDto) {
+        if (!authorizeDto.getPassword().equals(authorizeDto.getConfirmedPassword())){
+            throw new BadRequestException("passwords are not equal");
+        }
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                userRequestDto.getUsername(), userRequestDto.getPassword()));
+                authorizeDto.getUsername(), authorizeDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtTokenProvider.createToken(authentication);
