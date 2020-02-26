@@ -34,7 +34,7 @@ public class DoctorService {
 
     public List<Doctor> findAll(List<String> filtersByMainEntity, List<String> illnesses, String sortBy, String order,
                                 int page, int size) {
-        List<Doctor> doctors = doctorDao.findAll(filtersByMainEntity, sortBy, order);
+        /*List<Doctor> doctors = doctorDao.findAll(filtersByMainEntity, sortBy, order);
         illnesses.forEach(name -> {
             if (!illnessDao.existsByName(name)) {
                 throw new EntityIsNotExistException("illness with name: '" + name + "' is not exist");
@@ -46,7 +46,8 @@ public class DoctorService {
                                 .collect(Collectors.toList()))).collect(Collectors.toList());
         int from = Math.min((page == 1) ? page - 1 : (page - 1) * size, doctors.size());
         int to = (Math.min(size + from, doctors.size()));
-        return doctors.subList(from, to);
+        return doctors.subList(from, to);*/
+        return doctorDao.findAll(filtersByMainEntity, illnesses, sortBy, order, page, size);
     }
 
     @Transactional

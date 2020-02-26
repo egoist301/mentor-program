@@ -32,6 +32,7 @@ public class OrderDao {
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
+    @SuppressWarnings("unchecked")
     public List<Order> findAllForCurrentUser(Long userId, int page, int size) {
         return entityManager
                 .createNativeQuery("SELECT id, create_date, total_price, user_id FROM orders WHERE user_id = :user_ID",

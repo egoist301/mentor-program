@@ -7,9 +7,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class DoctorDao {
@@ -47,28 +48,39 @@ public class DoctorDao {
         return !entityManager.createQuery(criteriaQuery).getResultList().isEmpty();
     }
 
-    public List<Doctor> findAll(List<String> filtersByMainEntity, String sortBy, String order) {
-        return entityManager.createNativeQuery(getQuery(sortBy, order), Doctor.class)
-                .setParameter("firstName", filtersByMainEntity.get(0))
-                .setParameter("lastName", filtersByMainEntity.get(1))
-                .setParameter("middleName", filtersByMainEntity.get(2)).getResultList();
+    public List<Doctor> findAll(List<String> filtersByMainEntity, List<String> illnesses, String sortBy, String order,
+                                int page, int size) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
+        Root<Doctor> root = criteriaQuery.from(Doctor.class);
+        List<Predicate> predicates = createPredicates(filtersByMainEntity, criteriaBuilder, filtersByMainEntity, root);
+        criteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
+        addSort(sortBy, order, criteriaBuilder, root, criteriaQuery);
+        return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+                .setMaxResults(size).getResultList();
     }
 
-    private String getQuery(String sortBy, String order) {
-        String search =
-                new StringBuilder().append("SELECT ")
-                        .append("id, first_name, last_name, middle_name, phone_number, date_of_birth, price_per_consultation, identification_number, create_date, update_date")
-                        .append(" FROM searchPatient(:firstName,:lastName,:middleName)")
-                        .toString();
-        boolean isSortable = FIRST_NAME.equals(sortBy) || LAST_NAME.equals(sortBy) || MIDDLE_NAME.equals(sortBy)
-                || DATE_OF_BIRTH.equals(sortBy);
-        if (isSortable) {
-            search = search.concat(" ORDER BY ".concat(sortBy));
-            if (Objects.nonNull(order)) {
-                search = search.concat(" ".concat(order));
-            }
+    private List<Predicate> createPredicates(List<String> illnesses, CriteriaBuilder criteriaBuilder,
+                                             List<String> filtersByMainEntity, Root<Doctor> root) {
+        List<Predicate> predicates = new ArrayList<>();
+        illnesses.forEach(name -> predicates.add(criteriaBuilder.equal(root.join("illness").get("name"), name)));
+        predicates.add(criteriaBuilder
+                .and(criteriaBuilder.like(root.get("firstName"), '%' + filtersByMainEntity.get(0) + '%'),
+                        criteriaBuilder.and(criteriaBuilder
+                                .like(root.get("middleName"), '%' + filtersByMainEntity.get(1) + '%')),
+                        criteriaBuilder.and(criteriaBuilder
+                                .like(root.get("lastName"), '%' + filtersByMainEntity.get(2) + '%'))));
+        return predicates;
+    }
+
+    private void addSort(String sortBy, String order, CriteriaBuilder criteriaBuilder, Root<Doctor> root,
+                         CriteriaQuery<Doctor> criteriaQuery) {
+        if ("asc".equalsIgnoreCase(order)) {
+            criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy)));
         }
-        return search;
+        if ("desc".equalsIgnoreCase(order)) {
+            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy)));
+        }
     }
 
     public Doctor findByIdentificationNumber(String identificationNumber) {
