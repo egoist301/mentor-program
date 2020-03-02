@@ -1,0 +1,40 @@
+plugins {
+    id "org.springframework.boot" version "2.2.0.RELEASE"
+}
+allprojects {
+    group = 'com.epam.esm'
+    version = '1.0-SNAPSHOT'
+
+
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url = 'https://repo.maven.apache.org/maven2'
+        }
+    }
+
+    dependencies {
+        compile group: 'org.springframework.boot', name: 'spring-boot-maven-plugin', version: '2.2.4.RELEASE'
+
+    }
+
+    sourceCompatibility = '1.8'
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
