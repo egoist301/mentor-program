@@ -53,7 +53,7 @@ public class DoctorDao {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Doctor> criteriaQuery = criteriaBuilder.createQuery(Doctor.class);
         Root<Doctor> root = criteriaQuery.from(Doctor.class);
-        List<Predicate> predicates = createPredicates(filtersByMainEntity, criteriaBuilder, filtersByMainEntity, root);
+        List<Predicate> predicates = createPredicates(illnesses, criteriaBuilder, filtersByMainEntity, root);
         criteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
         addSort(sortBy, order, criteriaBuilder, root, criteriaQuery);
         return entityManager.createQuery(criteriaQuery).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
@@ -63,7 +63,7 @@ public class DoctorDao {
     private List<Predicate> createPredicates(List<String> illnesses, CriteriaBuilder criteriaBuilder,
                                              List<String> filtersByMainEntity, Root<Doctor> root) {
         List<Predicate> predicates = new ArrayList<>();
-        illnesses.forEach(name -> predicates.add(criteriaBuilder.equal(root.join("illness").get("name"), name)));
+        illnesses.forEach(name -> predicates.add(criteriaBuilder.equal(root.join("illnesses").get("name"), name)));
         predicates.add(criteriaBuilder
                 .and(criteriaBuilder.like(root.get("firstName"), '%' + filtersByMainEntity.get(0) + '%'),
                         criteriaBuilder.and(criteriaBuilder
