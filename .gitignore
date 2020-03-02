@@ -5,3 +5,6 @@
 */production
 */.class
 */build
+*/*/build
+*/.gradle
+*/*/.gradle
