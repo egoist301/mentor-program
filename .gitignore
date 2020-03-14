@@ -9,3 +9,7 @@
 /reactjs/.vscode
 /sick/.gradle
 /sick/*/build
+/sick/api/build
+/sick/error/build
+/sick/service/build
+/sick/util/build
