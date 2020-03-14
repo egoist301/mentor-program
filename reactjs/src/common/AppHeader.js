@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import './AppHeader.css';
 import pollIcon from '../img/poll.svg';
-import {Avatar, Dropdown, Icon, Layout, Menu} from 'antd';
-import {getAvatarColor} from "../util/Colors";
+import { Avatar, Dropdown, Icon, Layout, Menu } from 'antd';
+import { getAvatarColor } from "../util/Colors";
 
-import {localizedStrings} from "../util/Localization";
+import { localizedStrings } from "../util/Localization";
 import Button from "antd/es/button";
 
 
@@ -17,7 +17,7 @@ class AppHeader extends Component {
         this.handleMenuClick = this.handleMenuClick.bind(this);
     }
 
-    handleMenuClick({key}) {
+    handleMenuClick({ key }) {
         if (key === "logout") {
             this.props.onLogout();
         }
@@ -30,21 +30,21 @@ class AppHeader extends Component {
                 <Menu.Item key="/add">
                     <span className={this.props.currentUser.role === 'ROLE_ADMIN' ? '' : 'custom-hidden'}>
                         <Link to="/add">
-                            <Icon type="plus" className="nav-icon"/>
+                            <Icon type="plus" className="nav-icon" />
                         </Link>
                     </span>
                 </Menu.Item>,
 
                 <Menu.Item key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon"/>
+                        <Icon type="home" className="nav-icon" style={{color: '#559fff'}} />
                     </Link>
                 </Menu.Item>,
 
                 <Menu.Item key="/profile" className="profile-menu">
                     <ProfileDropdownMenu
                         currentUser={this.props.currentUser}
-                        handleMenuClick={this.handleMenuClick}/>
+                        handleMenuClick={this.handleMenuClick} />
                 </Menu.Item>
 
             ];
@@ -52,7 +52,7 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon"/>
+                        <Icon type="home" className="nav-icon" />
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/login">
@@ -75,12 +75,12 @@ class AppHeader extends Component {
                 <div className="container">
                     <span className="app-language-position">
                         <Button className="app-language app-language-style"
-                                onClick={() => this.props.handleLanguageChange('ru')}>
-                             RU
+                            onClick={() => this.props.handleLanguageChange('ru')}>
+                            RU
                         </Button>
-                         <Button className="app-language app-language-style"
-                                 onClick={() => this.props.handleLanguageChange('en')}>
-                             EN
+                        <Button className="app-language app-language-style"
+                            onClick={() => this.props.handleLanguageChange('en')}>
+                            EN
                         </Button>
                     </span>
 
@@ -89,7 +89,7 @@ class AppHeader extends Component {
                         className="app-menu"
                         mode="horizontal"
                         selectedKeys={[this.props.location.pathname]}
-                        style={{lineHeight: '64px'}}>
+                        style={{ lineHeight: '64px', background: 'BLACK' }}>
                         {menuItems}
                     </Menu>
 
@@ -101,11 +101,6 @@ class AppHeader extends Component {
 }
 
 function ProfileDropdownMenu(props) {
-    const image =  (
-        <div className="text-avatar">
-            <span>{props.currentUser.username && props.currentUser.username[0]}</span>
-        </div>
-    );
     const dropdownMenu = (
         <Menu onClick={props.handleMenuClick} className="profile-dropdown-menu">
             <Menu.Item key="user-info" className="dropdown-item" disabled>
@@ -113,7 +108,7 @@ function ProfileDropdownMenu(props) {
                     {props.currentUser.username}
                 </div>
             </Menu.Item>
-            <Menu.Divider/>
+            <Menu.Divider />
             <Menu.Item key="profile" className="dropdown-item">
                 <Link to="/profile">
                     {localizedStrings.profile}
@@ -131,7 +126,7 @@ function ProfileDropdownMenu(props) {
             trigger={['click']}
             getPopupContainer={() => document.getElementsByClassName('profile-menu')[0]}>
             <a className="ant-dropdown-link">
-                <Icon type="user" className="nav-icon" style={{marginRight: 0}}/> <Icon type="down"/>
+                <Icon type="user" className="nav-icon" style={{ marginRight: 0, color: '#559fff' }} /> <Icon type="down" />
             </a>
         </Dropdown>
     );
