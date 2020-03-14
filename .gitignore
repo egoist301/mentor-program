@@ -4,3 +4,6 @@
 */out
 */production
 */.class
+/reactjs/node_modules
+/reactjs/package-lock.json
+/reactjs/.vscode
