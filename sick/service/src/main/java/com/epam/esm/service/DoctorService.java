@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -113,5 +114,9 @@ public class DoctorService {
 
     public boolean existByIdentificationNumber(String number) {
         return doctorDao.existByIdentificationNumber(number);
+    }
+
+    public List<Doctor> findAllForCurrentUser(Long userId, int page, int size) {
+        return doctorDao.findAllForCurrentUser(userId, page, size);
     }
 }

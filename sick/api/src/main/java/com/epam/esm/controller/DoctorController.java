@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,6 +36,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/doctors")
+@CrossOrigin
 public class DoctorController {
     private DoctorFacade doctorFacade;
 
@@ -55,8 +57,8 @@ public class DoctorController {
             @RequestParam(value = "last_name", required = false, defaultValue = "") String searchByLastName,
             @RequestParam(value = "middle_name", required = false, defaultValue = "") String searchByMiddleName,
             @RequestParam(value = "illness", required = false) List<String> searchByIllnessName,
-            @RequestParam(value = "sort", required = false) String sortBy,
-            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "sort", required = false, defaultValue = "dateOfBirth") String sortBy,
+            @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
             @RequestParam(value = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
             @RequestParam(value = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         Validator.validateSortAndOrder(sortBy, order);

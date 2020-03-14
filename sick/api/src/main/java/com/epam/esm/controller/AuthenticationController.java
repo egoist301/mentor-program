@@ -12,12 +12,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@CrossOrigin
 @RestController
 public class AuthenticationController {
     private AuthenticationManager authenticationManager;
@@ -32,9 +34,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid AuthorizeDto authorizeDto) {
-        if (!authorizeDto.getPassword().equals(authorizeDto.getConfirmedPassword())){
-            throw new BadRequestException("passwords are not equal");
-        }
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authorizeDto.getUsername(), authorizeDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);

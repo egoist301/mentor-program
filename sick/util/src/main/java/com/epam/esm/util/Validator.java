@@ -8,10 +8,10 @@ import java.util.Objects;
 
 public final class Validator {
 
-    private static final String FIRST_NAME = "first_name";
-    private static final String LAST_NAME = "last_name";
-    private static final String MIDDLE_NAME = "middle_name";
-    private static final String DATE_OF_BIRTH = "date_of_birth";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String MIDDLE_NAME = "middleName";
+    private static final String DATE_OF_BIRTH = "dateOfBirth";
 
     private Validator() {
     }
@@ -28,7 +28,7 @@ public final class Validator {
     public static void validateSortAndOrder(String sortBy, String order) {
         if ((Objects.nonNull(sortBy) &&
                 !(Arrays.asList(FIRST_NAME, LAST_NAME, MIDDLE_NAME, DATE_OF_BIRTH).contains(sortBy))) ||
-                ("asc".equalsIgnoreCase(order) || "desc".equalsIgnoreCase(order))) {
+                !("asc".equalsIgnoreCase(order) || "desc".equalsIgnoreCase(order))) {
             throw new IncorrectPathVariableException("incorrect sort param:" + sortBy + " or order param:" + order);
         }
     }

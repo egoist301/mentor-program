@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public class DoctorResponseDto {
     @JsonProperty("id")
@@ -39,7 +39,7 @@ public class DoctorResponseDto {
     private LocalDate updateDate;
 
     @JsonProperty("illnesses")
-    private Set<IllnessResponseDto> illnesses;
+    private List<IllnessResponseDto> illnesses;
 
     public DoctorResponseDto() {
     }
@@ -116,11 +116,11 @@ public class DoctorResponseDto {
         this.updateDate = updateDate;
     }
 
-    public Set<IllnessResponseDto> getIllnesses() {
+    public List<IllnessResponseDto> getIllnesses() {
         return illnesses;
     }
 
-    public void setIllnesses(Set<IllnessResponseDto> illnesses) {
+    public void setIllnesses(List<IllnessResponseDto> illnesses) {
         this.illnesses = illnesses;
     }
 

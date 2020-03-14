@@ -94,4 +94,11 @@ public class DoctorDao {
                         + " FROM doctor JOIN doctor_illness di on doctor.id = di.doctor_id JOIN illness i on di.illness_id = i.id WHERE identification_number = :identification_number",
                 Doctor.class).setParameter("identification_number", number).getResultList().isEmpty();
     }
+
+    public List<Doctor> findAllForCurrentUser(Long userId, int page, int size) {
+        return entityManager.createNativeQuery("SELECT DISTINCT " + ALL_FIELDS
+                + " FROM doctor JOIN order_doctor od on doctor.id = od.doctor_id JOIN orders o on od.order_id = o.id WHERE user_id = :userId", Doctor.class)
+                .setParameter("userId", userId).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
+                .setMaxResults(size).getResultList();
+    }
 }

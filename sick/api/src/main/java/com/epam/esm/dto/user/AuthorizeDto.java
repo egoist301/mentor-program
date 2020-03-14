@@ -16,10 +16,6 @@ public class AuthorizeDto {
     @JsonProperty("password")
     private String password;
 
-    @NotBlank(message = "password can't be null or empty")
-    @Size(min = 4, max = 30, message = "password can be 4 to 30 characters long")
-    @JsonProperty("password")
-    private String confirmedPassword;
 
     public String getUsername() {
         return username;
@@ -27,14 +23,6 @@ public class AuthorizeDto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getConfirmedPassword() {
-        return confirmedPassword;
-    }
-
-    public void setConfirmedPassword(String confirmedPassword) {
-        this.confirmedPassword = confirmedPassword;
     }
 
     public String getPassword() {

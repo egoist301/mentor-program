@@ -27,7 +27,7 @@ public final class DoctorDtoConverter {
         if (Objects.nonNull(doctor.getIllnesses())) {
             doctorResponseDto
                     .setIllnesses(doctor.getIllnesses().stream().map(IllnessDtoConverter::convertToDto).collect(
-                            Collectors.toSet()));
+                            Collectors.toList()));
         }
         return doctorResponseDto;
     }

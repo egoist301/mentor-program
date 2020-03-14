@@ -1,9 +1,11 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.constant.AppConstants;
+import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
 import com.epam.esm.facade.UserFacade;
+import com.epam.esm.security.exception.BadRequestException;
 import com.epam.esm.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +59,9 @@ public class UserController {
 
     @PostMapping("/signUp")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
+        if (!userRequestDto.getPassword().equals(userRequestDto.getConfirmedPassword())) {
+            throw new BadRequestException("passwords are not equal");
+        }
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         UserResponseDto userResponseDto = userFacade.create(userRequestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -81,5 +86,21 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         Validator.validateId(id);
         userFacade.delete(id);
+    }
+
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/orders")
+    public ResponseEntity<List<DoctorResponseDto>> getAllDoctorsForCurrentUser(
+            @RequestParam(value = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+        Validator.validatePageNumberAndSize(page, size);
+        return new ResponseEntity<>(userFacade.getAllDoctorsForCurrentUser(page, size), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getCurrentUser() {
+        return new ResponseEntity<>(userFacade.getCurrentUserDto(), HttpStatus.OK);
     }
 }

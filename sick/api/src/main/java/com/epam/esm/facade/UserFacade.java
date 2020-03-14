@@ -1,11 +1,14 @@
 package com.epam.esm.facade;
 
+import com.epam.esm.converter.DoctorDtoConverter;
 import com.epam.esm.converter.UserDtoConverter;
+import com.epam.esm.dto.doctor.DoctorResponseDto;
 import com.epam.esm.dto.user.UserRequestDto;
 import com.epam.esm.dto.user.UserResponseDto;
 import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.security.UserPrincipal;
+import com.epam.esm.service.DoctorService;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserFacade {
     private UserService userService;
+    private DoctorService doctorService;
 
     @Autowired
-    public UserFacade(UserService userService) {
+    public UserFacade(UserService userService, DoctorService doctorService) {
         this.userService = userService;
+        this.doctorService = doctorService;
     }
 
     public UserResponseDto get(Long id) {
@@ -62,8 +67,17 @@ public class UserFacade {
         userService.delete(id);
     }
 
+    public UserResponseDto getCurrentUserDto() {
+        return UserDtoConverter.convertToDto(UserDtoConverter
+                .convertToUser((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
+    }
+
     User getCurrentUser() {
         return UserDtoConverter
                 .convertToUser((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    public List<DoctorResponseDto> getAllDoctorsForCurrentUser(int page, int size) {
+        return doctorService.findAllForCurrentUser(getCurrentUser().getId(), page, size).stream().map(DoctorDtoConverter::convertToDto).collect(Collectors.toList());
     }
 }
