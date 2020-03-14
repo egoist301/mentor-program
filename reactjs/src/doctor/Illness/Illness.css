@@ -1,0 +1,15 @@
+
+.illness-look {
+    color: white;
+    border-color: #2da94f;
+    background-color: #2da94f;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.illness-look:hover {
+    color: black;
+    border-color: black;
+}
+
+

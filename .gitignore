@@ -8,3 +8,4 @@
 /reactjs/package-lock.json
 /reactjs/.vscode
 /sick/.gradle
+/sick/*/build

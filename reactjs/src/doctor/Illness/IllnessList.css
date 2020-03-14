@@ -1,0 +1,14 @@
+
+.illnesses-list_li {
+    float: bottom;
+    list-style: none;
+    display: inline-block;
+}
+
+.ul{
+    padding-inline-start: 10px;
+}
+/*
+ul li {
+    display: inline-block;
+}*/

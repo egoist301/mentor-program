@@ -1,0 +1,60 @@
+
+
+.custom-hidden {
+    display: none;
+}
+
+
+.no-doctors-found {
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+}
+
+.load-more-doctors {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+
+.doctors-header-text {
+    font-size: 25px;
+    font-weight: bolder;
+    text-align: center;
+    padding: 5px 5px 20px 20px;
+    color: black;
+}
+
+.doctors-header-text:hover {
+    color: #559fff;
+    border-color: #a5a5a5;
+}
+
+
+.search {
+    width: 100%;
+}
+
+.search-line-position {
+    margin-left: 3%;
+    width: 60%;
+    display: inline-block;
+}
+
+.search-button {
+    margin-left: 3%;
+    display: inline-block;
+}
+
+.doctors-content {
+    margin-top: 50px;
+    margin-left: 3%;
+}
+
+.aside-position {
+    width: 30%;
+    float: left;
+    margin-left: -50%;
+    height: 700px;
+    margin-top: 50px;
+}
