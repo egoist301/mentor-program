@@ -1,5 +1,6 @@
 package com.epam.esm.config;
 
+import com.epam.esm.security.JwtAuthenticationEntryPoint;
 import com.epam.esm.security.TokenAuthenticationFilter;
 import com.epam.esm.security.oauth2.CustomOAuth2UserService;
 import com.epam.esm.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -42,7 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private AuthenticationEntryPoint unauthorizedHandler;
 
 
     @Autowired
@@ -50,14 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                              CustomOAuth2UserService customOAuth2UserService,
                              OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
                              OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
-                             HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository,
-                             AuthenticationEntryPoint unauthorizedHandler) {
+                             HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.customUserDetailsService = customUserDetailsService;
         this.customOAuth2UserService = customOAuth2UserService;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Override
@@ -74,14 +72,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/doctors", "/doctors/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/doctors", "/doctors/{id}", "/doctors/count").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/signUp").access("!hasRole('USER')")
                 .antMatchers("/", "/error", "/oauth2/**").permitAll()
                 .anyRequest().authenticated()

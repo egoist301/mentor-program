@@ -6,6 +6,10 @@
     font-weight: bold;
     border-radius: 10px;
     margin-right: 10px;
+    font-size: xx-small;
+    overflow: auto;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 .illness-look:hover {
     color: black;

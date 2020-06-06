@@ -25,12 +25,6 @@
     color: black;
 }
 
-.doctors-header-text:hover {
-    color: #559fff;
-    border-color: #a5a5a5;
-}
-
-
 .search {
     width: 100%;
 }

@@ -60,6 +60,17 @@ public class DoctorDao {
                 .setMaxResults(size).getResultList();
     }
 
+    public Long getCountWithCriteria(List<String> filtersByMainEntity, List<String> illnesses, String sortBy,
+                                     String order) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Doctor> root = criteriaQuery.from(Doctor.class);
+        List<Predicate> predicates = createPredicates(illnesses, criteriaBuilder, filtersByMainEntity, root);
+        criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(Doctor.class)))
+                .where(predicates.toArray(new Predicate[]{}));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
     private List<Predicate> createPredicates(List<String> illnesses, CriteriaBuilder criteriaBuilder,
                                              List<String> filtersByMainEntity, Root<Doctor> root) {
         List<Predicate> predicates = new ArrayList<>();
@@ -67,14 +78,14 @@ public class DoctorDao {
         predicates.add(criteriaBuilder
                 .and(criteriaBuilder.like(root.get("firstName"), '%' + filtersByMainEntity.get(0) + '%'),
                         criteriaBuilder.and(criteriaBuilder
-                                .like(root.get("middleName"), '%' + filtersByMainEntity.get(1) + '%')),
+                                .like(root.get("middleName"), '%' + filtersByMainEntity.get(2) + '%')),
                         criteriaBuilder.and(criteriaBuilder
-                                .like(root.get("lastName"), '%' + filtersByMainEntity.get(2) + '%'))));
+                                .like(root.get("lastName"), '%' + filtersByMainEntity.get(1) + '%'))));
         return predicates;
     }
 
     private void addSort(String sortBy, String order, CriteriaBuilder criteriaBuilder, Root<Doctor> root,
-                         CriteriaQuery<Doctor> criteriaQuery) {
+                         CriteriaQuery criteriaQuery) {
         if ("asc".equalsIgnoreCase(order)) {
             criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy)));
         }
@@ -96,9 +107,17 @@ public class DoctorDao {
     }
 
     public List<Doctor> findAllForCurrentUser(Long userId, int page, int size) {
-        return entityManager.createNativeQuery("SELECT DISTINCT " + ALL_FIELDS
-                + " FROM doctor JOIN order_doctor od on doctor.id = od.doctor_id JOIN orders o on od.order_id = o.id WHERE user_id = :userId", Doctor.class)
+        return entityManager.createNativeQuery("SELECT " + ALL_FIELDS
+                        + " FROM doctor JOIN order_doctor od on doctor.id = od.doctor_id JOIN orders o on od.order_id = o.id WHERE user_id = :userId ORDER BY o.create_date DESC ",
+                Doctor.class)
                 .setParameter("userId", userId).setFirstResult((page == 1) ? page - 1 : (page - 1) * size)
                 .setMaxResults(size).getResultList();
+    }
+
+    public Long findCountDoctors() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        return entityManager.createQuery(criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(Doctor.class))))
+                .getSingleResult();
     }
 }

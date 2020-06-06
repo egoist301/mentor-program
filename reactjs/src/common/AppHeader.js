@@ -52,16 +52,16 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon" />
+                        <Icon type="home" className="nav-icon" style={{color: '#559fff'}}/>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/login">
-                    <Link to="/login">
+                    <Link to="/login" style={{color: '#559fff'}}>
                         {localizedStrings.login}
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="/sign-up">
-                    <Link to="/sign-up">
+                    <Link to="/sign-up" style={{color: '#559fff'}}>
                         {localizedStrings.signUp}
                     </Link>
                 </Menu.Item>

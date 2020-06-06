@@ -58,6 +58,10 @@ public class DoctorFacade {
         doctorService.delete(id);
     }
 
+    public Long getCount() {
+        return doctorService.findCountDoctors();
+    }
+
     private String generateIdentificationNumber(int length) {
         String number = NumberGenerator.generateIdentificationNumber(length);
         if (doctorService.existByIdentificationNumber(number)) {

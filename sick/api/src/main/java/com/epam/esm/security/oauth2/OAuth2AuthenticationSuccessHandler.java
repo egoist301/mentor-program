@@ -88,10 +88,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         return appProperties.getOauth2().getAuthorizedRedirectUris()
                 .stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                            && authorizedURI.getPort() == clientRedirectUri.getPort();
-                });
+                .map(URI::create)
+                .anyMatch(authorizedURI ->
+                        authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                                && authorizedURI.getPort() == clientRedirectUri.getPort());
     }
 }

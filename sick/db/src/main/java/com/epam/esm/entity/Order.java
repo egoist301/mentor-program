@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Order implements Serializable {
     @Column(name = "id")
     private Long id;
     @Column(name = "create_date", updatable = false)
-    private LocalDate createDate;
+    private LocalDateTime createDate;
     @Column(name = "total_price")
     private BigDecimal totalPrice;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -52,15 +53,15 @@ public class Order implements Serializable {
 
     @PrePersist
     private void onCreate() {
-        createDate = LocalDate.now();
+        createDate = LocalDateTime.now();
     }
 
     public LocalDate getCreateDate() {
-        return createDate;
+        return LocalDate.from(createDate);
     }
 
     public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
+        this.createDate = LocalDateTime.from(createDate);
     }
 
     public Set<Doctor> getDoctors() {

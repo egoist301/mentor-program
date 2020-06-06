@@ -35,20 +35,26 @@ class AddDoctor extends Component {
                 },
                 dateOfBirth: {
                     value: new Date(),
-                    validateStatus: ''
+                    validateStatus: 'success'
                 },
                 illnesses: [{
                     name: {
                         text: '',
-                        validateStatus: ''
+                        validateStatus: {
+                            validateStatus: ''
+                        }
                     },
                     description: {
                         text: '',
-                        validateStatus: ''
+                        validateStatus: {
+                            validateStatus: ''
+                        }
                     },
                     chanceToDie: {
                         value: '',
-                        validateStatus: ''
+                        validateStatus: {
+                            validateStatus: ''
+                        }
                     }
                 }]
             }

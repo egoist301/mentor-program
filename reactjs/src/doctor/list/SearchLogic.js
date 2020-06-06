@@ -14,16 +14,20 @@ class SearchLogic extends Component {
 
         this.state = {
             defaultChoice: this.props.userDoctors === 'true' ? 'MyCert' : 'All',
-            searchFirstName: {
-                value: this.props.searchFirstName
+            searchLastName: {
+                value: this.props.searchLastName
             },
-
+            searchIllnessName: {
+                value: this.props.searchIllnessName
+            },
+            sortType: this.props.sortType,
             sortBy: this.props.sortBy
         };
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSubmitSort = this.handleSubmitSort.bind(this);
         this.handleSortSelectChange = this.handleSortSelectChange.bind(this);
+        this.handleSortSelectChangeType = this.handleSortSelectChangeType.bind(this);
     }
 
     handleInputChange(event) {
@@ -42,13 +46,14 @@ class SearchLogic extends Component {
 
     handleSubmitSearch(event) {
         event.preventDefault();
-        this.props.searchDoctors(this.state.searchFirstName.value);
+        this.props.searchDoctors(this.state.searchLastName.value, this.state.searchIllnessName.value);
     }
 
 
     handleSelectChange(value) {
         this.setState({
-            searchFirstName: '',
+            searchLastName: '',
+            searchIllnessName: '',
             defaultChoice: value
         });
         if (value === 'All') {
@@ -66,47 +71,60 @@ class SearchLogic extends Component {
                     {localizedStrings.doctors}
                 </div>
                 <div className="search">
-                    <Form onSubmit={this.handleSubmitSearch}>
-                        <span className={this.props.isAuthenticated ? '' : 'custom-hidden'}>
-                            <div className="search-button">
-                                <Select
-                                    defaultValue={this.state.defaultChoice}
-                                    style={{ width: 170 }}
-                                    onSelect={this.handleSelectChange}>
-                                    <Option value="All">
-                                        {localizedStrings.selectShowAllDoctors}
-                                    </Option>
-                                    <Option value="MyCert"
-                                        disabled={!this.props.isAuthenticated}>
-                                        {localizedStrings.selectShowMyOrders}
-                                    </Option>
-                                </Select>
-                            </div>
-                        </span>
-                        <div className="search-line-position">
-                            <FormItem hasFeedback>
-                                <Input
-                                    name="searchFirstName"
-                                    type="text"
-                                    autoComplete="off"
-                                    placeholder={localizedStrings.helpSearch}
-                                    value={this.state.searchFirstName.value}
-                                    disabled={false}
-                                    onChange={(event) => this.handleInputChange(event)} />
-                            </FormItem>
-                        </div>
+                    <span className={this.props.isAuthenticated && this.props.currentUser.role === 'ROLE_USER' ? '' : 'custom-hidden'}>
                         <div className="search-button">
-                            <Button type="primary"
-                                htmlType="submit"
-                                size="large">
-                                <Icon type="search" className="nav-icon"/>
-                            </Button>
+                            <Select
+                                defaultValue={this.state.defaultChoice}
+                                style={{ width: 170 }}
+                                onSelect={this.handleSelectChange}>
+                                <Option value="All">
+                                    {localizedStrings.selectShowAllDoctors}
+                                </Option>
+                                <Option value="MyCert"
+                                    disabled={!this.props.isAuthenticated}>
+                                    {localizedStrings.selectShowMyOrders}
+                                </Option>
+                            </Select>
                         </div>
-                    </Form>
+                    </span>
+                    <span className={this.state.defaultChoice === 'MyCert' ? 'custom-hidden' : ''}>
 
+                        <Form onSubmit={this.handleSubmitSearch}>
+                            <div className="search-line-position">
+                                <FormItem hasFeedback>
+                                    <Input
+                                        name="searchLastName"
+                                        type="text"
+                                        autoComplete="off"
+                                        placeholder={localizedStrings.helpSearchLastName}
+                                        value={this.state.searchLastName.value}
+                                        disabled={false}
+                                        onChange={(event) => this.handleInputChange(event)} />
+                                </FormItem>
+                            </div>
+                            <div className="search-line-position">
+                                <FormItem hasFeedback>
+                                    <Input
+                                        name="searchIllnessName"
+                                        type="text"
+                                        autoComplete="off"
+                                        placeholder={localizedStrings.helpSearchIllnessName}
+                                        value={this.state.searchIllnessName.value}
+                                        disabled={false}
+                                        onChange={(event) => this.handleInputChange(event)} />
+                                </FormItem>
+                            </div>
+                            <div className="search-button">
+                                <Button type="primary"
+                                    htmlType="submit"
+                                    size="large">
+                                    <Icon type="search" className="nav-icon" />
+                                </Button>
+                            </div>
 
-                    <div>
-                        <span className={this.state.defaultChoice === 'MyCert' ? 'custom-hidden' : ''}>
+                        </Form>
+
+                        <div>
                             <div className="search-button">
                                 <div>
                                     {localizedStrings.sort}
@@ -124,10 +142,25 @@ class SearchLogic extends Component {
                                     </Option>
                                 </Select>
                             </div>
-                        </span>
-                    </div>
+                        </div>
 
+                        <div>
+                            <div className="search-button">
+                                <Select
+                                    defaultValue={this.state.sortType}
+                                    style={{ width: 140 }}
+                                    onSelect={this.handleSortSelectChangeType}>
 
+                                    <Option value="asc">
+                                        {localizedStrings.asc}
+                                    </Option>
+                                    <Option value="desc">
+                                        {localizedStrings.desc}
+                                    </Option>
+                                </Select>
+                            </div>
+                        </div>
+                    </span>
                 </div>
             </div>
         );
@@ -145,6 +178,12 @@ class SearchLogic extends Component {
         this.props.changeSort(value);
     }
 
+    handleSortSelectChangeType(value) {
+        this.setState({
+            sortType: value
+        });
+        this.props.changeSortType(value);
+    }
 }
 
 

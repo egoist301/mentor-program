@@ -26,6 +26,4 @@ app:
   oauth2:
 
     authorizedRedirectUris:
-      - http://localhost:8080/oauth2/redirect/login
-      - http://localhost:8080/oauth2/redirect
-      - http://localhost:8080/login
+      - http://localhost:3000/oauth2/redirect

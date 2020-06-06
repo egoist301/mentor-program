@@ -76,7 +76,7 @@ class Doctor extends Component {
 
                           <DeleteDoctorModal className={'button'}
                                                   type={''}
-                                                  size={''}
+                                                  size={'default'}
                                                   id={this.props.doctor.id}
                                                   history={this.props.history}
                                                   updateDeleteStatus={this.updateDeleteStatus}/>
@@ -105,7 +105,7 @@ class Doctor extends Component {
             .then(() => {
                 notification.success({
                     message: localizedStrings.alertAppName,
-                    description: "order created"
+                    description: localizedStrings.orderCreated
                 });
                 return <Redirect to='/'/>;
             }).catch(error => {

@@ -11,7 +11,7 @@ class Illness extends Component {
         return (
             <div>
                 <Tag className="illness-look">
-                    <div onClick={() => this.props.searchByName(this.props.illness.name)}>
+                    <div onClick={() => this.props.searchByName(this.props.illness.name)} className="illness-look">
                             {this.props.illness.name}
                     </div>
                 </Tag>

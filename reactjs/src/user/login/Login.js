@@ -49,7 +49,7 @@ class Login extends Component {
                 </div>
 
                 <div className="welcome-picture">
-                    <img src={welcomePicture} width="800px" height="500px " alt={"welcome"}/>
+                    <img src={welcomePicture} width="800px" height="460px " alt={"welcome"} style={{"margin-top": "30px"}}/>
                 </div>
             </div>
         );
@@ -120,7 +120,7 @@ class LoginForm extends Component {
                         {localizedStrings.login}
                     </Button>
                     {localizedStrings.or}
-                    <Link to="/signUp">
+                    <Link to="/sign-up">
                         {localizedStrings.loginFormRegisterNow}
                     </Link>
                 </FormItem>

@@ -35,7 +35,7 @@ class DoctorLogic extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log(props.doctor.dateOfBirth.value)
         this.state = {
 
             prevCert: props.doctor,
@@ -94,15 +94,21 @@ class DoctorLogic extends Component {
             illnesses: illnesses.concat([{
                 name: {
                     text: '',
-                    validateStatus: ''
+                    validateStatus: {
+                        validateStatus: ''
+                    }
                 },
                 description: {
                     text: '',
-                    validateStatus: ''
+                    validateStatus: {
+                        validateStatus: ''
+                    }
                 },
                 chanceToDie: {
-                    text: '',
-                    validateStatus: ''
+                    value: '',
+                    validateStatus: {
+                        validateStatus: ''
+                    }
                 }
             }])
         });
@@ -230,7 +236,6 @@ class DoctorLogic extends Component {
     handlePhoneChange(event) {
         const value = event.target.value;
         this.props.setUnsavedDataStatus(true);
-
         this.setState({
             phone: {
                 value: value,
@@ -241,10 +246,10 @@ class DoctorLogic extends Component {
 
     handleDateOfBirth(value) {
         this.props.setUnsavedDataStatus(true);
-
         this.setState({
             dateOfBirth: {
-                value: value
+                value: value,
+                ...this.validateDateOfBirth(value)
             }
         })
     }
@@ -291,21 +296,24 @@ class DoctorLogic extends Component {
         if (this.state.price.validateStatus !== 'success') {
             return true;
         }
+        if (this.state.dateOfBirth.validateStatus !== 'success') {
+            return true;
+        }
         for (let i = 0; i < this.state.illnesses.length; i++) {
             const name = this.state.illnesses[i].name;
-            if (name.validateStatus !== 'success') {
+            if (name.validateStatus.validateStatus !== 'success') {
                 return true;
             }
         }
         for (let i = 0; i < this.state.illnesses.length; i++) {
             const description = this.state.illnesses[i].description;
-            if (description.validateStatus !== 'success') {
+            if (description.validateStatus.validateStatus !== 'success') {
                 return true;
             }
         }
         for (let i = 0; i < this.state.illnesses.length; i++) {
             const chanceToDie = this.state.illnesses[i].chanceToDie;
-            if (chanceToDie.validateStatus !== 'success') {
+            if (chanceToDie.validateStatus.validateStatus !== 'success') {
                 return true;
             }
         }
@@ -374,10 +382,11 @@ class DoctorLogic extends Component {
                             help={this.state.price.errorMsg}
                             className="doctor-form-row">
                             <Input
-                                type={"number"}
+                                type={"text"}
                                 placeholder={localizedStrings.helpForDoctorPrice}
                                 style={{ fontSize: '16px' }}
                                 autosize={{ minRows: 3, maxRows: 6 }}
+                                maxLength="8"
                                 name="price"
                                 value={this.state.price.value}
                                 onChange={this.handlePriceChange} />
@@ -393,6 +402,8 @@ class DoctorLogic extends Component {
                                 style={{ fontSize: '16px' }}
                                 autosize={{ minRows: 3, maxRows: 6 }}
                                 name="phone"
+                                pattern="[0-9]{7}"
+                                maxLength="7"
                                 value={this.state.phone.value}
                                 onChange={this.handlePhoneChange} />
                         </FormItem>
@@ -403,9 +414,9 @@ class DoctorLogic extends Component {
                             className="doctor-form-row">
                             <DatePicker
                                 name="dateOfBirth"
-                                value={moment(this.state.dateOfBirth.value, 'yyyy-MM-dd')}
+                                value={moment(this.state.dateOfBirth.value)}
                                 onChange={this.handleDateOfBirth}
-                                dateFormat={"yyyy-MM-dd"} />
+                                format={"YYYY-MM-DD"} />
 
                         </FormItem>
 
@@ -454,6 +465,9 @@ class DoctorLogic extends Component {
 
 
     validateFirstName = (nameText) => {
+        if (nameText.length === 0) {
+            return;
+        }
         if (nameText.length < DOCTOR_FIRST_NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
@@ -473,6 +487,9 @@ class DoctorLogic extends Component {
     };
 
     validateLastName = (nameText) => {
+        if (nameText.length === 0) {
+            return;
+        }
         if (nameText.length < DOCTOR_LAST_NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
@@ -492,6 +509,9 @@ class DoctorLogic extends Component {
     };
 
     validateMiddleName = (nameText) => {
+        if (nameText.length === 0) {
+            return;
+        }
         if (nameText.length < DOCTOR_MIDDLE_NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
@@ -511,7 +531,10 @@ class DoctorLogic extends Component {
     };
 
     validatePrice = (priceValue) => {
-        if (priceValue < 0 || priceValue === undefined || priceValue.length === 0) {
+        if (priceValue.length === 0) {
+            return;
+        }
+        if (priceValue < 0 || priceValue === undefined) {
             return {
                 validateStatus: 'error',
                 errorMsg: localizedStrings.alertBadDoctorPriceTooSmall
@@ -520,6 +543,11 @@ class DoctorLogic extends Component {
             return {
                 validateStatus: 'error',
                 errorMsg: localizedStrings.alertBadDoctorPriceTooBig
+            }
+        } else if (!/(^[0-9]{1,5}[.]{1}[0-9]{0,2}$)|(^[0-9]{1,5}$)/.test(priceValue)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: localizedStrings.alertBadDoctorPrice
             }
         } else {
             return {
@@ -530,7 +558,10 @@ class DoctorLogic extends Component {
     };
 
     validatePhone = (phoneNumber) => {
-        if (phoneNumber.length !== DOCTOR_PHONE_LENGTH) {
+        if (phoneNumber.length === 0) {
+            return;
+        }
+        if (phoneNumber.length !== DOCTOR_PHONE_LENGTH || !/[0-9]{7}/.test(phoneNumber)) {
             return {
                 validateStatus: 'error',
                 errorMsg: localizedStrings.alertBadDoctorPhone
@@ -543,8 +574,29 @@ class DoctorLogic extends Component {
         }
     };
 
+    validateDateOfBirth = (dateOfBirth) => {
+        if (dateOfBirth.length === 0) {
+            return;
+        }
+        if (dateOfBirth > new Date().getTime()) {
+            return {
+                validateStatus: 'error',
+                errorMsg: localizedStrings.alertBadDoctorDateOfBirth
+            }
+        }
+        else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null
+            }
+        }
+    }
+
 
     validateDescription = (descriptionText) => {
+        if (descriptionText.length === 0) {
+            return { validateStatus: '' };
+        }
         if (descriptionText.length > ILLNESS_DESCRIPTION_MAX_LENGTH) {
             return {
                 validateStatus: 'error',
@@ -563,8 +615,11 @@ class DoctorLogic extends Component {
             }
         }
     };
-    
+
     validateIllnessName = (illnessText) => {
+        if (illnessText.length === 0) {
+            return { validateStatus: '' };
+        }
         if (illnessText.length < ILLNESS_NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
@@ -584,7 +639,10 @@ class DoctorLogic extends Component {
     };
 
     validateIllnessChanceToDie = (chance) => {
-        if (chance < ILLNESS_CHANCE_TO_DIE_MIN || chance === undefined || chance.length === 0) {
+        if (chance.length === 0) {
+            return { validateStatus: '' };
+        }
+        if (chance < ILLNESS_CHANCE_TO_DIE_MIN || chance === undefined) {
             return {
                 validateStatus: 'error',
                 errorMsg: localizedStrings.alertBadIllnessChanceTooSmall
@@ -594,7 +652,13 @@ class DoctorLogic extends Component {
                 validateStatus: 'error',
                 errorMsg: localizedStrings.alertBadIllnessChanceTooBig
             }
-        } else {
+        } else if (!/^[0-9]{1,3}$/.test(chance)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: localizedStrings.alertBadIllnessChance
+            }
+        }
+        else {
             return {
                 validateStatus: 'success',
                 errorMsg: null
@@ -607,7 +671,6 @@ function DoctorIllness(props) {
     console.log(props.illness);
     return (
         <div>
-            <FormItem label={localizedStrings.illness + ' ' + (props.illnessNumber + 1)}/>
             <FormItem
                 label={localizedStrings.name}
                 validateStatus={props.illness.name.validateStatus.validateStatus}
@@ -647,10 +710,11 @@ function DoctorIllness(props) {
                 help={props.illness.chanceToDie.validateStatus.errorMsg}
                 className="doctor-form-row">
                 <Input
-                    type={"number"}
+                    type={"text"}
                     placeholder={localizedStrings.chanceToDie}
                     size="large"
                     name="chance"
+                    maxLength="3"
                     value={props.illness.chanceToDie.value}
                     className={"optional-choice"}
                     onChange={(value) => props.handleIllnessChanceChange(value, props.illnessNumber)} />

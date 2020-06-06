@@ -10,15 +10,8 @@
 }
 
 .page-title {
-    margin-top: 10%;
-    margin-bottom: 5%;
+    margin-top: 15px;
     text-align: center;
-    font-size: 200%;
-}
-
-.page-title:hover {
-    color: #559fff;
-    border-color: #a5a5a5;
 }
 
 .page-title-text {
@@ -27,11 +20,6 @@
     text-align: center;
     padding: 5px 5px 20px 20px;
     color: black;
-}
-
-.page-title-text:hover {
-    color: #559fff;
-    border-color: #a5a5a5;
 }
 
 .welcome-picture {

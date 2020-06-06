@@ -41,7 +41,7 @@ public class DoctorRequestDto {
 
     @NotNull(message = "price per consultation can't be null")
     @Positive(message = "price only positive")
-    @Digits(integer = 11, fraction = 2, message = "11 digits")
+    @Digits(integer = 5, fraction = 2, message = "5 digits")
     @JsonProperty("price_per_consultation")
     private BigDecimal pricePerConsultation;
 

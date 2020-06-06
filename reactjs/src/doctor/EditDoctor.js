@@ -52,15 +52,24 @@ class EditDoctor extends Component {
                     return {
                         name: {
                             text: illness.name,
-                            validateStatus: 'success'
+                            validateStatus: {
+                                validateStatus: 'success',
+                                errorMsg: '',
+                            }
                         },
                         description: {
                             text: illness.description,
-                            validateStatus: 'success'
+                            validateStatus: {
+                                validateStatus: 'success',
+                                errorMsg: '',
+                            }
                         },
                         chanceToDie: {
                             value: illness.chance_to_die,
-                            validateStatus: 'success'
+                            validateStatus: {
+                                validateStatus: 'success',
+                                errorMsg: '',
+                            }
                         },
                         validateStatus:'success'
                     }

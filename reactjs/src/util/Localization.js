@@ -23,6 +23,10 @@ import {
 export const localizedStrings = new LocalizedStrings({
 
         en: {
+            helpSearchLastName: 'Search by last name',
+            helpSearchIllnessName: 'Search by illnesses names',
+            asc: "Ascending",
+            desc: "Descending",
             logout: "Logout",
             login: "Login",
             signUp: "Sign up",
@@ -37,8 +41,9 @@ export const localizedStrings = new LocalizedStrings({
             password: "Password",
             loginField: "Login",
             editDoctor: 'Update doctor',
+            orderCreated: 'Order created',
 
-
+            page:"page",
             sort: 'Sort: ',
             sortByLastName: 'By last name',
             sortByDateOfBirth: 'By date of birth',
@@ -69,29 +74,40 @@ export const localizedStrings = new LocalizedStrings({
             alertBadPassword: "Please input your Password!",
             alertSuccessRegister: "Thank you! You're successfully registered. Please Login to continue!",
 
-            alertException: "Sorry! Something went wrong. Please try again!",
+            alertException: "Sorry! Temporary problems. Try later!",
 
 
-            alertBadIllnessNameTooShort: `Illness name is too short (Minimum ${ILLNESS_NAME_MIN_LENGTH} characters allowed)`,
-            alertBadIllnessNameTooLong: `Illness name is too long (Maximum ${ILLNESS_NAME_MAX_LENGTH} characters allowed)`,
+            alertBadIllnessNameTooShort: `Illness name is too short (Minimum ${ILLNESS_NAME_MIN_LENGTH} characters)`,
+            alertBadIllnessNameTooLong: `Illness name is too long (Maximum ${ILLNESS_NAME_MAX_LENGTH} characters)`,
 
-            alertBadIllnessDescriptionTooLong: `Description is too long (Maximum ${ILLNESS_DESCRIPTION_MAX_LENGTH} characters allowed)`,
-            alertBadIllnessDescriptionTooShort:`Description is too short (Minimum ${ILLNESS_DESCRIPTION_MIN_LENGTH} characters allowed)`,
+            alertBadIllnessDescriptionTooLong: `Description is too long (Maximum ${ILLNESS_DESCRIPTION_MAX_LENGTH} characters)`,
+            alertBadIllnessDescriptionTooShort:`Description is too short (Minimum ${ILLNESS_DESCRIPTION_MIN_LENGTH} characters)`,
 
             alertBadIllnessChanceTooSmall: `Chance is too small (${ILLNESS_CHANCE_TO_DIE_MIN})`,
             alertBadIllnessChanceTooBig: `Chance is too big (${ILLNESS_CHANCE_TO_DIE_MAX})`,
+            alertBadIllnessChance: `Incorrect chance to die`,
 
             alertBadDoctorPriceTooSmall: 'Price can`t be <0',
             alertBadDoctorPriceTooBig: `Price is too big (Maximum ${MAX_PRICE}  allowed )`,
+            alertBadDoctorPrice: `Incorrect price`,
 
-            alertBadDoctorFirstNameTooShort: `First name is too short (Minimum ${DOCTOR_FIRST_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_FIRST_NAME_MAX_LENGTH} characters allowed )`,
-            alertBadDoctorFirstNameTooLong: `First name is too long (Minimum ${DOCTOR_FIRST_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_FIRST_NAME_MAX_LENGTH} characters allowed )`,
+            alertBadDoctorFirstNameTooShort: `First name is too short (Minimum ${DOCTOR_FIRST_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_FIRST_NAME_MAX_LENGTH} characters )`,
+            alertBadDoctorFirstNameTooLong: `First name is too long (Minimum ${DOCTOR_FIRST_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_FIRST_NAME_MAX_LENGTH} characters )`,
             
-            alertBadDoctorLastNameTooShort: `Last name is too short (Minimum ${DOCTOR_LAST_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_LAST_NAME_MAX_LENGTH} characters allowed )`,
-            alertBadDoctorLastNameTooLong: `Last name is too long (Minimum ${DOCTOR_LAST_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_LAST_NAME_MAX_LENGTH} characters allowed )`,
+            alertBadDoctorLastNameTooShort: `Last name is too short (Minimum ${DOCTOR_LAST_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_LAST_NAME_MAX_LENGTH} characters )`,
+            alertBadDoctorLastNameTooLong: `Last name is too long (Minimum ${DOCTOR_LAST_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_LAST_NAME_MAX_LENGTH} characters )`,
 
-            alertBadDoctorMiddleNameTooShort: `Middle name is too short (Minimum ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} characters allowed )`,
-            alertBadDoctorMiddleNameTooLong: `Middle name is too long (Minimum ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} characters allowed;\nMaximum ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} characters allowed )`,
+            alertBadDoctorMiddleNameTooShort: `Middle name is too short (Minimum ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} characters )`,
+            alertBadDoctorMiddleNameTooLong: `Middle name is too long (Minimum ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} characters;\nMaximum ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} characters )`,
+
+            alertBadUsernameTooShort: `Username is too short (Minimum ${USERNAME_MIN_LENGTH} characters;\nMaximum ${USERNAME_MAX_LENGTH} characters )`,
+            alertBadUsernameTooLong: `Username is too long (Maximum ${USERNAME_MAX_LENGTH} characters;\nMinimum ${USERNAME_MIN_LENGTH} characters )`,
+
+            alertBadDoctorDateOfBirth: `Date can be past or present`,
+
+            alertBadPasswordTooShort: `Password is too short (Minimum ${PASSWORD_MIN_LENGTH} characters;\nMaximum ${PASSWORD_MAX_LENGTH} characters )`,
+            alertBadPasswordTooLong: `Password is too long (Maximum ${PASSWORD_MAX_LENGTH} characters;\nMinimum ${PASSWORD_MIN_LENGTH} characters )`,
+            alertNotEqualPasswords: `Confirmed password not equals password`,
 
             alertBadDoctorPhone: `Phone number can be ${DOCTOR_PHONE_LENGTH} digits`,
             alertDeleteDoctorSuccessfully: 'Doctor deleted successfully!',
@@ -103,12 +119,12 @@ export const localizedStrings = new LocalizedStrings({
 
 
             alertWrongUsernameOrPassword: 'Your Username or Password is incorrect. Please try again!',
-            alertSuccessLogin: 'You are successfully logged in!',
+            alertSuccessLogin: 'Welcome!',
 
             alertRebootPage: 'Reboot? The changes you made may not be saved.',
 
-            alertNoPermission: 'No permissions,Sorry!',
-            alertSuccessLogOut: 'You are successfully logged out!',
+            alertNoPermission: 'No permissions, Sorry!',
+            alertSuccessLogOut: 'Good bye!',
             ///helpers
             helpForUsername:`A username between ${USERNAME_MIN_LENGTH} to ${USERNAME_MAX_LENGTH} characters`,
             helpForPass: `A password between ${PASSWORD_MIN_LENGTH} to ${PASSWORD_MAX_LENGTH} characters`,
@@ -141,6 +157,8 @@ export const localizedStrings = new LocalizedStrings({
             selectShowAllDoctors: "All",
             selectShowMyOrders: "My orders",
 
+            notFound:"The Page you're looking for was not found.",
+            back: "Go back",
 
             //months
             january: "January",
@@ -158,6 +176,10 @@ export const localizedStrings = new LocalizedStrings({
             ///
         },
         ru: {
+            helpSearchLastName: 'Поиск по фамилии',
+            helpSearchIllnessName: 'Поиск по названия болезней',
+            asc: "По возрастанию",
+            desc: "По убыванию",
             logout: "Выйти",
             login: "Войти",
             signUp: "Зарегистрироваться",
@@ -172,12 +194,12 @@ export const localizedStrings = new LocalizedStrings({
             password: "Пароль",
             loginField: "Логин",
             editDoctor: 'Изменить врача',
-
+            orderCreated: "заказ сделан",
 
             sort: 'Сортировать: ',
             sortByLastName: 'По фамилии',
             sortByDateOfBirth: 'По дате рождения',
-
+            page: "страница",
 
             firstName: "Имя",
             lastName: "Фамилия",
@@ -204,7 +226,7 @@ export const localizedStrings = new LocalizedStrings({
             alertBadPassword: "Пожалуйста, введите Ваш пароль",
             alertSuccessRegister: "Спасибо! Вы успешно зарегистрированы. Пожалуйста, залогиньтесь для продолжения!",
 
-            alertException: "Извините! Что-то пошло не так. Попробуйте еще раз!",
+            alertException: "Извините! Временные неполадки. Попробуйте позже!",
 
             alertRebootPage: 'Перезагрузить? Возможно, внесенные изменения не сохранятся.',
 
@@ -216,9 +238,11 @@ export const localizedStrings = new LocalizedStrings({
 
             alertBadIllnessChanceTooSmall:`Шанс смерти маленький(Минимум ${ILLNESS_CHANCE_TO_DIE_MIN})`,
             alertBadIllnessChanceTooBig:`Шанс смерти большой(Максимум ${ILLNESS_CHANCE_TO_DIE_MAX})`,
+            alertBadIllnessChance: `Некорректный шанс смерти`,
             
             alertBadDoctorPriceTooBig: `Стоимость слишком большая (Максимум ${MAX_PRICE}  )`,
             alertBadDoctorPriceTooSmall: 'Стоимость не может быть меньше 0',
+            alertBadDoctorPrice: `Некорректная цена`,
 
             alertBadDoctorFirstNameTooShort: `Имя очень короткое (Минимум ${DOCTOR_FIRST_NAME_MIN_LENGTH} символов;\nМаксимум ${DOCTOR_FIRST_NAME_MAX_LENGTH} символов )`,
             alertBadDoctorFirstNameTooLong: `Имя очень длинное (Максимум ${DOCTOR_FIRST_NAME_MAX_LENGTH} символов;\nМинимум ${DOCTOR_FIRST_NAME_MIN_LENGTH} символов )`,
@@ -228,6 +252,15 @@ export const localizedStrings = new LocalizedStrings({
 
             alertBadDoctorMiddleNameTooShort: `Отчество очень короткое (Минимум ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} символов;\nМаксимум ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} символов )`,
             alertBadDoctorMiddleNameTooLong: `Отчество очень длинное (Максимум ${DOCTOR_MIDDLE_NAME_MAX_LENGTH} символов;\nМинимум ${DOCTOR_MIDDLE_NAME_MIN_LENGTH} символов )`,
+
+            alertBadUsernameTooShort: `Никнейм очень короткий (Минимум ${USERNAME_MIN_LENGTH} символов;\nМаксимум ${USERNAME_MAX_LENGTH} символов )`,
+            alertBadUsernameTooLong: `Никнейм очень длинный (Максимум ${USERNAME_MAX_LENGTH} символов;\nМинимум ${USERNAME_MIN_LENGTH} символов )`,
+
+            alertBadDoctorDateOfBirth: `Дата можеть быть прошлой или текущей`,
+
+            alertBadPasswordTooShort: `Пароль очень короткий (Минимум ${PASSWORD_MIN_LENGTH} символов;\nМаксимум ${PASSWORD_MAX_LENGTH} символов )`,
+            alertBadPasswordTooLong: `Пароль очень длинный (Максимум ${PASSWORD_MAX_LENGTH} символов;\nМинимум ${PASSWORD_MIN_LENGTH} символов )`,
+            alertNotEqualPasswords:`Пароли не совпадают.`,
 
             alertBadDoctorPhone: `Номер телефона может иметь ${DOCTOR_PHONE_LENGTH} цифр`,
             alertDeleteDoctorSuccessfully: 'Врач удален успешно!',
@@ -239,7 +272,7 @@ export const localizedStrings = new LocalizedStrings({
 
             alertWrongUsernameOrPassword: 'Ваш логин или пароль неверны. Пожалуйста, попробуйте еще раз!',
 
-            alertSuccessLogin: 'Успешный вход!',
+            alertSuccessLogin: 'Добро пожаловать!',
 
             alertNoPermission: 'У вас нет прав, хитрюга!',
             alertSuccessLogOut: 'Успешный выход!',
@@ -274,6 +307,9 @@ export const localizedStrings = new LocalizedStrings({
             search: "Поиск",
             selectShowAllDoctors: "Всё",
             selectShowMyOrders: "Мои заказы",
+
+            notFound: 'Страница, которую вы ищете, не найдена.',
+            back: "Назад",
 
             //months
             january: "Январь",

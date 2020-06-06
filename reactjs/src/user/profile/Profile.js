@@ -18,10 +18,10 @@ class Profile extends Component {
                         <div className="profile-avatar">
                             {
                                 this.props.currentUser.imageUrl ? (
-                                    <img src={this.props.currentUser.imageUrl} alt={this.props.currentUser.name}/>
+                                    <img src={this.props.currentUser.imageUrl}/>
                                 ) : (
                                     <div className="text-avatar">
-                                        <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
+                                        <span>{this.props.currentUser.username && this.props.currentUser.username[0]}</span>
                                     </div>
                                 )
                             }

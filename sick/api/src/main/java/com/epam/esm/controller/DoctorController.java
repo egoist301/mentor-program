@@ -63,10 +63,17 @@ public class DoctorController {
             @RequestParam(value = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         Validator.validateSortAndOrder(sortBy, order);
         Validator.validatePageNumberAndSize(page, size);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Doctor-Count", "100");
         return new ResponseEntity<>(doctorFacade
                 .getAll(Arrays.asList(searchByFirstName, searchByLastName, searchByMiddleName),
                         (Objects.nonNull(searchByIllnessName) ? searchByIllnessName : Collections.emptyList()),
-                        sortBy, order, page, size), HttpStatus.OK);
+                        sortBy, order, page, size), responseHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        return new ResponseEntity<>(doctorFacade.getCount(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

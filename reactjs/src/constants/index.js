@@ -18,7 +18,7 @@ export const MAX_ILLNESS = 6;
 
 export const DOCTOR_PHONE_LENGTH = 7;
 export const MIN_PRICE = 1;
-export const MAX_PRICE = 1000000;
+export const MAX_PRICE = 99999.99;
 export const DOCTOR_FIRST_NAME_MIN_LENGTH = 2;
 export const DOCTOR_FIRST_NAME_MAX_LENGTH = 16;
 export const DOCTOR_LAST_NAME_MIN_LENGTH = 2;

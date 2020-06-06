@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Route, Switch, withRouter} from 'react-router-dom';
+import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
 
 import {getCurrentUser} from '../util/APIUtils';
 import {ACCESS_TOKEN, USER_ID} from '../constants';
@@ -23,6 +23,7 @@ import EditDoctor from "../doctor/EditDoctor";
 import {localizedStrings} from "../util/Localization";
 import PrivateAdminRoute from "../common/PrivateAdminRoute";
 import AddDoctor from "../doctor/AddDoctor";
+import NoPermission from '../common/NoPermission';
 
 
 const {Content} = Layout;
@@ -83,9 +84,10 @@ class App extends Component {
         this.loadCurrentUser();
     }
 
-    handleLogout(redirectTo = "/", notificationType = "success", description = localizedStrings.alertSuccessLogOut) {
+    handleLogout(redirectTo = "/login", notificationType = "success", description = localizedStrings.alertSuccessLogOut) {
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(USER_ID);
+        sessionStorage.clear();
 
         this.setState({
             currentUser: null,
@@ -159,15 +161,15 @@ class App extends Component {
                                                handleLogout={this.handleLogout}/>
 
                             <Route path="/login"
-                                   render={(props) =>
+                                   render={(props) =>!this.state.isAuthenticated?
                                        <Login onLogin={this.handleLogin}
-                                              {...props} />}/>
+                                              {...props} />:<Redirect to="/"/>}/>
 
                             <Route path="/sign-up"
-                                   render={(props) =>
+                                   render={(props) => !this.state.isAuthenticated?
                                        <SignUp
                                            authenticated={this.state.isAuthenticated}
-                                           {...props} />}/>
+                                           {...props} />:<Redirect to="/"/>}/>
 
                             <Route path="/oauth2/redirect"
                                    render={(props) =>

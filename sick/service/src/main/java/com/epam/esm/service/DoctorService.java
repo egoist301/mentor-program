@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
@@ -36,6 +34,10 @@ public class DoctorService {
     public List<Doctor> findAll(List<String> filtersByMainEntity, List<String> illnesses, String sortBy, String order,
                                 int page, int size) {
         return doctorDao.findAll(filtersByMainEntity, illnesses, sortBy, order, page, size);
+    }
+
+    public Long countWithCriteria(List<String> filtersByMainEntity, List<String> illnesses, String sortBy, String order) {
+        return doctorDao.getCountWithCriteria(filtersByMainEntity, illnesses, sortBy, order);
     }
 
     @Transactional
@@ -118,5 +120,9 @@ public class DoctorService {
 
     public List<Doctor> findAllForCurrentUser(Long userId, int page, int size) {
         return doctorDao.findAllForCurrentUser(userId, page, size);
+    }
+
+    public Long findCountDoctors() {
+        return doctorDao.findCountDoctors();
     }
 }

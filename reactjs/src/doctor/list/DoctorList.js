@@ -23,8 +23,10 @@ class DoctorList extends PureComponent {
 
             userDoctors: false,
 
-            searchFirstName: '',
+            searchIllnessName: '',
+            searchLastName: '',
             searchByName: '',
+            sortType: sessionStorage.getItem('sortType') != null ? sessionStorage.getItem('sortType') : "asc",
             sortBy: sessionStorage.getItem('sortBy') != null ? sessionStorage.getItem('sortBy') : "dateOfBirth",
 
             isLoading: false,
@@ -41,6 +43,7 @@ class DoctorList extends PureComponent {
         this.loadDoctorsList = this.loadDoctorsList.bind(this);
         this.deleteDoctor = this.deleteDoctor.bind(this);
         this.changeSort = this.changeSort.bind(this);
+        this.changeSortType = this.changeSortType.bind(this);
 
         this.setRememberedParams();
     }
@@ -59,9 +62,13 @@ class DoctorList extends PureComponent {
         if (this.state.doctors.length !== 0) {
             this.state.pagesCount = Math.ceil(Number(this.state.doctors.length / this.state.size));
         }
-        if (sessionStorage.getItem('searchFirstName') != null) {
-            const searchText = sessionStorage.getItem('searchFirstName');
-            this.state.searchFirstName = searchText === 'undefined' ? '' : searchText;
+        if (sessionStorage.getItem('searchLastName') != null) {
+            const searchText = sessionStorage.getItem('searchLastName');
+            this.state.searchLastName = searchText === 'undefined' ? '' : searchText;
+        }
+        if (sessionStorage.getItem('searchIllnessName') != null) {
+            const searchText = sessionStorage.getItem('searchIllnessName');
+            this.state.searchIllnessName = searchText === 'undefined' ? '' : searchText;
         }
         if (sessionStorage.getItem('userDoctors') != null) {
             this.state.userDoctors = sessionStorage.getItem('userDoctors');
@@ -94,14 +101,25 @@ class DoctorList extends PureComponent {
         this.loadMore(1, this.state.size * 2);
     }
 
+    changeSortType(sortType) {
+        this.state.sortType = sortType;
+        sessionStorage.setItem('sortType', sortType);
+
+        this.clearSessionStorage();
+        this.setDefaultState();
+
+        this.loadMore(1, this.state.size * 2);
+    }
+
     loadAllDoctors() {
         this.clearSessionStorage();
-        sessionStorage.removeItem('searchFirstName');
+        sessionStorage.removeItem('searchLastName');
         sessionStorage.removeItem('searchByName');
 
         this.setDefaultState();
         this.state.userDoctors = false;
-        this.state.searchFirstName = '';
+        this.state.searchLastName = '';
+        this.state.searchIllnessName = '';
         this.state.searchByName = '';
 
         this.loadMore(1, this.state.size * 2);
@@ -111,7 +129,8 @@ class DoctorList extends PureComponent {
         this.clearSessionStorage();
         this.setDefaultState();
         this.state.userDoctors = true;
-        this.state.searchFirstName = '';
+        this.state.searchLastName = '';
+        this.state.searchIllnessName = '';
         this.state.searchByName = '';
         this.state.doctors = []
         this.state.pagesCount = 0
@@ -120,16 +139,18 @@ class DoctorList extends PureComponent {
     }
 
 
-    searchDoctors(firstName) {
-        if (firstName === '' || firstName === undefined) {
+    searchDoctors(lastName, illnessName) {
+        if ((lastName === '' || lastName === undefined) && (illnessName === '' || illnessName === undefined)) {
             this.loadAllDoctors();
         } else {
             this.clearSessionStorage();
             this.setDefaultState();
             this.state.userDoctors = false;
             this.state.searchByName = '';
-            this.state.searchFirstName = firstName;
-            sessionStorage.setItem('searchFirstName', firstName)
+            this.state.searchLastName = lastName === undefined? '' : lastName;
+            this.state.searchIllnessName = illnessName;
+            sessionStorage.setItem('searchLastName', lastName)
+            sessionStorage.setItem('searchIllnessName', illnessName)
             this.loadMore(1, this.state.size * 2);
         }
     }
@@ -137,10 +158,10 @@ class DoctorList extends PureComponent {
     searchByName(illnessName) {
 
         this.clearSessionStorage();
-        this.state.page = 1;
-        this.state.pagesCount = 0;
-        this.state.doctors = [];
+        this.setDefaultState();
         this.state.userDoctors = false;
+        this.state.searchLastName = '';
+        this.state.searchIllnessName = '';
         this.state.searchByName = illnessName;
 
         sessionStorage.setItem('searchByName', illnessName)
@@ -167,9 +188,10 @@ class DoctorList extends PureComponent {
                     size: size,
 
                     sortBy: this.state.sortBy,
-                    sortType: 'asc',
+                    sortType: this.state.sortType,
 
-                    first_name: this.state.searchFirstName,
+                    last_name: this.state.searchLastName,
+                    illness_name: this.state.searchIllnessName,
                     illness: this.state.searchByName
                 };
 
@@ -198,7 +220,7 @@ class DoctorList extends PureComponent {
                 const currentPageSize = this.state.size;
                 const prevPagesCount = this.state.pagesCount;
                 const newPagesCount = Math.ceil(Number(doctorsCount / currentPageSize));
-
+                console.log(promise);
                 this.setState({
                     doctors: prevDoctors.concat(response),
                     pagesCount: prevPagesCount + newPagesCount,
@@ -248,14 +270,16 @@ class DoctorList extends PureComponent {
                 <div className="doctors-container-header">
                     <SearchLogic
                         userDoctors={this.state.userDoctors}
-                        searchText={this.state.searchFirstName}
+                        searchText={this.state.searchLastName}
                         currentUser={this.props.currentUser}
                         isAuthenticated={this.props.isAuthenticated}
                         loadAllUserDoctors={this.loadAllUserDoctors}
                         loadAllDoctors={this.loadAllDoctors}
                         searchDoctors={this.searchDoctors}
                         sortBy={this.state.sortBy}
-                        changeSort={this.changeSort} />
+                        sortType={this.state.sortType}
+                        changeSort={this.changeSort}
+                        changeSortType={this.changeSortType} />
                 </div>
 
                 <div className="doctors-content">
@@ -275,7 +299,7 @@ class DoctorList extends PureComponent {
                             showSizeChanger: true,
                             defaultCurrent: Number(this.state.page),
                             defaultPageSize: Number(this.state.size),
-                            pageSizeOptions: ["12", "51", "99"],
+                            pageSizeOptions: ["12", "18", "27"],
                             position: "bottom",
                             onShowSizeChange: this.onSizeChangeHandler,
                             onChange: this.onPageChangeHandler,
@@ -295,18 +319,16 @@ class DoctorList extends PureComponent {
     }
 
     onSizeChangeHandler(page, size) {
-        const prevCertCount = this.state.doctors.length;
-        let newPageCount = Math.ceil((prevCertCount / size));
-        let newPage;
-
+        this.loadMore(page, size);
+        const prevDoctorCount = this.state.doctors.length;
+        let newPageCount = Math.ceil((prevDoctorCount / size));
+        let newPage = page;
         if (page !== 1 && page >= newPageCount) {
             newPage = page - 1;
         }
-
         if (newPageCount === 0) {
             newPageCount = 1;
         }
-
         this.setState({
             page: newPage,
             size: size,
@@ -334,7 +356,7 @@ class DoctorList extends PureComponent {
     setDefaultState() {
         this.state.page = 1;
         this.state.pagesCount = 0;
-        this.state.size = 24;
+        this.state.size = 12;
         this.state.doctors = [];
     }
 

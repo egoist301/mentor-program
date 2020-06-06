@@ -45,14 +45,14 @@ class ConsultationInfoPopUp extends React.Component {
 
                     title={
                         <span>
-                            <span className="title-text">
+                            <span className="title-text-card">
                                 {this.state.doctor.last_name}
                             </span>
-                            <span className="title-text">
-                                {"  " + this.state.doctor.first_name}
+                            <span className="title-text-card">
+                                {this.state.doctor.first_name}
                             </span>
-                            <span className="title-text">
-                                {"" + this.state.doctor.middle_name}
+                            <span className="title-text-card">
+                                {this.state.doctor.middle_name}
                             </span>
                             <span className="doctor-creation-date-popUp">
                                 {formatDateTime(this.state.doctor.date_of_birth)}
@@ -77,7 +77,7 @@ class ConsultationInfoPopUp extends React.Component {
                                 this.props.currentUser !== null ?
                                     this.props.currentUser.role === 'ROLE_USER' ? '' : 'custom-hidden' : 'custom-hidden'}>
                                 <BuyConsultationModal
-                                    handleBuyConsultation={this.props.handleBuyConsultation} />
+                                    handleBuyDoctor={this.props.handleBuyDoctor} />
                             </span>
                             <div className="price-position">
                                 <div className="price">

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './NotFound.css';
 import {Link} from 'react-router-dom';
 import {Button} from 'antd';
+import {localizedStrings} from '../util/Localization';
 
 class NoPermission extends Component {
     render() {
@@ -11,9 +12,9 @@ class NoPermission extends Component {
                     403
                 </h1>
                 <div className="desc">
-                    You have no permission. Sorry!
+                    {localizedStrings.alertNoPermission}
                 </div>
-                <Link to="/"><Button className="go-back-btn" type="primary" size="large">Go Back</Button></Link>
+                <Link to="/"><Button className="go-back-btn" type="primary" size="large">{localizedStrings.back}</Button></Link>
             </div>
         );
     }

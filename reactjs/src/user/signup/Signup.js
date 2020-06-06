@@ -85,7 +85,6 @@ class Signup extends Component {
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form">
                         <FormItem label={localizedStrings.username}
-                                  hasFeedback
                                   validateStatus={this.state.username.validateStatus}
                                   help={this.state.username.errorMsg}>
                             <Input
@@ -140,15 +139,16 @@ class Signup extends Component {
 
 
     validateUserName = (name) => {
+        if(name.length === 0) return;
         if (name.length < USERNAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Name is too short (Minimum ${USERNAME_MIN_LENGTH} characters needed.)`
+                errorMsg: localizedStrings.alertBadUsernameTooShort
             }
         } else if (name.length > USERNAME_MAX_LENGTH) {
             return {
                 validationStatus: 'error',
-                errorMsg: `Name is too long (Maximum ${USERNAME_MAX_LENGTH} characters allowed.)`
+                errorMsg: alertBadUsernameTooLong
             }
         } else {
             return {
@@ -159,15 +159,16 @@ class Signup extends Component {
     };
 
     validatePassword = (password) => {
+        if(password.length === 0) return;
         if (password.length < PASSWORD_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Password is too short (Minimum ${PASSWORD_MIN_LENGTH} characters needed.)`
+                errorMsg: localizedStrings.alertBadPasswordTooShort
             }
         } else if (password.length > PASSWORD_MAX_LENGTH) {
             return {
                 validationStatus: 'error',
-                errorMsg: `Password is too long (Maximum ${PASSWORD_MAX_LENGTH} characters allowed.)`
+                errorMsg: localizedStrings.alertBadPasswordTooLong
             }
         } else {
             return {
@@ -178,11 +179,11 @@ class Signup extends Component {
     };
 
     validateConfirmedPassword = (confirmedPassword) => {
-        const validRes = this.validatePassword(confirmedPassword);
-        if (validRes.validateStatus !== 'success' && confirmedPassword !== this.state.password) {
+        if(confirmedPassword.length === 0) return;
+        if (confirmedPassword !== this.state.password.value) {
             return {
                 validateStatus: 'error',
-                errorMsg: validRes.errorMsg + ` Conf not equals pass`
+                errorMsg: localizedStrings.alertNotEqualPasswords
             }
         } else {
             return {

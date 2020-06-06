@@ -15,11 +15,14 @@ const request = (options) => {
 
     return fetch(options.url, options)
         .then(response => {
+            var count = response.headers.get("Doctor-Count");
+            console.log(count)
+            console.log(response);
             if (!response.ok) {
                 throw response
             }
             if (response.status !== 204) {
-                return response.json()
+                return response.json();
             }
         }).then(json => {
             return json;
@@ -34,14 +37,15 @@ export function getAllDoctors(searchCriteria) {
         "&size=" + searchCriteria.size +
         "&sort=" + searchCriteria.sortBy +
         "&order=" + searchCriteria.sortType +
-        "&first_name=" + searchCriteria.first_name +
-        "&illness=" + searchCriteria.illness;
+        "&last_name=" + searchCriteria.last_name +
+        "&illness=" + searchCriteria.illness_name + searchCriteria.illness;
     return request({
         url: url,
         method: 'GET'
     });
 
 }
+
 
 export function createDoctor(doctors) {
     return request({
@@ -106,7 +110,7 @@ export function buyDoctor(order) {
 
 export function findAllUserOrder(userId, searchCriteria) {
     const url = API_BASE_URL + "/users/orders?page=" + searchCriteria.page
-    +"&size=" + searchCriteria.size;
+        + "&size=" + searchCriteria.size;
     return request({
         url: url,
         method: 'GET'

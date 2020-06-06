@@ -110,11 +110,6 @@
     font-size: 15px;
 }
 
-.price:hover {
-    color: #ff3f4b;
-    border-color: #01060b;
-}
-
 .button {
     border-radius: 15px;
     margin-right: 15px;
@@ -169,11 +164,6 @@
     margin-top: 2px;
 }
 
-.doctor-creation-date:hover {
-    color: #1890ff;
-    border-color: #1890ff;
-}
-
 .title-info {
     color: #040506;
     margin-left: 20px;
@@ -185,6 +175,16 @@
 
 
 .title-text {
+    float: left;
+    border: none;
+    margin: 1px;
+    color: #559fff;
+    font-size: 16px;
+    font-weight: bold;
+    background: none;
+}
+
+.title-text-card {
     float: left;
     border: none;
     margin: 1px;
