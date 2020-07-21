@@ -36,3 +36,13 @@ create table news_author
 	foreign key(news_id) references news(id) on update cascade on delete cascade,
 	foreign key(author_id) references author(id) on update cascade on delete cascade
 );
+CREATE TABLE  COMMENTS (
+	id NUMBER(10) GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+	author_id NUMBER(10) NOT NULL,
+	news_id NUMBER(10) NOT NULL,
+	body CLOB NOT NULL,
+	PRIMARY KEY  (id),
+	foreign key(news_id) references news(id) on update cascade on delete cascade,
+	foreign key(author_id) references author(id) on update cascade on delete cascade
+
+);
